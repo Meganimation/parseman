@@ -1,37 +1,24 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Button } from './Button';
+import { Modal } from './Modal';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Button/Button',
-  component: Button,
-} as ComponentMeta<typeof Button>;
+  title: 'Modal/Modal',
+  component: Modal,
+} as ComponentMeta<typeof Modal>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   darkMode: true,
-  label: 'Hello World',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Button',
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  width: '200px',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  height: '200px',
-  label: 'Button',
-};

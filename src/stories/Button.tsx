@@ -1,48 +1,60 @@
 import React from 'react';
-import './button.css';
+import styled from 'styled-components';
 
 interface ButtonProps {
-  /**
-   * Is this the principal call to action on the page?
-   */
-  primary?: boolean;
-  /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
-   * How large should the button be?
-   */
-  size?: 'small' | 'medium' | 'large';
-  /**
-   * Button contents
-   */
-  label: string;
-  /**
-   * Optional click handler
-   */
+  height?: string;
+  width?: string;
+  fontSize?: string;
+  label?: string;
   onClick?: () => void;
+  darkMode?: boolean;
 }
 
-/**
- * Primary UI component for user interaction
- */
+
+const StyledButton = styled.button`
+  background-color: ${(props: ButtonProps) => props.darkMode ? '#753886' : '#753881'};
+  min-width: ${(props: ButtonProps) => props.width ? props.width : '200px'};
+  height: ${(props: ButtonProps) => props.height ? props.height : '100px'};
+  border-radius: 5px;
+  font-size: ${(props: ButtonProps) => props.fontSize ? props.fontSize : '20px'};
+  font-family: "IBM Plex Mono", sans-serif;
+  border: 0px;
+  color: white;
+  border-bottom: 2px solid #753881;
+  box-shadow: 0px 3px 6px #00000029;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3B1C44;
+  }
+
+  &:active {
+    box-shadow: 0;
+    transform: translateY(3px);
+    background-color: #3B1C54;
+  }
+`
+
+
 export const Button = ({
-  primary = false,
-  size = 'medium',
-  backgroundColor,
+  height = '100px', 
+  width = '200px',
+  fontSize = '20px',
+  darkMode = false,
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+
   return (
-    <button
+   <StyledButton
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
+      darkMode={darkMode}
+      fontSize={fontSize}
+      height={height}
+      width={width}
       {...props}
     >
       {label}
-    </button>
+    </StyledButton>
   );
 };

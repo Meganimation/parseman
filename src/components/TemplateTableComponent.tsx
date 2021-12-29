@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Button } from "stories/Button";
 
 const TemplateTableComponentWrapper = styled.section`
 height: 65vh;
@@ -12,6 +13,7 @@ margin: 10px;
 export default function TemplateTableComponent() {
     return (
         <TemplateTableComponentWrapper>
+            <Button label='Parse' />
             This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent
         </TemplateTableComponentWrapper>
     )
