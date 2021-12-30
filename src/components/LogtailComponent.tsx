@@ -1,27 +1,36 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// 825px
 
-const LogtailComponentWrapper = styled.section`
-height: 65vh;
+const LogtailComponentWrapper = styled.section<StyledLogtailType>`
 width: 45vw;
 background-color: #26374C;
 margin: 10px;
-
 overflow: hidden;
 resize: horizontal;
-max-width: 80vw;
-min-width: 30vw;
+max-width: ${(props) => props.templateIsVisible ? '70vw' : '100vw'};
+min-width: ${(props) => props.templateIsVisible ? '30vw' : '100vw'};
+height: ${(props) => props.wordCloudIsVisible ? '65vh' : '100vw'};
+width: ${(props) => props.templateIsVisible ? '45vw' : '90vw'};
 overflow: auto;
 ` 
 
 
-export default function LogtailComponent() {
+export default function LogtailComponent(props: LogtailComponentProps) {
     return (
-        <LogtailComponentWrapper>
-            This is the LogtailComponent
+        <LogtailComponentWrapper templateIsVisible={props.templateIsVisible} wordCloudIsVisible={props.wordCloudIsVisible} >
+            This is the LogtailComponent 
             This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent
         </LogtailComponentWrapper>
     )
 }
+
+type StyledLogtailType = {
+    templateIsVisible?: boolean;
+    wordCloudIsVisible?: boolean;
+  };
+
+interface LogtailComponentProps {
+    templateIsVisible: boolean;
+    wordCloudIsVisible: boolean;
+  }

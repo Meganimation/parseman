@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
+import { ComponentWindow } from "stories/ComponentWindow";
 
 import {
   WordCloudComponent,
@@ -14,6 +15,7 @@ import {
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "green")};
   width: 100vw;
+  overflow-X: hidden;
   color: ${(props) => (props.darkMode ? "white" : "black")};
   font-family: "IBM Plex Mono", sans-serif;
   height: 100vh;
@@ -50,7 +52,7 @@ background: #182331;
 
 `
 
-const DragAndDropGrid = styled.section`
+const SliderWrapper = styled.section`
   display: flex;
 
   width: 100%;
@@ -59,6 +61,7 @@ const DragAndDropGrid = styled.section`
 
 const Slider = styled.section`
 
+
 `;
 
 function App() {
@@ -66,18 +69,37 @@ function App() {
   //create 3 components to drag
 
   const [darkMode, setDarkMode] = useState(true);
+  const [logtailIsVisible, setLogtailIsVisible] = useState(true);
+  const [templateIsVisible, setTemplateIsVisible] = useState(true);
+  const [wordCloudIsVisible, setWordCloudIsVisible] = useState(true);
 
+  const showComponent = (word: any) => {
+    setLogtailIsVisible(true)
+    return alert(word)
+  }
+ 
+
+  //make a component to wrap the main components, call it component wrapper in stories, give it an X that toggles its visibility (can be an onclick function passed on to it)
   return (
     <StyledApp darkMode={darkMode}>
-      <NavBar />
+      <NavBar showComponent={showComponent}/>
       <Content  darkMode={darkMode}>
-      <DragAndDropGrid>
+        
+      <SliderWrapper>
         <Slider>
-          <LogtailComponent />
+        { (logtailIsVisible && <ComponentWindow onExit={()=>{setLogtailIsVisible(false)}}>
+          <LogtailComponent templateIsVisible={templateIsVisible} wordCloudIsVisible={wordCloudIsVisible}/>
+          </ComponentWindow>)}
         </Slider>
-        <TemplateTableComponent />
-      </DragAndDropGrid>
+        { (templateIsVisible && 
+        <ComponentWindow onExit={()=>{setTemplateIsVisible(false)}}>
+        <TemplateTableComponent templateIsVisible={templateIsVisible} wordCloudIsVisible={wordCloudIsVisible}/>
+       </ComponentWindow>)}
+      </SliderWrapper>
+      { (wordCloudIsVisible && 
+      <ComponentWindow onExit={()=>{setWordCloudIsVisible(false)}}>
       <WordCloudComponent />
+      </ComponentWindow>)}
       </Content>
     </StyledApp>
   );
