@@ -11,12 +11,15 @@ height: ${(props) => props.wordCloudIsVisible ? '65vh' : '100vw'};
 margin: 10px;
 ` 
 
+
 export default function TemplateTableComponent(props: TemplateTableComponentProps) {
     return (
+        <>
         <TemplateTableComponentWrapper wordCloudIsVisible={props.wordCloudIsVisible}>
-            <Button label='Parse' />
+            
             This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent
         </TemplateTableComponentWrapper>
+        </>
     )
 }
 

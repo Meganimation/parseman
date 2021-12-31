@@ -41,12 +41,10 @@ const StyledApp = styled.div<StyledAppType>`
   }
 `;
 
-type StyledAppType = {
-  darkMode?: boolean;
-};
+
 
 const Content = styled.main<StyledAppType>`
-padding-top: 10vh;
+padding-top: 15vh;
 background: #182331;
 
 
@@ -73,16 +71,30 @@ function App() {
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
   const [wordCloudIsVisible, setWordCloudIsVisible] = useState(true);
 
-  const showComponent = (word: any) => {
-    setLogtailIsVisible(true)
-    return alert(word)
+  const showComponent = (nameOfComponents: any) => {
+
+    switch (nameOfComponents) {
+      case "logtailComponent":
+        setLogtailIsVisible(true)
+        break;
+      case "templateTable":
+        setTemplateIsVisible(true)
+        break;
+      case "wordCloud":
+        setWordCloudIsVisible(true)
+        break; 
+    }   
   }
  
 
   //make a component to wrap the main components, call it component wrapper in stories, give it an X that toggles its visibility (can be an onclick function passed on to it)
   return (
     <StyledApp darkMode={darkMode}>
-      <NavBar showComponent={showComponent}/>
+      <NavBar 
+      logtailIsVisible={logtailIsVisible}
+      templateIsVisible={templateIsVisible}
+      wordCloudIsVisible={wordCloudIsVisible}
+      showComponent={showComponent}/>
       <Content  darkMode={darkMode}>
         
       <SliderWrapper>
@@ -92,7 +104,7 @@ function App() {
           </ComponentWindow>)}
         </Slider>
         { (templateIsVisible && 
-        <ComponentWindow onExit={()=>{setTemplateIsVisible(false)}}>
+        <ComponentWindow button={true} buttonText="parse" onExit={()=>{setTemplateIsVisible(false)}}>
         <TemplateTableComponent templateIsVisible={templateIsVisible} wordCloudIsVisible={wordCloudIsVisible}/>
        </ComponentWindow>)}
       </SliderWrapper>
@@ -104,6 +116,10 @@ function App() {
     </StyledApp>
   );
 }
+
+type StyledAppType = {
+  darkMode?: boolean;
+};
 
 export interface TestProps {
   darkMode: boolean;

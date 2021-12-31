@@ -37,8 +37,8 @@ const StyledButton = styled.button`
 
 
 export const Button = ({
-  height = '100px', 
-  width = '200px',
+  height = '3rem', 
+  width = '9rem',
   fontSize = '20px',
   darkMode = false,
   label,
