@@ -23,7 +23,7 @@ const StyledWrapper = styled.section`
 `
 
 const HeaderContent = styled.div`
-  background: red;
+background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
   width: 100%;
   max-height: 50px;
   display: flex;
@@ -37,7 +37,7 @@ const HeaderContent = styled.div`
 
 
 export const ComponentWindow = ({
-  darkMode = false,
+  darkMode = true,
   children = 'this could be anything',
   width = 'auto',
   title = 'title',
@@ -51,7 +51,7 @@ export const ComponentWindow = ({
       darkMode={darkMode}
       {...props}
     >
-      <HeaderContent>
+      <HeaderContent darkMode={darkMode}>
       <h1>{title}</h1>
       { props.button && <Button onClick={props.onButtonClick} label={buttonText} />}
         <ExitWrapper><button onClick={onExit}>x</button></ExitWrapper>

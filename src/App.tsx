@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
+
 
 import {
   WordCloudComponent,
@@ -62,6 +63,8 @@ const Slider = styled.section`
 
 `;
 
+
+
 function App() {
   //create nav bar fixed at top
   //create 3 components to drag
@@ -70,6 +73,9 @@ function App() {
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
   const [wordCloudIsVisible, setWordCloudIsVisible] = useState(true);
+  const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
+
+  const messagesEndRef = useRef(null)
 
   const showComponent = (nameOfComponents: any) => {
 
@@ -86,6 +92,16 @@ function App() {
     }   
   }
  
+  useEffect(() => {
+    if (parsedDataIsVisible) handleParsedDataRendering()
+  }, [parsedDataIsVisible]);
+
+  const handleParsedDataRendering =()=>{
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    setParsedDataIsVisible(true)
+
+  }
 
   //make a component to wrap the main components, call it component wrapper in stories, give it an X that toggles its visibility (can be an onclick function passed on to it)
   return (
@@ -99,20 +115,27 @@ function App() {
         
       <SliderWrapper>
         <Slider>
-        { (logtailIsVisible && <ComponentWindow onExit={()=>{setLogtailIsVisible(false)}}>
+        { (logtailIsVisible && <ComponentWindow title={'Logtail'} onExit={()=>{setLogtailIsVisible(false)}}>
           <LogtailComponent templateIsVisible={templateIsVisible} wordCloudIsVisible={wordCloudIsVisible}/>
           </ComponentWindow>)}
         </Slider>
         { (templateIsVisible && 
-        <ComponentWindow button={true} buttonText="parse" onExit={()=>{setTemplateIsVisible(false)}}>
+        <ComponentWindow button={true} title={'Template List'} buttonText="parse" onButtonClick={()=>{handleParsedDataRendering()}} onExit={()=>{setTemplateIsVisible(false)}}>
         <TemplateTableComponent templateIsVisible={templateIsVisible} wordCloudIsVisible={wordCloudIsVisible}/>
        </ComponentWindow>)}
       </SliderWrapper>
       { (wordCloudIsVisible && 
-      <ComponentWindow onExit={()=>{setWordCloudIsVisible(false)}}>
+      <ComponentWindow title={'Word Cloud'} onExit={()=>{setWordCloudIsVisible(false)}}>
       <WordCloudComponent />
       </ComponentWindow>)}
       </Content>
+
+      { (parsedDataIsVisible && 
+      <ComponentWindow  title={'Parsed Data Table'} onExit={()=>{setParsedDataIsVisible(false)}}>
+      <div ref={messagesEndRef}><ParsedDataComponent/>
+      </div>
+      </ComponentWindow>
+      )}
     </StyledApp>
   );
 }

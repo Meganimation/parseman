@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'stories/Button'
 import styled from 'styled-components'
 
-
+import MenuIcon from '@material-ui/icons/Menu'
 
 const StyledNavWrapper = styled.nav`
 display: flex;
@@ -84,7 +84,7 @@ export default function NavBar(props: INavBarProps) {
             <StyledInput type="text" placeholder="Search" />
             
         </StyledNav>
-        <MenuButtonWrapper> menu goes here</MenuButtonWrapper>
+        <MenuButtonWrapper><MenuIcon/></MenuButtonWrapper>
         </StyledNavWrapper>
     )
 }
