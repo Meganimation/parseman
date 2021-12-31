@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'stories/Button'
 import styled from 'styled-components'
-
+import ClearIcon from '@material-ui/icons/Clear'
 import MenuIcon from '@material-ui/icons/Menu'
 
 const StyledNavWrapper = styled.nav`
@@ -20,9 +20,9 @@ const StyledNav = styled.nav<StyledNavType>`
 `
 
 const UnhideComponentItem = styled.span<StyledNavType>`
-top: 0;
-right: 2rem;
-padding-left: 1rem;
+top: -7px;
+position: relative;
+margin-right: 1rem;
 `
 
 const UnhideComponentWrapper = styled.div`
@@ -31,6 +31,7 @@ display: flex;
 position: relative;
 top: 0;
 right: 0;
+
 `
 
 const StyledInput = styled.input`
@@ -76,9 +77,9 @@ export default function NavBar(props: INavBarProps) {
                 <input type="radio"  value="Both"/> Both
             </RadioButtonGroup>
             <UnhideComponentWrapper>
-            {(!props.logtailIsVisible && <UnhideComponentItem onClick={()=>{props.showComponent('logtailComponent')}}>X Show Logtail</UnhideComponentItem>)}
-            {(!props.templateIsVisible && <UnhideComponentItem onClick={()=>{props.showComponent('templateTable')}}> X Show Template Table</UnhideComponentItem>)}
-            {(!props.wordCloudIsVisible && <UnhideComponentItem onClick={()=>{props.showComponent('wordCloud')}}>X Show Word Cloud</UnhideComponentItem>)}
+            {(!props.logtailIsVisible && <div onClick={()=>{props.showComponent('logtailComponent')}}><ClearIcon/><UnhideComponentItem >Show Logtail</UnhideComponentItem></div>)}
+            {(!props.templateIsVisible &&  <div onClick={()=>{props.showComponent('templateComponent')}}><ClearIcon/><UnhideComponentItem >Show Template Table</UnhideComponentItem></div>)}
+            {(!props.wordCloudIsVisible &&  <div onClick={()=>{props.showComponent('wordCloud')}}><ClearIcon/><UnhideComponentItem >Show Word Cloud</UnhideComponentItem></div>)}
             </UnhideComponentWrapper>
             </ContentWrapper>
             <StyledInput type="text" placeholder="Search" />

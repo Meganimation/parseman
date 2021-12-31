@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'stories/Button';
+import ClearIcon from '@material-ui/icons/Clear'
 
 interface ComponentWindowProps {
   onClick?: () => void;
@@ -31,9 +32,24 @@ background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' 
   padding: 20px;
   `
 
+  const Title = styled.h1`
+  font-size: 1.5em;
+  font-family: arial;
+  color: ${(props: ComponentWindowProps) => props.darkMode ? 'black' : 'white'};
+  `
+
   const ExitWrapper = styled.span`
   padding-right: 20px;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    opacity: 0.5;
+  }
   `
+
+  
 
 
 export const ComponentWindow = ({
@@ -52,9 +68,9 @@ export const ComponentWindow = ({
       {...props}
     >
       <HeaderContent darkMode={darkMode}>
-      <h1>{title}</h1>
-      { props.button && <Button onClick={props.onButtonClick} label={buttonText} />}
-        <ExitWrapper><button onClick={onExit}>x</button></ExitWrapper>
+      <Title>{title}</Title>
+      { props.button && <div style={{marginRight: '15%'}}><Button onClick={props.onButtonClick} label={buttonText} /></div>}
+        <ExitWrapper><ClearIcon onClick={onExit} /> </ExitWrapper>
         
         </HeaderContent>
       {children}

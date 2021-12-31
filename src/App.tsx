@@ -131,7 +131,7 @@ function App() {
       </Content>
 
       { (parsedDataIsVisible && 
-      <ComponentWindow  title={'Parsed Data Table'} onExit={()=>{setParsedDataIsVisible(false)}}>
+      <ComponentWindow  title={'Parsed Data Table'}  button buttonText="Save" onExit={()=>{setParsedDataIsVisible(false)}}>
       <div ref={messagesEndRef}><ParsedDataComponent/>
       </div>
       </ComponentWindow>
