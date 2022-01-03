@@ -28,7 +28,9 @@ const StyledApp = styled.div<StyledAppType>`
   > nav {
     background-color: ${(props) => (props.darkMode ? "#57066F" : "#57066F")};
   }
-
+  > h1 {
+    background-color: ${(props) => (props.darkMode ? "purple" : "yellow")};
+  }
   > h2 {
     background-color: ${(props) => (props.darkMode ? "purple" : "yellow")};
   }
@@ -83,7 +85,7 @@ function App() {
       case "logtailComponent":
         setLogtailIsVisible(true)
         break;
-      case "templateTable":
+      case "templateComponent":
         setTemplateIsVisible(true)
         break;
       case "wordCloud":
