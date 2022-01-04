@@ -4,20 +4,23 @@ import styled from 'styled-components'
 
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
-width: 100%;
 overflow: auto;
 background-color: #26374C;
-height: ${(props) => props.wordCloudIsVisible ? '47vh' : '100vw'};
+height: ${(props) => props.wordCloudIsVisible ? '47vh' : '35vw'};
 margin: 10px;
+
 ` 
 
+const TableWrapper = styled.div`
+`
 
 export default function TemplateTableComponent(props: TemplateTableComponentProps) {
     return (
         <>
         <TemplateTableComponentWrapper wordCloudIsVisible={props.wordCloudIsVisible}>
             
-            This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent
+            <TableWrapper>This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent This is the TemplateTableComponent
+            </TableWrapper>
         </TemplateTableComponentWrapper>
         </>
     )

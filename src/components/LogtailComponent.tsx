@@ -5,12 +5,12 @@ import styled from 'styled-components'
 const LogtailComponentWrapper = styled.section<StyledLogtailType>`
 
 background-color: #26374C;
-margin: 10px;
+margin: 17px;
 overflow: hidden;
 resize: horizontal;
-max-width: ${(props) => props.templateIsVisible ? '70vw' : '97vw'};
+max-width: ${(props) => props.templateIsVisible ? '65vw' : '97vw'};
 min-width: ${(props) => props.templateIsVisible ? '30vw' : '97vw'};
-height: ${(props) => props.wordCloudIsVisible ? '47vh' : '100vw'};
+height: ${(props) => props.wordCloudIsVisible ? '47vh' : '35vw'};
 width: ${(props) => props.templateIsVisible ? '45vw' : '90vw'};
 overflow: auto;
 ` 
