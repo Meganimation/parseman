@@ -8,7 +8,7 @@ import Menu from './Menu'
 const StyledNavWrapper = styled.nav`
 display: flex;
 position: fixed;
-height: 100px;
+height: 80px;
 width: 100%;
 opacity: 0.9;   
 `
@@ -30,8 +30,27 @@ const UnhideComponentWrapper = styled.div`
 height: 50px;
 display: flex;
 position: relative;
+height: fit-content;
+
 top: 0;
 right: 0;
+
+>div {
+    margin-left: 0.3rem;
+    margin-right: 0.8rem;
+    font-size: 0.8rem;
+    position: relative;
+    top: 7px;
+    cursor: pointer;
+
+    
+
+    &:hover {
+        transform: scale(1.1);
+    
+    }
+
+}
 
 `
 
@@ -42,6 +61,8 @@ const StyledInput = styled.input`
     height: 2rem;
     border: none;
     border-radius: 10px;
+    font-family: 'IBM Plex Mono', sans-serif;
+    margin-left: 10px;
 `
 
 
@@ -58,11 +79,20 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
     display: flex;
+
+    >div {
+        margin-left: 0.3rem;
+        margin-right: 0.8rem;
+        font-size: 0.8rem;
+    }
+
 `
 
 const ContentWrapper = styled.div`
 display: flex;
 justify-content: space-between;
+height: 15px;
+padding: 10px;
 `
 
 // const Menu = styled.div<StyledNavType>`
@@ -88,6 +118,13 @@ export default function NavBar(props: INavBarProps) {
     const handleMenu = () => {
         setMenu(false)
     }
+
+    const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            alert('You can search by hitting enter')
+        }
+
+    }
     return (
         <>
           
@@ -95,17 +132,17 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
             <ContentWrapper>
         <RadioButtonGroup>
-                <input type="radio"  value="Templates" /> Template
-                <input type="radio"  value="Variables"/> Variables
-                <input type="radio"  value="Both"/> Both
+                <input type="radio"  value="Templates" /> <div>Template</div> 
+                <input type="radio"  value="Variables"/><div>Variables</div> 
+                <input type="radio"  value="Both"/> <div>Both</div> 
             </RadioButtonGroup>
             <UnhideComponentWrapper>
-            {(!props.logtailIsVisible && <div onClick={()=>{props.showComponent('logtailComponent')}}><ClearIcon/><UnhideComponentItem >Show Logtail</UnhideComponentItem></div>)}
-            {(!props.templateIsVisible &&  <div onClick={()=>{props.showComponent('templateComponent')}}><ClearIcon/><UnhideComponentItem >Show Template Table</UnhideComponentItem></div>)}
-            {(!props.wordCloudIsVisible &&  <div onClick={()=>{props.showComponent('wordCloud')}}><ClearIcon/><UnhideComponentItem >Show Word Cloud</UnhideComponentItem></div>)}
+            {(!props.logtailIsVisible && <div onClick={()=>{props.showComponent('logtailComponent')}}><UnhideComponentItem ><div> x Show Logtail</div></UnhideComponentItem></div>)}
+            {(!props.templateIsVisible &&  <div onClick={()=>{props.showComponent('templateComponent')}}><UnhideComponentItem ><div> x Show Template Table</div></UnhideComponentItem></div>)}
+            {(!props.wordCloudIsVisible &&  <div onClick={()=>{props.showComponent('wordCloud')}}><UnhideComponentItem ><div> x Show Word Cloud</div></UnhideComponentItem></div>)}
             </UnhideComponentWrapper>
             </ContentWrapper>
-            <StyledInput type="text" placeholder="Search" />
+            <StyledInput type="text" placeholder="Search" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>)=>{handleSubmit(e)}}/>
             
         </StyledNav>
         <MenuButtonWrapper onClick={()=>{setMenu(!menu)}}><MenuIcon/></MenuButtonWrapper>
