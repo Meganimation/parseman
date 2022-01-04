@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const WordCloudComponentWrapper = styled.section`
-height: 17vh;
+height: 15vh;
 background-color: #26374C;
 margin: 10px;
 resize: horizontal;
@@ -28,9 +28,13 @@ export default function WordCloudComponent() {
         <WordCloudComponentWrapper>
             <Text>
             This is the WordCloudComponent
+            This is the WordCloudComponent
+            This is the WordCloudComponent
+            This is the WordCloudComponent
+            This is the WordCloudComponent
+            This is the WordCloudComponent
             </Text>
         </WordCloudComponentWrapper>
-        <div>bjksdbhfsdbhfsbhsfb</div>
         </>
 
     )

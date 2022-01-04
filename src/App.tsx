@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
+import {Modal} from "stories/Modal";
 
 
 import {
@@ -39,9 +40,6 @@ const StyledApp = styled.div<StyledAppType>`
     background-color: ${(props) => (props.darkMode ? "green" : "yellow")};
   }
 
-  > div {
-    background-color: ${(props) => (props.darkMode ? "#26374C" : "yellow")};
-  }
 `;
 
 
@@ -58,12 +56,15 @@ const SliderWrapper = styled.section`
 
   width: 100%;
 
+
 `;
 
 const Slider = styled.section`
 
 
 `;
+
+
 
 
 
@@ -75,7 +76,10 @@ function App() {
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
   const [wordCloudIsVisible, setWordCloudIsVisible] = useState(true);
+
+  const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
+
 
   const messagesEndRef = useRef(null)
 
@@ -127,23 +131,28 @@ function App() {
        </ComponentWindow>)}
       </SliderWrapper>
       { (wordCloudIsVisible && 
-      <ComponentWindow title={'Word Cloud'} onExit={()=>{setWordCloudIsVisible(false)}}>
+      <ComponentWindow onExit={()=>{setWordCloudIsVisible(false)}}>
       <WordCloudComponent />
       </ComponentWindow>)}
       </Content>
 
       { (parsedDataIsVisible && 
-      <ComponentWindow  title={'Parsed Data Table'}  button buttonText="Save" onExit={()=>{setParsedDataIsVisible(false)}}>
+      <ComponentWindow  title={'Parsed Data Table'}  button buttonText="Save"  onButtonClick={()=>{setModal(true)}} onExit={()=>{setParsedDataIsVisible(false)}}> 
       <div ref={messagesEndRef}><ParsedDataComponent/>
       </div>
       </ComponentWindow>
       )}
+
+      {modal && <Modal onExit={()=>{setModal(false)}} title='Saved!' >
+        SAVED
+        </Modal>}
     </StyledApp>
   );
 }
 
 type StyledAppType = {
   darkMode?: boolean;
+  wobble?: number;
 };
 
 export interface TestProps {

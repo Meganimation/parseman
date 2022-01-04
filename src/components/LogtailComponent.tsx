@@ -10,7 +10,7 @@ overflow: hidden;
 resize: horizontal;
 max-width: ${(props) => props.templateIsVisible ? '70vw' : '97vw'};
 min-width: ${(props) => props.templateIsVisible ? '30vw' : '97vw'};
-height: ${(props) => props.wordCloudIsVisible ? '65vh' : '100vw'};
+height: ${(props) => props.wordCloudIsVisible ? '47vh' : '100vw'};
 width: ${(props) => props.templateIsVisible ? '45vw' : '90vw'};
 overflow: auto;
 ` 

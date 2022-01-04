@@ -20,7 +20,7 @@ const StyledModal = styled.section`
     props.darkMode ? "#26374C" : "white"};
   color: ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
   width: ${(props: ModalProps) => (props.width ? props.width : "70vw")};
-  height: ${(props: ModalProps) => (props.height ? props.height : "70vh")};
+  min-height: ${(props: ModalProps) => (props.height ? props.height : "70vh")};
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   position: absolute;
   z-index: 1;

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'stories/Button';
 import ClearIcon from '@material-ui/icons/Clear'
+import Exit from './Exit';
 
 interface ComponentWindowProps {
   onClick?: () => void;
@@ -26,7 +27,7 @@ const StyledWrapper = styled.section`
 const HeaderContent = styled.div`
 background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
   width: 100%;
-  max-height: 50px;
+  max-height: ${(props: ComponentWindowProps) => (props.title === 'None') ? '1px' : '50px'};
   display: flex;
   justify-content: space-between;
   padding: 20px;
@@ -49,6 +50,12 @@ background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' 
   }
   `
 
+  const FakeDiv = styled.div`
+  color: #26374C;
+  font-size: 1px;
+  `
+
+
   
 
 
@@ -56,8 +63,9 @@ export const ComponentWindow = ({
   darkMode = true,
   children = 'this could be anything',
   width = 'auto',
-  title = 'title',
+  title = 'None',
   buttonText='button',
+  onButtonClick = () => {},
   onExit = () => {},
   ...props
 }: ComponentWindowProps) => {
@@ -67,10 +75,10 @@ export const ComponentWindow = ({
       darkMode={darkMode}
       {...props}
     >
-      <HeaderContent darkMode={darkMode}>
-      <Title>{title}</Title>
-      { props.button && <div style={{marginRight: '15%'}}><Button onClick={props.onButtonClick} label={buttonText} /></div>}
-        <ExitWrapper><ClearIcon onClick={onExit} /> </ExitWrapper>
+      <HeaderContent darkMode={darkMode} title={title}>
+      { title !== 'None' ? <Title title={title}>{title}</Title> : <FakeDiv>.</FakeDiv>}
+      { props.button && <div style={{marginRight: '15%'}}><Button onClick={onButtonClick} label={buttonText} /></div>}
+        <ExitWrapper><Exit onExit={onExit} /> </ExitWrapper>
         
         </HeaderContent>
       {children}

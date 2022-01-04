@@ -7,7 +7,7 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
 width: 100%;
 overflow: auto;
 background-color: #26374C;
-height: ${(props) => props.wordCloudIsVisible ? '65vh' : '100vw'};
+height: ${(props) => props.wordCloudIsVisible ? '47vh' : '100vw'};
 margin: 10px;
 ` 
 
