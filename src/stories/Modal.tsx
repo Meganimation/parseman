@@ -131,14 +131,13 @@ export const Modal = ({
 
         {editMode && (
           <>
-        
-          <EditModeWrapper>
-          <Title darkMode={darkMode}>{title}</Title>
-            <StyledInput type="text" darkMode={darkMode} />
-            <IconWrapper>
-              <CheckCircleOutlineIcon />
-            </IconWrapper>
-          </EditModeWrapper>
+            <EditModeWrapper>
+              <Title darkMode={darkMode}>{title}</Title>
+              <StyledInput type="text" darkMode={darkMode} />
+              <IconWrapper>
+                <CheckCircleOutlineIcon />
+              </IconWrapper>
+            </EditModeWrapper>
           </>
         )}
 

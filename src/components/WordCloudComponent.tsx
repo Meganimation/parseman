@@ -1,15 +1,14 @@
+import { type } from 'os'
 import React from 'react'
 import styled from 'styled-components'
 
-const WordCloudComponentWrapper = styled.section`
+const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
 height: 15vh;
-background-color: #26374C;
+background: ${(props) => props.darkMode ? '#26374b' : 'white'};
 margin: 10px;
 resize: horizontal;
-
-
-background-color: #26374C;
 margin: 10px;
+color: ${(props) => props.darkMode ? 'white' : '#26374b'};
 
 overflow: hidden;
 resize: horizontal;
@@ -22,10 +21,10 @@ overflow: auto;
 const Text = styled.div`
 
 `
-export default function WordCloudComponent() {
+export default function WordCloudComponent(props: IWordCloudComponentProps) {
     return (
         <>
-        <WordCloudComponentWrapper>
+        <WordCloudComponentWrapper darkMode={props.darkMode}>
             <Text>
             This is the WordCloudComponent
             This is the WordCloudComponent
@@ -38,4 +37,13 @@ export default function WordCloudComponent() {
         </>
 
     )
+}
+
+type StyledWordCloudType = {
+    darkMode?: boolean;
+};
+
+
+interface IWordCloudComponentProps {
+    darkMode?: boolean;
 }

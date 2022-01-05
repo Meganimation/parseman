@@ -29,9 +29,11 @@ export default function TemplateTableComponent(props: TemplateTableComponentProp
 type StyledTemplateType = {
     templateIsVisible?: boolean;
     wordCloudIsVisible?: boolean;
+    
   };
 
 interface TemplateTableComponentProps {
     templateIsVisible: boolean;
+    darkMode?: boolean;
     wordCloudIsVisible: boolean;
   }
