@@ -3,6 +3,6 @@
 Installed Dependencies Outside of React: 
 Storybook, 
 TypeScript, 
-Styled-Components
+Styled-Components,
 Redux & Tooklits
 </div>

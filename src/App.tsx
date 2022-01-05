@@ -13,7 +13,7 @@ import {
 } from "components";
 
 const StyledApp = styled.div<StyledAppType>`
-  background-color: ${(props) => (props.darkMode ? "#182331" : "green")};
+  background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
   width: 100vw;
   overflow-x: hidden;
   color: ${(props) => (props.darkMode ? "white" : "black")};
@@ -31,7 +31,7 @@ const StyledApp = styled.div<StyledAppType>`
 
 const Content = styled.main<StyledAppType>`
   padding-top: 15vh;
-  background: #182331;
+  background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
 const SliderWrapper = styled.section`
@@ -99,6 +99,7 @@ function App() {
                 }}
               >
                 <LogtailComponent
+                  darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
                 />
@@ -163,6 +164,7 @@ function App() {
             setModal(false);
           }}
           title="Saved!"
+          darkMode={darkMode}
         >
           SAVED
         </Modal>

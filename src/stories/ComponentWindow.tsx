@@ -36,7 +36,7 @@ background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' 
   const Title = styled.h1`
   font-size: 1.5em;
   font-family: arial;
-  color: ${(props: ComponentWindowProps) => props.darkMode ? 'black' : 'white'};
+  color: ${(props: ComponentWindowProps) => props.darkMode ? 'white' : '#26374C'};
   `
 
   const ExitWrapper = styled.span`
@@ -76,7 +76,7 @@ export const ComponentWindow = ({
       {...props}
     >
       <HeaderContent darkMode={darkMode} title={title}>
-      { title !== 'None' ? <Title title={title}>{title}</Title> : <FakeDiv>.</FakeDiv>}
+      { title !== 'None' ? <Title title={title } darkMode={darkMode}>{title}</Title> : <FakeDiv>.</FakeDiv>}
       { props.button && <div style={{marginRight: '15%'}}><Button onClick={onButtonClick} label={buttonText} /></div>}
         <ExitWrapper><Exit onExit={onExit} /> </ExitWrapper>
         

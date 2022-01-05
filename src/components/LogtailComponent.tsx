@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const LogtailComponentWrapper = styled.section<StyledLogtailType>`
 
-background-color: #26374C;
+background-color:${(props) => props.darkMode ? '#26374C; ' : 'white'};
 margin: 17px;
 overflow: hidden;
 resize: horizontal;
@@ -18,7 +18,7 @@ overflow: auto;
 
 export default function LogtailComponent(props: LogtailComponentProps) {
     return (
-        <LogtailComponentWrapper templateIsVisible={props.templateIsVisible} wordCloudIsVisible={props.wordCloudIsVisible} >
+        <LogtailComponentWrapper templateIsVisible={props.templateIsVisible} wordCloudIsVisible={props.wordCloudIsVisible} darkMode={props.darkMode} >
             This is the LogtailComponent 
             This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent  This is the LogtailComponent
         </LogtailComponentWrapper>
@@ -28,9 +28,11 @@ export default function LogtailComponent(props: LogtailComponentProps) {
 type StyledLogtailType = {
     templateIsVisible?: boolean;
     wordCloudIsVisible?: boolean;
+    darkMode: boolean;
   };
 
 interface LogtailComponentProps {
     templateIsVisible: boolean;
     wordCloudIsVisible: boolean;
+    darkMode: boolean;
   }

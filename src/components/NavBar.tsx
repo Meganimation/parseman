@@ -69,6 +69,7 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
   display: flex;
+  color: ${(props: StyledNavType) => props.darkMode ? 'white' : 'white'};
 
   > div {
     margin-left: 0.3rem;
@@ -171,6 +172,7 @@ export default function NavBar(props: INavBarProps) {
 
 type StyledNavType = {
   animateMenu?: boolean;
+  darkMode?: boolean;
 };
 
 interface INavBarProps {

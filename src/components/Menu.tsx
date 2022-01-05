@@ -13,6 +13,7 @@ transition: right 1s;
 opacity: 0.95;
 box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.30);
 right: ${props => props.animateMenu ? "0" : "-500px"};
+color: ${(props: StyledMenuType) => props.darkMode ? 'white' : 'white'};
 
 `
 
@@ -20,11 +21,12 @@ const StyledButton = styled(Button)`
 background-color: #670E81;
 border-radius:0px;
 border: none;
+
 `
 
 function Menu(props: IStyledMenuProps) {
     return (
-        <MenuWrapper animateMenu={props.menu} >
+        <MenuWrapper animateMenu={props.menu} darkMode={props.darkMode}>
        <Exit onExit={props.handleMenu} />
 
        <h2>Hello!</h2>
@@ -35,6 +37,7 @@ function Menu(props: IStyledMenuProps) {
 
 type StyledMenuType = {
     animateMenu?: boolean
+    darkMode?: boolean
   };
 
 interface IStyledMenuProps {

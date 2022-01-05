@@ -17,7 +17,7 @@ interface ModalProps {
 
 const StyledModal = styled.section`
   background-color: ${(props: ModalProps) =>
-    props.darkMode ? "#26374C" : "white"};
+    props.darkMode ? "#182331" : "white"};
   color: ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
   width: ${(props: ModalProps) => (props.width ? props.width : "70vw")};
   min-height: ${(props: ModalProps) => (props.height ? props.height : "70vh")};
