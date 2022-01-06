@@ -12,8 +12,9 @@ import {
   LogtailComponent,
 } from "components";
 
+// background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
 const StyledApp = styled.div<StyledAppType>`
-  background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
+  background-color: red;
   width: 100vw;
   overflow-x: hidden;
   color: ${(props) => (props.darkMode ? "white" : "black")};
@@ -25,7 +26,7 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   > nav {
-    background-color: ${(props) => (props.darkMode ? "#57066F" : "#57066F")};
+    background-color: #4B0C5E;
   }
 `;
 
@@ -40,7 +41,9 @@ const SliderWrapper = styled.section`
   width: 100%;
 `;
 
-const Slider = styled.section``;
+const Slider = styled.section`
+background: red;
+`;
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -106,6 +109,7 @@ function App() {
               </ComponentWindow>
             )}
           </Slider>
+          <Slider>
           {templateIsVisible && (
             <ComponentWindow
               darkMode={darkMode}
@@ -125,7 +129,9 @@ function App() {
                 wordCloudIsVisible={wordCloudIsVisible}
               />
             </ComponentWindow>
+        
           )}
+               </Slider>
         </SliderWrapper>
         {wordCloudIsVisible && (
           <ComponentWindow

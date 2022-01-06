@@ -61,7 +61,7 @@ const StyledInput = styled.input`
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 7rem;
   height: 100%;
-  background: #57066f;
+  background: #4B0C5E;
   color: white;
   border: none;
   cursor: pointer;

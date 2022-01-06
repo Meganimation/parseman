@@ -15,10 +15,9 @@ interface ComponentWindowProps {
   buttonText?: any;
   onButtonClick?: () => void;
 }
-
+// background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
 
 const StyledWrapper = styled.section`
-  background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
   color: ${(props: ComponentWindowProps) => props.darkMode ? 'white' : 'black'};
   min-width: ${(props: ComponentWindowProps) => props.width ? props.width : 'auto'};
  
