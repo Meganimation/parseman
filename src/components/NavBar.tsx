@@ -11,6 +11,10 @@ const StyledNavWrapper = styled.nav`
   height: 80px;
   width: 100%;
   opacity: 0.9;
+
+  overflow: hidden;
+  resize: vertical;
+  max-height: 120px;
 `;
 
 const StyledNav = styled.nav<StyledNavType>``;
@@ -76,7 +80,14 @@ const RadioButtonGroup = styled.span`
     margin-right: 0.8rem;
     font-size: 0.8rem;
   }
+
+  > input {
+    margin-left: 25px;
+    margin-right: 10px;
+  }
 `;
+
+
 
 const ContentWrapper = styled.div`
   display: flex;
@@ -85,8 +96,19 @@ const ContentWrapper = styled.div`
   padding: 10px;
 `;
 
+const RadioItem = styled.div`
+cursor: pointer; 
+
+&:hover {
+  transform: scale(1.1);
+}
+
+
+`
+
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
+  const [radioValue, setRadioValue] = React.useState('');
 
   const handleMenu = () => {
     setMenu(false);
@@ -103,10 +125,10 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
           <ContentWrapper>
             <RadioButtonGroup>
-              <input type="radio" value="Templates" /> <div>Template</div>
-              <input type="radio" value="Variables" />
-              <div>Variables</div>
-              <input type="radio" value="Both" /> <div>Both</div>
+              <RadioItem onClick={(e)=>{setRadioValue('Templates')}}> <input type="radio" value="Templates" checked={radioValue === 'Templates' ? true : false}/> <b>Template</b></RadioItem>
+              <RadioItem onClick={(e)=>{setRadioValue('Variables')}}> <input type="radio" value="Variables" checked={radioValue === 'Variables' ? true : false}/>
+              <b>Variables</b></RadioItem>
+              <RadioItem onClick={(e)=>{setRadioValue('Both')}}> <input type="radio" value="Both" checked={radioValue === 'Both' ? true : false}/> <b>Both</b></RadioItem>
             </RadioButtonGroup>
             <UnhideComponentWrapper>
               {!props.logtailIsVisible && (
