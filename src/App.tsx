@@ -42,7 +42,7 @@ const SliderWrapper = styled.section`
 `;
 
 const Slider = styled.section`
-background: red;
+background: #131B25;
 `;
 
 function App() {
@@ -53,6 +53,7 @@ function App() {
 
   const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
+  const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true)
 
   const messagesEndRef = useRef(null);
 
@@ -67,6 +68,9 @@ function App() {
       case "wordCloud":
         setWordCloudIsVisible(true);
         break;
+        case "parsedSideInfoIsVisible":
+          setParsedSideInfoIsVisible(true);
+          break;
     }
   };
 
@@ -80,6 +84,11 @@ function App() {
     setParsedDataIsVisible(true);
   };
 
+  const handleExit=()=>{
+
+    setParsedSideInfoIsVisible(false)
+  }
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -87,6 +96,7 @@ function App() {
         logtailIsVisible={logtailIsVisible}
         templateIsVisible={templateIsVisible}
         wordCloudIsVisible={wordCloudIsVisible}
+        parsedSideInfoIsVisible={parsedSideInfoIsVisible}
         showComponent={showComponent}
         darkMode={darkMode}
       />
@@ -159,7 +169,7 @@ function App() {
           }}
         >
           <div ref={messagesEndRef}>
-            <ParsedDataComponent />
+            <ParsedDataComponent darkMode={darkMode} handleExit={handleExit} parsedSideInfoIsVisible={parsedSideInfoIsVisible} />
           </div>
         </ComponentWindow>
       )}
@@ -189,3 +199,4 @@ export interface TestProps {
 }
 
 export default App;
+

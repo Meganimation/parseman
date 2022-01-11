@@ -4,17 +4,19 @@ import Exit from 'stories/Exit'
 import {Button} from 'stories/Button'
 
 const MenuWrapper = styled.div<StyledMenuType>`
-background: #182331C3;
+background: #131B25;
 position: relative;
-width: 30vw;
+width: 20vw;
 height: 100vh;
 position: fixed;
-transition: right 1s;
-opacity: 0.95;
+opacity: 95%;
 box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.30);
+transition: right 1s;
 right: ${props => props.animateMenu ? "0" : "-500px"};
 color: ${(props: StyledMenuType) => props.darkMode ? 'white' : 'white'};
 padding: 20px;
+
+z-index: 1;
 
 `
 
@@ -35,7 +37,7 @@ top:0;
 right:0;
 padding: 20px;
 `
-const MenuGreeting = styled.h2`
+const MenuGreeting = styled.h3`
 padding-bottom: 3rem;
 padding-top: 2rem;
 `

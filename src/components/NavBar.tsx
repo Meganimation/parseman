@@ -127,7 +127,7 @@ export default function NavBar(props: INavBarProps) {
             <RadioButtonGroup>
               <RadioItem onClick={(e)=>{setRadioValue('Templates')}}> <input type="radio" value="Templates" checked={radioValue === 'Templates' ? true : false}/> <b>Template</b></RadioItem>
               <RadioItem onClick={(e)=>{setRadioValue('Variables')}}> <input type="radio" value="Variables" checked={radioValue === 'Variables' ? true : false}/>
-              <b>Variables</b></RadioItem>
+              <b> Variables</b></RadioItem>
               <RadioItem onClick={(e)=>{setRadioValue('Both')}}> <input type="radio" value="Both" checked={radioValue === 'Both' ? true : false}/> <b>Both</b></RadioItem>
             </RadioButtonGroup>
             <UnhideComponentWrapper>
@@ -161,6 +161,17 @@ export default function NavBar(props: INavBarProps) {
                 >
                   <UnhideComponentItem>
                     <div> x Show Word Cloud</div>
+                  </UnhideComponentItem>
+                </div>
+              )}
+                 {!props.parsedSideInfoIsVisible && (
+                <div
+                  onClick={() => {
+                    props.showComponent("parsedSideInfoIsVisible");
+                  }}
+                >
+                  <UnhideComponentItem>
+                    <div> x Show parsedSideInfoIsVisible</div>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -202,6 +213,7 @@ interface INavBarProps {
   logtailIsVisible?: any;
   templateIsVisible: boolean;
   wordCloudIsVisible: boolean;
+  parsedSideInfoIsVisible: boolean;
   darkMode: boolean;
   handleTheme: () => void;
 }

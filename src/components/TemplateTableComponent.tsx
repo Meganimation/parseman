@@ -4,10 +4,13 @@ import styled from 'styled-components'
 
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
+background-color:${(props) => props.darkMode ? '#1C2937; ' : 'white'};
+border-radius: 10px;
 overflow: auto;
-background-color:${(props) => props.darkMode ? '#26374C; ' : 'white'};
-height: ${(props) => props.wordCloudIsVisible ? '47vh' : '35vw'};
-margin: 10px;
+height: ${(props) => props.wordCloudIsVisible ? '43vh' : '35vw'};
+padding: 20px;
+
+
 
 ` 
 

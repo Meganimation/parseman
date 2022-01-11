@@ -1,18 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-
+//background-color:${(props) => props.darkMode ? '#26374C; ' : 'white'};
 const LogtailComponentWrapper = styled.section<StyledLogtailType>`
-
-background-color:${(props) => props.darkMode ? '#26374C; ' : 'white'};
-margin: 17px;
 overflow: hidden;
 resize: horizontal;
-max-width: ${(props) => props.templateIsVisible ? '65vw' : '97vw'};
-min-width: ${(props) => props.templateIsVisible ? '30vw' : '97vw'};
-height: ${(props) => props.wordCloudIsVisible ? '47vh' : '35vw'};
+max-width: ${(props) => props.templateIsVisible ? '60vw' : '95vw'};
+min-width: ${(props) => props.templateIsVisible ? '30vw' : '95vw'};
+height: ${(props) => props.wordCloudIsVisible ? '43vh' : '35vw'};
 width: ${(props) => props.templateIsVisible ? '45vw' : '90vw'};
 overflow: auto;
+padding: 20px;
+
+background-color:${(props) => props.darkMode ? '#1C2937; ' : 'white'};
+border-radius: 10px;
 ` 
 
 

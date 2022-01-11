@@ -13,8 +13,8 @@ interface ButtonProps {
 
 const StyledButton = styled.button`
   background-color: ${(props: ButtonProps) => props.darkMode ? '#753886' : '#753881'};
-  min-width: ${(props: ButtonProps) => props.width ? props.width : '200px'};
-  height: ${(props: ButtonProps) => props.height ? props.height : '100px'};
+  min-width: ${(props: ButtonProps) => props.width ? props.width : '6em'};
+  height: ${(props: ButtonProps) => props.height ? props.height : '3em'};
   border-radius: 5px;
   font-size: ${(props: ButtonProps) => props.fontSize ? props.fontSize : '20px'};
   font-family: "IBM Plex Mono", sans-serif;
@@ -37,8 +37,8 @@ const StyledButton = styled.button`
 
 
 export const Button = ({
-  height = '3rem', 
-  width = '9rem',
+  height = '3em', 
+  width = '9em',
   fontSize = '20px',
   darkMode = false,
   label,
