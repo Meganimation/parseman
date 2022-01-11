@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import styled from 'styled-components'
+
+
+const StyledFooter = styled.footer`
+
+color: black;
+font-size: 0.2em;
+display: absolute;
+bottom: 0;
+
+`
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <StyledFooter>©2022 SliceUp, Inc. All rights reserved.</StyledFooter>
   </React.StrictMode>,
   document.getElementById('root')
 );
