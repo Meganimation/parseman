@@ -12,8 +12,9 @@ import {
   LogtailComponent,
 } from "components";
 
+// background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
 const StyledApp = styled.div<StyledAppType>`
-  background-color: ${(props) => (props.darkMode ? "#182331" : "green")};
+  background-color: red;
   width: 100vw;
   overflow-x: hidden;
   color: ${(props) => (props.darkMode ? "white" : "black")};
@@ -25,13 +26,13 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   > nav {
-    background-color: ${(props) => (props.darkMode ? "#57066F" : "#57066F")};
+    background-color: #4B0C5E;
   }
 `;
 
 const Content = styled.main<StyledAppType>`
   padding-top: 15vh;
-  background: #182331;
+  background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
 const SliderWrapper = styled.section`
@@ -40,7 +41,9 @@ const SliderWrapper = styled.section`
   width: 100%;
 `;
 
-const Slider = styled.section``;
+const Slider = styled.section`
+background: #131B25;
+`;
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -50,6 +53,7 @@ function App() {
 
   const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
+  const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true)
 
   const messagesEndRef = useRef(null);
 
@@ -64,6 +68,9 @@ function App() {
       case "wordCloud":
         setWordCloudIsVisible(true);
         break;
+        case "parsedSideInfoIsVisible":
+          setParsedSideInfoIsVisible(true);
+          break;
     }
   };
 
@@ -77,6 +84,11 @@ function App() {
     setParsedDataIsVisible(true);
   };
 
+  const handleExit=()=>{
+
+    setParsedSideInfoIsVisible(false)
+  }
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -84,6 +96,7 @@ function App() {
         logtailIsVisible={logtailIsVisible}
         templateIsVisible={templateIsVisible}
         wordCloudIsVisible={wordCloudIsVisible}
+        parsedSideInfoIsVisible={parsedSideInfoIsVisible}
         showComponent={showComponent}
         darkMode={darkMode}
       />
@@ -99,12 +112,14 @@ function App() {
                 }}
               >
                 <LogtailComponent
+                  darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
                 />
               </ComponentWindow>
             )}
           </Slider>
+          <Slider>
           {templateIsVisible && (
             <ComponentWindow
               darkMode={darkMode}
@@ -124,7 +139,9 @@ function App() {
                 wordCloudIsVisible={wordCloudIsVisible}
               />
             </ComponentWindow>
+        
           )}
+               </Slider>
         </SliderWrapper>
         {wordCloudIsVisible && (
           <ComponentWindow
@@ -152,7 +169,7 @@ function App() {
           }}
         >
           <div ref={messagesEndRef}>
-            <ParsedDataComponent />
+            <ParsedDataComponent darkMode={darkMode} handleExit={handleExit} parsedSideInfoIsVisible={parsedSideInfoIsVisible} />
           </div>
         </ComponentWindow>
       )}
@@ -163,6 +180,7 @@ function App() {
             setModal(false);
           }}
           title="Saved!"
+          darkMode={darkMode}
         >
           SAVED
         </Modal>
@@ -181,3 +199,4 @@ export interface TestProps {
 }
 
 export default App;
+

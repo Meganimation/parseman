@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'stories/Button';
-import ClearIcon from '@material-ui/icons/Clear'
 import Exit from './Exit';
 
 interface ComponentWindowProps {
@@ -17,31 +16,36 @@ interface ComponentWindowProps {
 }
 
 
-const StyledWrapper = styled.section`
-  background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
+const ComponentWindowWrapper = styled.section`
+background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
   color: ${(props: ComponentWindowProps) => props.darkMode ? 'white' : 'black'};
   min-width: ${(props: ComponentWindowProps) => props.width ? props.width : 'auto'};
+   margin: 2px;
+   border-radius: 10px;
+   border: ${(props: ComponentWindowProps) => props.darkMode ? '5px #26374C solid' : '5px white solid'};
+   
+
  
 `
 
 const HeaderContent = styled.div`
 background-color: ${(props: ComponentWindowProps) => props.darkMode ? '#26374C' : 'white'};
-  width: 100%;
-  max-height: ${(props: ComponentWindowProps) => (props.title === 'None') ? '1px' : '50px'};
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  
   `
 
   const Title = styled.h1`
   font-size: 1.5em;
   font-family: arial;
-  color: ${(props: ComponentWindowProps) => props.darkMode ? 'black' : 'white'};
+  color: ${(props: ComponentWindowProps) => props.darkMode ? 'white' : '#26374C'};
   `
 
   const ExitWrapper = styled.span`
-  padding-right: 20px;
   cursor: pointer;
+  position: relative;
+  top: 10px;
+  right: 0;
   &:hover {
     transform: scale(1.1);
   }
@@ -71,18 +75,18 @@ export const ComponentWindow = ({
 }: ComponentWindowProps) => {
 
   return (
-   <StyledWrapper
+   <ComponentWindowWrapper
       darkMode={darkMode}
       {...props}
     >
       <HeaderContent darkMode={darkMode} title={title}>
-      { title !== 'None' ? <Title title={title}>{title}</Title> : <FakeDiv>.</FakeDiv>}
-      { props.button && <div style={{marginRight: '15%'}}><Button onClick={onButtonClick} label={buttonText} /></div>}
+      { title !== 'None' ? <Title title={title } darkMode={darkMode}>{title}</Title> : <FakeDiv>.</FakeDiv>}
+      { props.button && <div style={{marginRight: '15%', marginTop: '2.5%'}}><Button onClick={onButtonClick} label={buttonText} fontSize='16px' /></div>}
         <ExitWrapper><Exit onExit={onExit} /> </ExitWrapper>
         
         </HeaderContent>
       {children}
       
-    </StyledWrapper>
+    </ComponentWindowWrapper>
   );
 };
