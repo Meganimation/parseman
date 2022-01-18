@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import styled from 'styled-components'
+import { Provider } from 'react-redux'
+import { store } from 'slices/store'
 
 
 const StyledFooter = styled.footer`
@@ -17,7 +19,9 @@ bottom: 0;
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store={store}>
     <App />
+    </Provider>
     <StyledFooter>©2022 SliceUp, Inc. All rights reserved.</StyledFooter>
   </React.StrictMode>,
   document.getElementById('root')
