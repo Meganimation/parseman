@@ -1,38 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import SelectorsHelper, {
+  CURRENT_ENVIRONMENT_TYPE,
+} from "utils/SelectorsHelper";
+import { convertToParsed, convertToTemplateList } from "slices/currentDataSlice";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
   border-radius: 10px;
   overflow: auto;
-  height: ${(props) => (props.wordCloudIsVisible ? "49vh" : "35vw")};
+  height: ${(props) => (props.wordCloudIsVisible ? "54.5vh" : "35vw")};
 
   font-size: 12px;
-  border-top: 10px solid #1c2937;
+
 `;
 
 const TableHeaderWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: 1.1fr 5fr 1.5fr;
+
+  position: -webkit-sticky; 
+  position: sticky;
+  top: 0;
 
 `;
 
 
 const TableWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: 1.5fr 4fr 0.5fr;
   background: #34404E;
   cursor: pointer;
   margin: 0;
   border: 0;
   align-items: center;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  grid-column-gap: 20px;
+  border-bottom: 1px solid #C1C1C1;
 
   &:hover {
     background: #28313B;
   }
 
 `;
-const TableHeader = styled.h2`
+const TableHeader = styled.div`
   padding-left: 10px;
   font-size: 0.75em;
   background: #2d4460;
@@ -52,25 +65,48 @@ const StyledRadio = styled.input`
   margin-right: 10px;
 `;
 
-const testData = [
-  {
-    templateId: 1234433,
-    templateLiteral: "bedue 2823b3 did290 2k3o3 dkdososbdd e",
-    totalLogs: 12,
-  },
-  {
-    templateId: 12311433,
-    templateLiteral:
-      "bedue 2823b3 did290 2k3o3 dkdososb290 2k3o3 dkdososb290 2k3o3 dkdososb290 2 dkdososb290 2k3o3 dkdososb290 2k3o3 dkdososb k3o3 dkdososbdd e",
-    totalLogs: 112,
-  },
-];
 
 let testString =
   " ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved.";
+
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
+
+  const [templateId, setTemplateId] = useState('');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const URL: string = SelectorsHelper.getURL(
+      CURRENT_ENVIRONMENT_TYPE,
+      "templateList"
+    );
+
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=500&to=0`;
+
+    if (!props.templateListData.length)
+      fetch(urlWithString)
+        .then((res) => {
+          if (!res.ok) {
+            throw Error(`Error code: ${res.status}. Please try again.`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          //@ts-ignore
+          dispatch(convertToTemplateList(data));
+          console.log(data);
+     
+
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    // }
+  }, [props.templateListData, dispatch]);
+
+  if (!props.templateListData) return <h1>Loading...</h1>;
+
   return (
     <>
       <TemplateTableComponentWrapper
@@ -78,8 +114,8 @@ export default function TemplateTableComponent(
         darkMode={props.darkMode}
       >
         <TableHeaderWrapper>
-          <TableHeader>
-            <h2>Template Id</h2>
+          <TableHeader >
+            <h2  >Template Id</h2>
           </TableHeader>
 
           <TableHeader>
@@ -91,16 +127,15 @@ export default function TemplateTableComponent(
           </TableHeader>
         </TableHeaderWrapper>
 
-          <div>
-            {testData.map((data) => (
-              <TableWrapper>
-               
-                <div> <StyledRadio type="radio" />{data.templateId}</div>
+          <>
+            {props.templateListData.map((data: any) => (
+              <TableWrapper onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion)}}>
+                <div > <StyledRadio type="radio" checked={props.checkedTemplateId === data.templateId} /> {data.templateId} </div>
                 <div>{data.templateLiteral}</div>
-                <div>{data.totalLogs}</div>
+                <div>{data.totalTemplates}</div>
               </TableWrapper>
             ))}
-          </div>
+          </>
 
         <p>{testString}</p>
       </TemplateTableComponentWrapper>
@@ -118,4 +153,9 @@ interface TemplateTableComponentProps {
   templateIsVisible: boolean;
   darkMode?: boolean;
   wordCloudIsVisible: boolean;
+  templateListData?: any;
+  updateTailSearchResultsHandler?: any;
+  handleCheckedRadio?: any;
+  checkedTemplateId?: string;
+  
 }

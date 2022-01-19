@@ -15,6 +15,9 @@ const StyledNavWrapper = styled.nav`
   overflow: hidden;
   resize: vertical;
   max-height: 120px;
+
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+  z-index: 2;
 `;
 
 const StyledNav = styled.nav<StyledNavType>``;
@@ -61,7 +64,7 @@ const StyledInput = styled.input`
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 7rem;
   height: 100%;
-  background: #4B0C5E;
+  background: #4b0c5e;
   color: white;
   border: none;
   cursor: pointer;
@@ -73,7 +76,7 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
   display: flex;
-  color: ${(props: StyledNavType) => props.darkMode ? 'white' : 'white'};
+  color: ${(props: StyledNavType) => (props.darkMode ? "white" : "white")};
 
   > div {
     margin-left: 0.3rem;
@@ -87,8 +90,6 @@ const RadioButtonGroup = styled.span`
   }
 `;
 
-
-
 const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -97,18 +98,17 @@ const ContentWrapper = styled.div`
 `;
 
 const RadioItem = styled.div`
-cursor: pointer; 
+  cursor: pointer;
 
-&:hover {
-  transform: scale(1.1);
-}
-
-
-`
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
-  const [radioValue, setRadioValue] = React.useState('');
+  const [radioValue, setRadioValue] = React.useState("Templates");
+  const [inputValue, setInputValue] = React.useState("");
 
   const handleMenu = () => {
     setMenu(false);
@@ -116,7 +116,7 @@ export default function NavBar(props: INavBarProps) {
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      alert("You can search by hitting enter");
+      props.updateTailSearchResultsHandler(inputValue);
     }
   };
   return (
@@ -125,10 +125,48 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
           <ContentWrapper>
             <RadioButtonGroup>
-              <RadioItem onClick={(e)=>{setRadioValue('Templates')}}> <input type="radio" value="Templates" checked={radioValue === 'Templates' ? true : false}/> <b>Template</b></RadioItem>
-              <RadioItem onClick={(e)=>{setRadioValue('Variables')}}> <input type="radio" value="Variables" checked={radioValue === 'Variables' ? true : false}/>
-              <b> Variables</b></RadioItem>
-              <RadioItem onClick={(e)=>{setRadioValue('Both')}}> <input type="radio" value="Both" checked={radioValue === 'Both' ? true : false}/> <b>Both</b></RadioItem>
+              <RadioItem
+                onClick={(e) => {
+                  props.handleTemplateVersionChange("1");
+                  setRadioValue("Templates");
+                }}
+              >
+                
+                <input
+                  type="radio"
+                  value="Templates"
+                  checked={radioValue === "Templates" ? true : false}
+                />
+                <b>Template</b>
+              </RadioItem>
+              <RadioItem
+                onClick={(e) => {
+                  props.handleTemplateVersionChange("2");
+                  setRadioValue("Variables");
+                }}
+              >
+                
+                <input
+                  type="radio"
+                  value="Variables"
+                  checked={radioValue === "Variables" ? true : false}
+                />
+                <b> Variables</b>
+              </RadioItem>
+              <RadioItem
+                onClick={(e) => {
+                  props.handleTemplateVersionChange("3");
+                  setRadioValue("Both");
+                }}
+              >
+                
+                <input
+                  type="radio"
+                  value="Both"
+                  checked={radioValue === "Both" ? true : false}
+                />
+                <b>Both</b>
+              </RadioItem>
             </RadioButtonGroup>
             <UnhideComponentWrapper>
               {!props.logtailIsVisible && (
@@ -164,7 +202,7 @@ export default function NavBar(props: INavBarProps) {
                   </UnhideComponentItem>
                 </div>
               )}
-                 {!props.parsedSideInfoIsVisible && (
+              {!props.parsedSideInfoIsVisible && (
                 <div
                   onClick={() => {
                     props.showComponent("parsedSideInfoIsVisible");
@@ -179,7 +217,11 @@ export default function NavBar(props: INavBarProps) {
           </ContentWrapper>
           <StyledInput
             type="text"
-            placeholder="Search"
+            placeholder={props.tailSearch}
+            onChange={(event) => {
+              const val = event.target.value as string;
+              setInputValue(val)
+            }}
             onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
               handleSubmit(e);
             }}
@@ -216,4 +258,7 @@ interface INavBarProps {
   parsedSideInfoIsVisible: boolean;
   darkMode: boolean;
   handleTheme: () => void;
+  updateTailSearchResultsHandler?: any;
+  tailSearch: string;
+  handleTemplateVersionChange: any;
 }
