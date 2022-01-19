@@ -73,7 +73,7 @@ export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
 
-
+  const [templateId, setTemplateId] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -129,9 +129,8 @@ export default function TemplateTableComponent(
 
           <>
             {props.templateListData.map((data: any) => (
-              <TableWrapper>
-               
-                <div > <StyledRadio type="radio" /> {data.templateId}</div>
+              <TableWrapper onClick={()=>{props.handleCheckedRadio(data.templateId)}}>
+                <div > <StyledRadio type="radio" checked={props.templateId === data.templateId } /> {data.templateId} </div>
                 <div>{data.templateLiteral}</div>
                 <div>{data.totalTemplates}</div>
               </TableWrapper>
@@ -156,4 +155,6 @@ interface TemplateTableComponentProps {
   wordCloudIsVisible: boolean;
   templateListData?: any;
   updateTailSearchResultsHandler?: any;
+  handleCheckedRadio?: any;
+  templateId?: string;
 }

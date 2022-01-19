@@ -14,6 +14,7 @@ interface ComponentWindowProps {
   buttonText?: any;
   onButtonClick?: () => void;
   headerHeight?: string;
+  handleCheckedData?: any;
 }
 
 const ComponentWindowWrapper = styled.section`

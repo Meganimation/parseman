@@ -214,7 +214,7 @@ export default function NavBar(props: INavBarProps) {
           </ContentWrapper>
           <StyledInput
             type="text"
-            placeholder="Search"
+            placeholder={props.tailSearch}
             onChange={(event) => {
               const val = event.target.value as string;
               setInputValue(val)
@@ -256,4 +256,5 @@ interface INavBarProps {
   darkMode: boolean;
   handleTheme: () => void;
   updateTailSearchResultsHandler?: any;
+  tailSearch: string;
 }

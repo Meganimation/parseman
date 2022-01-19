@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Exit from "stories/Exit";
+import { RootState } from "slices/store";
+import { useSelector, useDispatch } from "react-redux";
 
 const ParsedDataComponentWrapper = styled.section`
   height: 75vh;
@@ -91,6 +93,14 @@ export default function ParsedDataComponent({
   parsedSideInfoIsVisible = true,
   ...props
 }: IParsedDataComponentProps) {
+
+
+      const parsedData: any = useSelector(
+        (state: RootState) => state.returnedData.parsedData
+      );
+
+
+
   const [data, setData] = useState("place some data here");
 
   const temptemplateData =
@@ -144,9 +154,9 @@ export default function ParsedDataComponent({
           </TableHeader>
         </TableHeaderWrapper>
 
-          <>
-            data here
-          </>
+          <button onClick={()=>{console.log(parsedData)}}>
+            click to log data
+          </button>
       </ParsedTableResultsWrapper>
 
       

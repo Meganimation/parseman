@@ -20,6 +20,7 @@ import {
   convertToLogged,
   convertToWordCloud,
   convertToTemplateList,
+  convertToParsed
 } from "./slices/currentDataSlice";
 
 import { RootState } from "slices/store";
@@ -75,6 +76,8 @@ function App() {
 
   const [tailSearch, setTailSearch] = useState("");
 
+  const [templateId, setTemplateId] = useState("");
+
   const messagesEndRef = useRef(null);
 
 
@@ -98,14 +101,29 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (parsedDataIsVisible) handleParsedDataRendering();
-  }, [parsedDataIsVisible]);
+
+
+
 
   const handleParsedDataRendering = () => {
-    //@ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     setParsedDataIsVisible(true);
+
+    let filterAddOnValue = `${tailSearch} AND templateId=${templateId}`;
+
+   
+  
+
+    updateTailSearchResultsHandler(filterAddOnValue);
+
+      //@ts-ignore
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    return fetchParsedData(
+      templateId,
+      '1', //replace with the templateVersion
+      dispatch as any
+    );
+
+    
   };
 
   const fetchLogTailData = (value: string) => {
@@ -114,7 +132,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=500&to=0`;
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -138,7 +156,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=hi&from=500&to=0`;
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -162,7 +180,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=500&to=0`;
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -173,6 +191,35 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToWordCloud(data));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const fetchParsedData = (
+    templateId: string,
+    templateVersion: string,
+    dispatch: any
+  ) => {
+    const URL: string = SelectorsHelper.getURL(
+      CURRENT_ENVIRONMENT_TYPE,
+      "parsedDataTable"
+    );
+
+    const urlWithString = `${URL}/${templateId}/1/?limit=500`;
+
+    fetch(urlWithString)
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(`Error code: ${res.status}. Please try again.`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+
+        dispatch(convertToParsed(data));
+        console.log('done', data)
       })
       .catch((err) => {
         console.log(err.message);
@@ -190,6 +237,11 @@ function App() {
     setParsedSideInfoIsVisible(false);
   };
 
+  const handleCheckedRadio = (value: string) => {
+    setTemplateId(value);
+  }
+
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -201,6 +253,7 @@ function App() {
         showComponent={showComponent}
         darkMode={darkMode}
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
+        tailSearch={tailSearch}
       />
       <Content darkMode={darkMode}>
         <SliderWrapper>
@@ -244,6 +297,8 @@ function App() {
                   wordCloudIsVisible={wordCloudIsVisible}
                   templateListData={templateListData}
                   updateTailSearchResultsHandler={updateTailSearchResultsHandler}
+                  handleCheckedRadio={handleCheckedRadio}
+                  templateId={templateId}
                 />
               </ComponentWindow>
             )}
