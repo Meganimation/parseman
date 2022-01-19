@@ -107,7 +107,7 @@ const RadioItem = styled.div`
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
-  const [radioValue, setRadioValue] = React.useState("");
+  const [radioValue, setRadioValue] = React.useState("Templates");
   const [inputValue, setInputValue] = React.useState("");
 
   const handleMenu = () => {
@@ -127,6 +127,7 @@ export default function NavBar(props: INavBarProps) {
             <RadioButtonGroup>
               <RadioItem
                 onClick={(e) => {
+                  props.handleTemplateVersionChange("1");
                   setRadioValue("Templates");
                 }}
               >
@@ -140,6 +141,7 @@ export default function NavBar(props: INavBarProps) {
               </RadioItem>
               <RadioItem
                 onClick={(e) => {
+                  props.handleTemplateVersionChange("2");
                   setRadioValue("Variables");
                 }}
               >
@@ -153,6 +155,7 @@ export default function NavBar(props: INavBarProps) {
               </RadioItem>
               <RadioItem
                 onClick={(e) => {
+                  props.handleTemplateVersionChange("3");
                   setRadioValue("Both");
                 }}
               >
@@ -257,4 +260,5 @@ interface INavBarProps {
   handleTheme: () => void;
   updateTailSearchResultsHandler?: any;
   tailSearch: string;
+  handleTemplateVersionChange: any;
 }

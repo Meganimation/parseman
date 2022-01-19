@@ -74,9 +74,11 @@ function App() {
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
-  const [tailSearch, setTailSearch] = useState("");
+  const [tailSearch, setTailSearch] = useState("build");
 
-  const [templateId, setTemplateId] = useState("");
+  const [checkedTemplateId, setCheckedTemplateId] = useState("");
+  const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
+  const [templateVersion, setTemplateVersion] = useState("1");
 
   const messagesEndRef = useRef(null);
 
@@ -108,7 +110,11 @@ function App() {
   const handleParsedDataRendering = () => {
     setParsedDataIsVisible(true);
 
-    let filterAddOnValue = `${tailSearch} AND templateId=${templateId}`;
+
+    if (tailSearch.includes('AND') && tailSearch.includes(checkedTemplateId)) {
+      return(console.log('breaking'))
+    }
+    let filterAddOnValue = `${tailSearch} AND checkedTemplateId=${checkedTemplateId}`;
 
    
   
@@ -118,13 +124,18 @@ function App() {
       //@ts-ignore
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     return fetchParsedData(
-      templateId,
-      '1', //replace with the templateVersion
+      checkedTemplateId,
+      templateVersion, 
       dispatch as any
     );
 
     
   };
+
+  const handleTemplateVersionChange = (version: string) => {
+    setTemplateVersion(version);
+  }
+
 
   const fetchLogTailData = (value: string) => {
     const URL: string = SelectorsHelper.getURL(
@@ -132,7 +143,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -143,6 +154,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToLogged(data));
+        console.log('logtail data', data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -156,7 +168,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -180,7 +192,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -198,8 +210,8 @@ function App() {
   };
 
   const fetchParsedData = (
-    templateId: string,
-    templateVersion: string,
+    checkedTemplateId: string,
+    templateVersion: string, //this needs to be the parsed templateversion
     dispatch: any
   ) => {
     const URL: string = SelectorsHelper.getURL(
@@ -207,7 +219,9 @@ function App() {
       "parsedDataTable"
     );
 
-    const urlWithString = `${URL}/${templateId}/1/?limit=500`;
+    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`;
+
+    
 
     fetch(urlWithString)
       .then((res) => {
@@ -237,8 +251,9 @@ function App() {
     setParsedSideInfoIsVisible(false);
   };
 
-  const handleCheckedRadio = (value: string) => {
-    setTemplateId(value);
+  const handleCheckedRadio = (templateIdValue: string, templateVersionValue: string) => {
+    setCheckedTemplateId(templateIdValue);
+    setCheckedTemplateVersion(templateVersionValue)
   }
 
 
@@ -254,7 +269,9 @@ function App() {
         darkMode={darkMode}
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
         tailSearch={tailSearch}
+        handleTemplateVersionChange={handleTemplateVersionChange}
       />
+  
       <Content darkMode={darkMode}>
         <SliderWrapper>
           <Slider>
@@ -298,7 +315,7 @@ function App() {
                   templateListData={templateListData}
                   updateTailSearchResultsHandler={updateTailSearchResultsHandler}
                   handleCheckedRadio={handleCheckedRadio}
-                  templateId={templateId}
+                  checkedTemplateId={checkedTemplateId}
                 />
               </ComponentWindow>
             )}
