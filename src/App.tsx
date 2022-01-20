@@ -20,12 +20,10 @@ import {
   convertToLogged,
   convertToWordCloud,
   convertToTemplateList,
-  convertToParsed
+  convertToParsed,
 } from "./slices/currentDataSlice";
 
 import { RootState } from "slices/store";
-
-
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -59,11 +57,9 @@ const Slider = styled.section`
 `;
 
 function App() {
-
   const templateListData = useSelector(
     (state: RootState) => state.returnedData.templateListData
   );
-
 
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
@@ -82,8 +78,6 @@ function App() {
   const [templateVersion, setTemplateVersion] = useState("1");
 
   const messagesEndRef = useRef(null);
-
-
 
   const dispatch = useDispatch();
 
@@ -104,39 +98,24 @@ function App() {
     }
   };
 
-
-
-
-
   const handleParsedDataRendering = () => {
     setParsedDataIsVisible(true);
 
-
-    if (tailSearch.includes('AND') && tailSearch.includes(checkedTemplateId)) {
-      return(console.log('breaking'))
+    if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
+      return console.log("breaking");
     }
     let filterAddOnValue = `${tailSearch} AND checkedTemplateId=${checkedTemplateId}`;
 
-   
-  
-
     updateTailSearchResultsHandler(filterAddOnValue);
 
-      //@ts-ignore
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    return fetchParsedData(
-      checkedTemplateId,
-      templateVersion, 
-      dispatch as any
-    );
-
-    
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    return fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
   };
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
-  }
-
+  };
 
   const fetchLogTailData = (value: string) => {
     const URL: string = SelectorsHelper.getURL(
@@ -155,7 +134,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToLogged(data));
-        console.log('logtail data', data);
+        console.log("logtail data", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -180,7 +159,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToTemplateList(data));
-        console.log('done', data)
+        console.log("done", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -222,8 +201,6 @@ function App() {
 
     const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`;
 
-    
-
     fetch(urlWithString)
       .then((res) => {
         if (!res.ok) {
@@ -232,9 +209,8 @@ function App() {
         return res.json();
       })
       .then((data) => {
-
         dispatch(convertToParsed(data));
-        console.log('done', data)
+        console.log("done", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -252,12 +228,15 @@ function App() {
     setParsedSideInfoIsVisible(false);
   };
 
-  const handleCheckedRadio = (templateIdValue: string, templateVersionValue: string, templateLiteralValue: string) => {
+  const handleCheckedRadio = (
+    templateIdValue: string,
+    templateVersionValue: string,
+    templateLiteralValue: string
+  ) => {
     setCheckedTemplateId(templateIdValue);
-    setCheckedTemplateVersion(templateVersionValue)
+    setCheckedTemplateVersion(templateVersionValue);
     setCheckedTemplateLiteral(templateLiteralValue);
-  }
-
+  };
 
   return (
     <StyledApp darkMode={darkMode}>
@@ -273,7 +252,7 @@ function App() {
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
       />
-  
+
       <Content darkMode={darkMode}>
         <SliderWrapper>
           <Slider>
@@ -290,7 +269,6 @@ function App() {
                   darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
-                 
                 />
               </ComponentWindow>
             )}
@@ -315,10 +293,10 @@ function App() {
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
                   templateListData={templateListData}
-                  updateTailSearchResultsHandler={updateTailSearchResultsHandler}
+                  updateTailSearchResultsHandler={
+                    updateTailSearchResultsHandler
+                  }
                   handleCheckedRadio={handleCheckedRadio}
-                  
-                  
                   checkedTemplateId={checkedTemplateId}
                 />
               </ComponentWindow>
@@ -353,7 +331,7 @@ function App() {
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
-            checkedTemplateLiteral={checkedTemplateLiteral}
+              checkedTemplateLiteral={checkedTemplateLiteral}
               darkMode={darkMode}
               handleExit={handleExit}
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}

@@ -14,8 +14,8 @@ const ParsedDataComponentWrapper = styled.section`
   display: flex;
 `;
 
-const InfoBar = styled.aside`
-  background-color: (props) => (props.darkMode ? "#182331": "white");
+const InfoBar = styled.aside<StyledParsedTableType>`
+  background-color: ${(props) => (props.darkMode ? "#26374B": "white")};
   margin: 10px;
   width: 25vw;
 
@@ -76,12 +76,12 @@ const TableHeader = styled.div`
   }
 `;
 
-const GridContainer = styled.div`
+const GridContainer = styled.div<StyledParsedTableType>`
+
   display: grid;
   grid-auto-flow: column;
   overflow: auto;
-
-  background: #34404e;
+  background-color: ${(props) => (props.darkMode ? "#34404e": "white")};
   border: 1px solid #c1c1c1;
 `;
 
@@ -100,13 +100,18 @@ const TitleContainer = styled.div`
   cursor: pointer;
 `;
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.div<StyledParsedTableType>`
   display: flex;
   border-right: 1px solid #c1c1c1;
   padding-left: 10px;
   padding-right: 10px;
   font-size: 1em;
-  background: #2d4460;
+
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+
+  background-color: ${(props) => (props.darkMode ? "#2d4460": "white")};
   align-items: center;
   height: 4rem;
 
@@ -231,11 +236,12 @@ export default function ParsedDataComponent({
   const showColumns = () => {
     if (i < state.both.array.length) {
       return (
-        <GridContainer>
+        <GridContainer darkMode={darkMode}>
           {state.both.array.map(
             (array: { key: string; value: string[] }, key: number) => (
               <GridItem>
                 <HeaderContainer
+                darkMode={darkMode}
                   onClick={(e) => {
                     setEditInput([e.pageY - 50, e.clientX - 100]);
                   }}
@@ -270,7 +276,7 @@ export default function ParsedDataComponent({
         <>
           <Exit onExit={handleExit} />
 
-          <InfoBar>
+          <InfoBar darkMode={darkMode}>
             <InfoItem>
               <StyledEditTemplateWrapper
                 onClick={() => {
@@ -310,7 +316,7 @@ export default function ParsedDataComponent({
         <>
           <div>
             {!state.headers.length ? (
-              <p>parse some information above</p>
+              <p>Loading...</p>
             ) : (
               <ParsedTableResultsWrapper parsedSideInfoIsVisible={parsedSideInfoIsVisible}>
                 {showColumns()}

@@ -13,7 +13,7 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
   resize: horizontal;
   max-width: ${(props) => (props.templateIsVisible ? "60vw" : "95vw")};
   min-width: ${(props) => (props.templateIsVisible ? "30vw" : "95vw")};
-  height: ${(props) => (props.wordCloudIsVisible ? "49vh" : "35vw")};
+  height: ${(props) => (props.wordCloudIsVisible ? "50.5vh" : "35vw")};
   width: ${(props) => (props.templateIsVisible ? "40vw" : "90vw")};
   overflow: auto;
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
@@ -21,11 +21,15 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
 `;
 
 const LogtailItem = styled.div<StyledLogtailType>`
-  background: ${(props) => (props.id % 2 === 0 ? "#34404E" : "#2B3543")};
+  background: ${(props) => (props.id % 2 === 0 ?(props.darkMode ? "#34404E" : 'white') : (props.darkMode ? "#2B3543" : '#F5F5F5'))};
   font-size: 12px;
   color: #c5c7cb;
   overflow-wrap: break-word;
   word-break: break-all;
+
+   code {
+     color: ${(props) => (props.darkMode ? "#c5c7cb" : "#1C2937")};
+    }
 `;
 
 export default function LogtailComponent(props: LogtailComponentProps) {
@@ -67,7 +71,7 @@ const dispatch = useDispatch();
   const mapData = (data: any) => {
     return data.map((item: any, key: number) => {
       return (
-        <LogtailItem id={key}>
+        <LogtailItem id={key} darkMode={props.darkMode}>
           <code>
             {item.logTail}
           </code>
