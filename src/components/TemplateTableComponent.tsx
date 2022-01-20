@@ -129,7 +129,7 @@ export default function TemplateTableComponent(
 
           <>
             {props.templateListData.map((data: any) => (
-              <TableWrapper onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion)}}>
+              <TableWrapper onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion, data.templateLiteral)}}>
                 <div > <StyledRadio type="radio" checked={props.checkedTemplateId === data.templateId} /> {data.templateId} </div>
                 <div>{data.templateLiteral}</div>
                 <div>{data.totalTemplates}</div>

@@ -78,6 +78,7 @@ function App() {
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
+  const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
 
   const messagesEndRef = useRef(null);
@@ -251,9 +252,10 @@ function App() {
     setParsedSideInfoIsVisible(false);
   };
 
-  const handleCheckedRadio = (templateIdValue: string, templateVersionValue: string) => {
+  const handleCheckedRadio = (templateIdValue: string, templateVersionValue: string, templateLiteralValue: string) => {
     setCheckedTemplateId(templateIdValue);
     setCheckedTemplateVersion(templateVersionValue)
+    setCheckedTemplateLiteral(templateLiteralValue);
   }
 
 
@@ -315,6 +317,8 @@ function App() {
                   templateListData={templateListData}
                   updateTailSearchResultsHandler={updateTailSearchResultsHandler}
                   handleCheckedRadio={handleCheckedRadio}
+                  
+                  
                   checkedTemplateId={checkedTemplateId}
                 />
               </ComponentWindow>
@@ -349,6 +353,7 @@ function App() {
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
+            checkedTemplateLiteral={checkedTemplateLiteral}
               darkMode={darkMode}
               handleExit={handleExit}
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}
