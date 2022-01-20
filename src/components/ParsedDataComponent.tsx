@@ -9,7 +9,7 @@ import { Modal } from "stories/Modal";
 import EditIcon from "@material-ui/icons/Edit";
 
 const ParsedDataComponentWrapper = styled.section`
-padding-top: 3rem;
+  padding-top: 1rem;
   height: 75vh;
   display: flex;
 `;
@@ -17,11 +17,9 @@ padding-top: 3rem;
 const InfoBar = styled.aside`
   background-color: (props) => (props.darkMode ? "#182331": "white");
   margin: 10px;
-   width: 25vw;
+  width: 25vw;
 
   overflow-y: auto;
-
-
 `;
 
 const ParsedTableWrapper = styled.div`
@@ -36,36 +34,31 @@ const InfoItem = styled.div`
 `;
 
 const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>`
-width: 70vw;
-
-
-
+  width: ${(props) => (props.parsedSideInfoIsVisible ? "70vw" : "100vw")};
+  
 `;
 
 const TableHeaderWrapper = styled.div`
   display: grid;
   grid-template-columns: 1.1fr 5fr 1.5fr;
 
-  position: -webkit-sticky; 
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-
 `;
-
 
 const TableWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
-  background: #34404E;
+  background: #34404e;
   cursor: pointer;
   margin: 0;
   border: 0;
   align-items: center;
 
   &:hover {
-    background: #28313B;
+    background: #28313b;
   }
-
 `;
 
 const TableHeader = styled.div`
@@ -83,46 +76,35 @@ const TableHeader = styled.div`
   }
 `;
 
-
-
 const GridContainer = styled.div`
-display: grid;
-grid-auto-flow: column;
-overflow: auto;
+  display: grid;
+  grid-auto-flow: column;
+  overflow: auto;
 
-background: #34404E;
-border: 1px solid #C1C1C1;
-
-
-
-
+  background: #34404e;
+  border: 1px solid #c1c1c1;
 `;
 
 const GridItem = styled.div`
-background: rgba(51, 170, 51, .01);
-border-radius: 3px;
-text-align: left;
-min-width: fit-content;
+  background: rgba(51, 170, 51, 0.01);
+  border-radius: 3px;
+  text-align: left;
+  min-width: fit-content;
 
-
-
-height: 70vh;
-
-
+  height: 71vh;
 `;
 
 const TitleContainer = styled.div`
-height: 65px;
-resize: horizontal;
-cursor: pointer;
-
-`
+  height: 65px;
+  resize: horizontal;
+  cursor: pointer;
+`;
 
 const HeaderContainer = styled.div`
-display: flex;
-border-right: 1px solid #C1C1C1;
-padding-left: 10px;
-padding-right: 10px;
+  display: flex;
+  border-right: 1px solid #c1c1c1;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: 1em;
   background: #2d4460;
   align-items: center;
@@ -135,28 +117,25 @@ padding-right: 10px;
     vertical-align: middle;
   }
 
-&:hover: {
-  backgroundColor: #3A3A3A;
-}
-
-`
+  &:hover: {
+    backgroundcolor: #3a3a3a;
+  }
+`;
 
 const Title = styled.div`
-cursor: pointer;
-margin-top: auto;
-margin-bottom: auto;
-color: white;
-`
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: white;
+`;
 
 const Test = styled.div`
-margin: 10px;
+  margin: 10px;
 
-
-&:hover {
-  background: rgba(51, 170, 51, .1);
- }
-
-`
+  &:hover {
+    background: rgba(51, 170, 51, 0.1);
+  }
+`;
 
 const StyledEditTemplateWrapper = styled.div`
 
@@ -175,7 +154,7 @@ const StyledEditTemplateWrapper = styled.div`
   }
 }
 
-`
+`;
 
 export interface ISubmitState {
   headers: string[];
@@ -184,8 +163,6 @@ export interface ISubmitState {
     arrow: string;
   };
 }
-
-
 
 export default function ParsedDataComponent({
   templateId = "123456789",
@@ -196,13 +173,9 @@ export default function ParsedDataComponent({
   parsedSideInfoIsVisible = true,
   ...props
 }: IParsedDataComponentProps) {
-
-
-      const returnedData: any = useSelector(
-        (state: RootState) => state.returnedData.parsedData
-      );
-
-
+  const returnedData: any = useSelector(
+    (state: RootState) => state.returnedData.parsedData
+  );
 
   const [modal, setModal] = useState(false);
 
@@ -226,7 +199,7 @@ export default function ParsedDataComponent({
   let arrBoth: any[] = [];
   let i = 0;
 
-    const showParsedInfo = () => {
+  const showParsedInfo = () => {
     if (!returnedData) return console.log("no data");
     else {
       while (i < returnedData.headers.length) {
@@ -259,42 +232,28 @@ export default function ParsedDataComponent({
     if (i < state.both.array.length) {
       return (
         <GridContainer>
- 
           {state.both.array.map(
             (array: { key: string; value: string[] }, key: number) => (
               <GridItem>
                 <HeaderContainer
                   onClick={(e) => {
-        
                     setEditInput([e.pageY - 50, e.clientX - 100]);
                   }}
                 >
                   <TitleContainer>
-                    <h1
-                      id={"header" + key}
-                      contentEditable="true"
-                    >
-                      {array.key} 
+                    <h1 id={"header" + key} contentEditable="true">
+                      {array.key}
                     </h1>
                   </TitleContainer>
-
-               
                 </HeaderContainer>
                 <b
                   onClick={(e) => {
                     // handleSort(e, array.key);
                   }}
-                >
-
-                </b>
+                ></b>
                 {array.value.map((value: any) =>
                   value.map((val: any, key: any) => {
-                    return (
-                      < Test
-                      key={key} >
-                        {val}
-                      </Test>
-                    );
+                    return <Test key={key}>{val}</Test>;
                   })
                 )}
               </GridItem>
@@ -305,33 +264,40 @@ export default function ParsedDataComponent({
     }
   };
 
-
   return (
-    <ParsedDataComponentWrapper>
+    <ParsedDataComponentWrapper >
       {parsedSideInfoIsVisible && (
         <>
           <Exit onExit={handleExit} />
 
           <InfoBar>
             <InfoItem>
-              
-              <StyledEditTemplateWrapper onClick={()=>{setModal(true)}}> <b>Template Id: {returnedData.templateId} <EditIcon style={{transform: 'scale(0.6)'}}/></b>  </StyledEditTemplateWrapper>
+              <StyledEditTemplateWrapper
+                onClick={() => {
+                  setModal(true);
+                }}
+              >
+                <b>
+                  Template Id: {returnedData.templateId}
+                  <EditIcon style={{ transform: "scale(0.6)" }} />
+                </b>
+              </StyledEditTemplateWrapper>
               {modal && (
-        <Modal
-          onExit={() => {
-            setModal(false);
-          }}
-          title="Enter Template Id Name"
-          darkMode={darkMode}
-        >
-          SAVED
-        </Modal>
-      )}
-         
+                <Modal
+                  onExit={() => {
+                    setModal(false);
+                  }}
+                  title="Enter Template Id Name"
+                  darkMode={darkMode}
+                >
+                  SAVED
+                </Modal>
+              )}
             </InfoItem>
             <InfoItem>
-              
-              <p><b>Version:</b> {returnedData.version}</p>
+              <p>
+                <b>Version:</b> {returnedData.version}
+              </p>
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
@@ -340,36 +306,29 @@ export default function ParsedDataComponent({
           </InfoBar>
         </>
       )}
-      <ParsedTableWrapper>
-      <>
-
-
-   
-
-      <div >
-        {!state.headers.length ? (
-       <p>parse some information above</p>
-        ) : (
-          <ParsedTableResultsWrapper>{showColumns()}</ParsedTableResultsWrapper>
-        )}
-
-  
-      </div>
-
-      
-    </>
-     </ParsedTableWrapper>
+      <ParsedTableWrapper >
+        <>
+          <div>
+            {!state.headers.length ? (
+              <p>parse some information above</p>
+            ) : (
+              <ParsedTableResultsWrapper parsedSideInfoIsVisible={parsedSideInfoIsVisible}>
+                {showColumns()}
+              </ParsedTableResultsWrapper>
+            )}
+          </div>
+        </>
+      </ParsedTableWrapper>
     </ParsedDataComponentWrapper>
   );
 }
-
 
 type StyledParsedTableType = {
   templateIsVisible?: boolean;
   wordCloudIsVisible?: boolean;
   darkMode?: boolean;
+  parsedSideInfoIsVisible?: boolean;
 };
-
 
 interface IParsedDataComponentProps {
   parsedDataIsVisible?: boolean;
