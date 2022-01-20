@@ -282,7 +282,8 @@ function App() {
                 title={"Template List"}
                 buttonText="Parse Data"
                 onButtonClick={() => {
-                  handleParsedDataRendering();
+                  checkedTemplateId ?
+                  handleParsedDataRendering() : alert('Please select a template')
                 }}
                 onExit={() => {
                   setTemplateIsVisible(false);
