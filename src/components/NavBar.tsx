@@ -8,7 +8,7 @@ import Menu from "./Menu";
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  height: 80px;
+  height: 100px;
   width: 100%;
   opacity: 0.9;
 
@@ -104,6 +104,13 @@ const RadioItem = styled.div`
     transform: scale(1.1);
   }
 `;
+
+const ShowingResultsWrapper = styled.div`
+font-size: 0.8em;
+padding-right: 10px;
+position: absolute;
+bottom: 0;
+right: 6rem;`
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
@@ -217,7 +224,7 @@ export default function NavBar(props: INavBarProps) {
           </ContentWrapper>
           <StyledInput
             type="text"
-            placeholder={props.tailSearch}
+            placeholder={'Search...'}
             onChange={(event) => {
               const val = event.target.value as string;
               setInputValue(val)
@@ -226,6 +233,7 @@ export default function NavBar(props: INavBarProps) {
               handleSubmit(e);
             }}
           />
+          <ShowingResultsWrapper><sup> currently showing results for: {props.tailSearch}</sup></ShowingResultsWrapper>
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {
