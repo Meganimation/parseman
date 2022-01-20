@@ -3,8 +3,13 @@ import styled from "styled-components";
 import Exit from "stories/Exit";
 import { RootState } from "slices/store";
 import { useSelector, useDispatch } from "react-redux";
+import { Modal } from "stories/Modal";
+
+//import the edit icon from material ui
+import EditIcon from "@material-ui/icons/Edit";
 
 const ParsedDataComponentWrapper = styled.section`
+padding-top: 3rem;
   height: 75vh;
   display: flex;
 `;
@@ -12,16 +17,14 @@ const ParsedDataComponentWrapper = styled.section`
 const InfoBar = styled.aside`
   background-color: (props) => (props.darkMode ? "#182331": "white");
   margin: 10px;
-  max-width: 27vw;
-  resize: horizontal;
+   width: 25vw;
+
   overflow-y: auto;
-  display: grid;
-  flex-direction: column;
-  grid-template-columns: 0.2fr 1fr;
+
+
 `;
 
 const ParsedTableWrapper = styled.div`
-  background-color: red;
   height: 100%;
   width: 100%;
 `;
@@ -29,10 +32,13 @@ const ParsedTableWrapper = styled.div`
 const InfoItem = styled.div`
   margin-top: 2px;
   font-size: 0.8rem;
+  width: 15vw;
 `;
 
 const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>`
-width: 65vw;
+width: 70vw;
+
+
 
 `;
 
@@ -84,6 +90,9 @@ display: grid;
 grid-auto-flow: column;
 overflow: auto;
 
+background: #34404E;
+border: 1px solid #C1C1C1;
+
 
 
 
@@ -95,7 +104,10 @@ border-radius: 3px;
 text-align: left;
 min-width: fit-content;
 
+
+
 height: 70vh;
+
 
 `;
 
@@ -103,15 +115,18 @@ const TitleContainer = styled.div`
 height: 65px;
 resize: horizontal;
 cursor: pointer;
+
 `
 
 const HeaderContainer = styled.div`
 display: flex;
+border-right: 1px solid #C1C1C1;
 padding-left: 10px;
-  font-size: 0.75em;
+padding-right: 10px;
+  font-size: 1em;
   background: #2d4460;
   align-items: center;
-  height: 2rem;
+  height: 4rem;
 
   h2 {
     font-size: 1em;
@@ -130,11 +145,12 @@ const Title = styled.div`
 cursor: pointer;
 margin-top: auto;
 margin-bottom: auto;
-color: blue;
+color: white;
 `
 
 const Test = styled.div`
 margin: 10px;
+
 
 &:hover {
   background: rgba(51, 170, 51, .1);
@@ -142,6 +158,24 @@ margin: 10px;
 
 `
 
+const StyledEditTemplateWrapper = styled.div`
+
+  display: flex;
+  alignItems: center;
+  flexWrap: wrap;
+  cursor: pointer;
+  svg {
+    opacity: 0.5;
+  }
+
+  &:hover {
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
+`
 
 export interface ISubmitState {
   headers: string[];
@@ -170,7 +204,7 @@ export default function ParsedDataComponent({
 
 
 
-  const [data, setData] = useState("place some data here");
+  const [modal, setModal] = useState(false);
 
   const [arrow, setArrow] = useState("V");
 
@@ -218,7 +252,6 @@ export default function ParsedDataComponent({
       }
 
       setState({ headers: arrKey, both: { array: arrBoth, arrow: "V" } });
-      console.log('its DONE', state)
     }
   };
 
@@ -226,72 +259,13 @@ export default function ParsedDataComponent({
     if (i < state.both.array.length) {
       return (
         <GridContainer>
-          <GridItem>
-          <HeaderContainer>
-            <TitleContainer>
-              <Title><h1>Record Id</h1></Title>
-            </TitleContainer>
-            </HeaderContainer>
-            <b className={"test"}> ... </b>
-            {returnedData.lines.map((line: any) => (
-              <Test> {returnedData.recordId}</Test>
-            ))}
-          </GridItem>
-
-          <GridItem>
-            <HeaderContainer
-              id={"header-container"}
-              // onClick={() => {
-              //   handleTemplateIdChange(
-              //     returnedData.templateId,
-              //     returnedData.version
-              //   );
-              // }}
-            >
-              <TitleContainer>
-                <Title><h1>Template Id</h1> </Title>
-              </TitleContainer>
-     
-            </HeaderContainer>
-            <b> ... </b>
-            {returnedData.lines.map((line: any) => (
-              <Test>{templateId}</Test>
-            ))}
-          </GridItem>
-
-          <GridItem>
-          <HeaderContainer
-              id={"header-container"}
-            >
-            <TitleContainer>
-              <Title> <h1>Version</h1> </Title>
-            </TitleContainer>
-            </HeaderContainer>
-            <b> ... </b>
-            {returnedData.lines.map((line: any) => (
-              <Test> {returnedData.version} </Test>
-            ))}
-          </GridItem>
-
-          <GridItem>
-          <HeaderContainer>
-            <TitleContainer>
-              <Title> Host</Title>
-            </TitleContainer>
-            </HeaderContainer>
-            <b> ... </b>
-            {returnedData.lines.map((line: any) => (
-              <Test> {returnedData.host} </Test>
-            ))}
-          </GridItem>
-          {/* {editInput[0] && editInput[1] ? <div><Modal input closeModal={closeModal} top={editInput[0]} left={editInput[1]} /> </div>: <p>p</p>} */}
-          
+ 
           {state.both.array.map(
             (array: { key: string; value: string[] }, key: number) => (
               <GridItem>
                 <HeaderContainer
                   onClick={(e) => {
-                    console.log('reeeee', e)
+        
                     setEditInput([e.pageY - 50, e.clientX - 100]);
                   }}
                 >
@@ -300,20 +274,18 @@ export default function ParsedDataComponent({
                       id={"header" + key}
                       contentEditable="true"
                     >
-                      {array.key}
+                      {array.key} 
                     </h1>
                   </TitleContainer>
 
-                  <div >
-                    set
-                  </div>
+               
                 </HeaderContainer>
                 <b
                   onClick={(e) => {
                     // handleSort(e, array.key);
                   }}
                 >
-                  <u>Sort ^</u>
+
                 </b>
                 {array.value.map((value: any) =>
                   value.map((val: any, key: any) => {
@@ -342,12 +314,24 @@ export default function ParsedDataComponent({
 
           <InfoBar>
             <InfoItem>
-              <b>Template Id:</b>
-              <p>{returnedData.templateId}</p>
+              
+              <StyledEditTemplateWrapper onClick={()=>{setModal(true)}}> <b>Template Id: {returnedData.templateId} <EditIcon style={{transform: 'scale(0.6)'}}/></b>  </StyledEditTemplateWrapper>
+              {modal && (
+        <Modal
+          onExit={() => {
+            setModal(false);
+          }}
+          title="Enter Template Id Name"
+          darkMode={darkMode}
+        >
+          SAVED
+        </Modal>
+      )}
+         
             </InfoItem>
             <InfoItem>
-              <b>Version:</b>
-              <p>{returnedData.version}</p>
+              
+              <p><b>Version:</b> {returnedData.version}</p>
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
