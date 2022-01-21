@@ -9,13 +9,13 @@ import TimeSelectorPicker from "./TimeSelectorPicker";
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  height: 100px;
+  
+  min-height: 110px;
   width: 100%;
   opacity: 0.9;
 
   overflow: hidden;
   resize: vertical;
-  max-height: 120px;
 
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   z-index: 2;
@@ -23,27 +23,26 @@ const StyledNavWrapper = styled.nav`
 
 const StyledNav = styled.nav<StyledNavType>``;
 
-const UnhideComponentItem = styled.span<StyledNavType>`
-  top: -7px;
+const UnhideComponentItem = styled.sup<StyledNavType>`
+
   position: relative;
   margin-right: 1rem;
 `;
 
 const UnhideComponentWrapper = styled.div`
-  height: 50px;
-  display: flex;
-  position: relative;
-  height: fit-content;
 
-  top: 0;
-  right: 0;
+  display: flex;
+  padding-left: 0.5rem;
+
+
+
 
   > div {
     margin-left: 0.3rem;
     margin-right: 0.8rem;
     font-size: 0.8rem;
     position: relative;
-    top: 7px;
+
     cursor: pointer;
 
     &:hover {
@@ -54,17 +53,18 @@ const UnhideComponentWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 90vw;
-  margin: 3px;
+
   height: 2rem;
   border: none;
   border-radius: 10px;
   font-family: "IBM Plex Mono", sans-serif;
   margin-left: 10px;
+  position: relative;
 `;
 
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 7rem;
-  height: 100%;
+  height: 7rem;
   background: #4b0c5e;
   color: white;
   border: none;
@@ -91,15 +91,22 @@ const RadioButtonGroup = styled.span`
   }
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.nav`
+  width: 90vw;
   display: flex;
-  justify-content: space-between;
-  height: 15px;
-  padding: 10px;
+  flex-direction: column;
+ 
+  justify-content: center;
+  padding-top: 10px;
+  
+
 `;
 
 const RadioItem = styled.div`
   cursor: pointer;
+  position: relative;
+  top: 0;
+  right: -25%;
 
   &:hover {
     transform: scale(1.1);
@@ -107,11 +114,20 @@ const RadioItem = styled.div`
 `;
 
 const ShowingResultsWrapper = styled.div`
+display: flex;
+flex-direction: row;
 font-size: 0.8em;
 padding-right: 10px;
 position: absolute;
 bottom: 0;
-right: 6rem;`
+right: 8%;
+
+`;
+
+const TimeSelectorPickerWrapper = styled.div`
+padding-top: 10px;
+
+`
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
@@ -133,19 +149,30 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
           <ContentWrapper>
             <RadioButtonGroup>
+          
+                         <TimeSelectorPickerWrapper>
+            <TimeSelectorPicker
+          updateStartEndTimeHandler={props.updateStartEndTimeHandler}
+          selectedStartDate={props.selectedStartDate}
+          selectedEndDate={props.selectedEndDate}
+          setSelectedStartDate={props.setSelectedStartDate}
+          setSelectedEndDate={props.setSelectedEndDate}
+        />
+        </TimeSelectorPickerWrapper>
               <RadioItem
                 onClick={(e) => {
                   props.handleTemplateVersionChange("1");
                   setRadioValue("Templates");
                 }}
               >
-                
+
+               
                 <input
                   type="radio"
                   value="Templates"
                   checked={radioValue === "Templates" ? true : false}
                 />
-                <b>Template</b>
+                   <b> Templates </b>
               </RadioItem>
               <RadioItem
                 onClick={(e) => {
@@ -174,54 +201,21 @@ export default function NavBar(props: INavBarProps) {
                   checked={radioValue === "Both" ? true : false}
                 />
                 <b>Both</b>
+
+                
               </RadioItem>
+
+          
+  
             </RadioButtonGroup>
+
+ 
             <UnhideComponentWrapper>
-              {!props.logtailIsVisible && (
-                <div
-                  onClick={() => {
-                    props.showComponent("logtailComponent");
-                  }}
-                >
-                  <UnhideComponentItem>
-                    <div> x Show Logtail</div>
-                  </UnhideComponentItem>
-                </div>
-              )}
-              {!props.templateIsVisible && (
-                <div
-                  onClick={() => {
-                    props.showComponent("templateComponent");
-                  }}
-                >
-                  <UnhideComponentItem>
-                    <div> x Show Template Table</div>
-                  </UnhideComponentItem>
-                </div>
-              )}
-              {!props.wordCloudIsVisible && (
-                <div
-                  onClick={() => {
-                    props.showComponent("wordCloud");
-                  }}
-                >
-                  <UnhideComponentItem>
-                    <div> x Show Word Cloud</div>
-                  </UnhideComponentItem>
-                </div>
-              )}
-              {!props.parsedSideInfoIsVisible && (
-                <div
-                  onClick={() => {
-                    props.showComponent("parsedSideInfoIsVisible");
-                  }}
-                >
-                  <UnhideComponentItem>
-                    <div> x Show parsedSideInfoIsVisible</div>
-                  </UnhideComponentItem>
-                </div>
-              )}
+ 
+      
+           
             </UnhideComponentWrapper>
+      
           </ContentWrapper>
           <StyledInput
             type="text"
@@ -234,7 +228,61 @@ export default function NavBar(props: INavBarProps) {
               handleSubmit(e);
             }}
           />
-          <ShowingResultsWrapper><sup> currently showing results for: {props.tailSearch}</sup></ShowingResultsWrapper>
+      
+          <ShowingResultsWrapper>   
+            <UnhideComponentWrapper>
+              {!props.logtailIsVisible && (
+                <div
+                  onClick={() => {
+                    props.showComponent("logtailComponent");
+                  }}
+                >
+                  <UnhideComponentItem>
+                    <b> x Show Logtail</b>
+                  </UnhideComponentItem>
+                </div>
+              )}
+              {!props.templateIsVisible && (
+                <div
+                  onClick={() => {
+                    props.showComponent("templateComponent");
+                  }}
+                >
+                  <UnhideComponentItem>
+                    <b> x Show Template Table</b>
+                  </UnhideComponentItem>
+                </div>
+              )}
+              {!props.wordCloudIsVisible && (
+                <div
+                  onClick={() => {
+                    props.showComponent("wordCloud");
+                  }}
+                >
+                  <UnhideComponentItem>
+                    <b> x Show Word Cloud</b>
+                  </UnhideComponentItem>
+                </div>
+              )}
+              {!props.parsedSideInfoIsVisible && (
+                <div
+                  onClick={() => {
+                    props.showComponent("parsedSideInfoIsVisible");
+                  }}
+                >
+                  <UnhideComponentItem>
+                    <b> x Show parsedSideInfoIsVisible</b>
+                  </UnhideComponentItem>
+                </div>
+                
+              )}
+               
+     
+               
+               </UnhideComponentWrapper>
+       
+               </ShowingResultsWrapper>
+               <i style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</i>
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {
@@ -244,13 +292,6 @@ export default function NavBar(props: INavBarProps) {
           <MenuIcon />
         </MenuButtonWrapper>
 
-        <TimeSelectorPicker
-          updateStartEndTimeHandler={props.updateStartEndTimeHandler}
-          selectedStartDate={props.selectedStartDate}
-          selectedEndDate={props.selectedEndDate}
-          setSelectedStartDate={props.setSelectedStartDate}
-          setSelectedEndDate={props.setSelectedEndDate}
-        />
 
       </StyledNavWrapper>
 

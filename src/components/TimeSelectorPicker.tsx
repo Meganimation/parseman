@@ -6,6 +6,30 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import styled from 'styled-components'
+
+
+
+
+  const StyledKeyboardDatePicker = styled(KeyboardDatePicker)`
+    all: unset;
+    width: 30%;
+    position: relative;
+    top: -12px;
+    background: white;
+    border-radius: 10px;
+
+
+     * {
+      color: #47115C;
+      }
+    }
+  `
+
+  const ExternalLabel = styled.label`
+  padding-right: 10px;
+  padding-left: 10px;
+  `
 
 export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
   const [selectedStartDate, setSelectedStartDate] = React.useState<Date>(
@@ -43,26 +67,24 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justify="space-around">
 
-          <>
-            <KeyboardDatePicker
-              disableToolbar
-              variant="inline"
+
+<Grid container >
+
+            <ExternalLabel>from</ExternalLabel><StyledKeyboardDatePicker
+       
+   
               format="MM/dd/yy"
-              margin="normal"
-              id="date-picker-inline"
-              label="From"
               value={selectedStartDate}
               onChange={handleStartDateChange}
               KeyboardButtonProps={{
                 "aria-label": "change date",
               }}
             />
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="To"
+ 
+ 
+   
+ <ExternalLabel>to</ExternalLabel><StyledKeyboardDatePicker
               format="MM/dd/yy"
               value={selectedEndDate}
               onChange={handleEndDateChange}
@@ -70,9 +92,10 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
                 "aria-label": "change date",
               }}
             />
-          </>
+   
+          </Grid>
 
-      </Grid>
+
     </MuiPickersUtilsProvider>
   );
 }

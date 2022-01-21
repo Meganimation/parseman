@@ -43,7 +43,7 @@ const StyledApp = styled.div<StyledAppType>`
 `;
 
 const Content = styled.main<StyledAppType>`
-  padding-top: 12vh;
+  padding-top: 15.5vh;
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
