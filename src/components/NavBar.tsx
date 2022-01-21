@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "./Menu";
+import TimeSelectorPicker from "./TimeSelectorPicker";
 
 const StyledNavWrapper = styled.nav`
   display: flex;
@@ -242,7 +243,17 @@ export default function NavBar(props: INavBarProps) {
         >
           <MenuIcon />
         </MenuButtonWrapper>
+
+        <TimeSelectorPicker
+          updateStartEndTimeHandler={props.updateStartEndTimeHandler}
+          selectedStartDate={props.selectedStartDate}
+          selectedEndDate={props.selectedEndDate}
+          setSelectedStartDate={props.setSelectedStartDate}
+          setSelectedEndDate={props.setSelectedEndDate}
+        />
+
       </StyledNavWrapper>
+
       <Menu
         menu={menu}
         handleMenu={handleMenu}
@@ -269,4 +280,10 @@ interface INavBarProps {
   updateTailSearchResultsHandler?: any;
   tailSearch: string;
   handleTemplateVersionChange: any;
+
+  updateStartEndTimeHandler: any;
+  selectedStartDate: any;
+  selectedEndDate: any;
+  setSelectedStartDate: any;
+  setSelectedEndDate: any;
 }

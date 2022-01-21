@@ -79,6 +79,13 @@ function App() {
 
   const messagesEndRef = useRef(null);
 
+  const [selectedStartDate, setSelectedStartDate] = React.useState(
+    new Date().toISOString().slice(0, 10)
+  ); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
+  const [selectedEndDate, setSelectedEndDate] = React.useState(
+    new Date().toISOString().slice(0, 10)
+  );
+
   const dispatch = useDispatch();
 
   const showComponent = (nameOfComponents: any) => {
@@ -238,6 +245,23 @@ function App() {
     setCheckedTemplateLiteral(templateLiteralValue);
   };
 
+  const updateStartEndTimeHandler = (
+    startDate: string,
+    endDate: string,
+    isRealTime: boolean
+  ) => {
+    if (isRealTime) {
+      // TODO
+    } else {
+      setSelectedStartDate(startDate);
+      setSelectedEndDate(endDate);
+      if (startDate >= endDate) {
+        alert("Cannot select a data ahead of itself");
+      }
+    }
+  };
+
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -251,6 +275,12 @@ function App() {
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
+
+        updateStartEndTimeHandler={updateStartEndTimeHandler}
+        selectedStartDate={selectedStartDate}
+        selectedEndDate={selectedEndDate}
+        setSelectedStartDate={setSelectedStartDate}
+        setSelectedEndDate={setSelectedEndDate}
       />
 
       <Content darkMode={darkMode}>
@@ -322,7 +352,7 @@ function App() {
           darkMode={darkMode}
           title={"Parsed Data Table"}
           button
-          buttonText="Save"
+          buttonText="Favorite"
           onButtonClick={() => {
             setModal(true);
           }}
