@@ -1,7 +1,22 @@
-version: 0.1
+version: 0.2
+
 phases:
   install:
+    runtime-versions:
+      nodejs: 12
+
     commands:
+      # install npm
       - npm install
-      - npm run build
-      - aws s3 sync build s3://frontend.aws.sliceup.co  #  --delete
+
+  build:
+    commands:
+      # run build script
+      - npm run-script build
+
+artifacts:
+  # include all files required to run application
+  # we include only the static build files
+  files:
+    - '**/*'
+  base-directory: 'build'
