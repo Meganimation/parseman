@@ -32,38 +32,31 @@ import styled from 'styled-components'
   `
 
 export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
-  const [selectedStartDate, setSelectedStartDate] = React.useState<Date>(
-    new Date("05/12/21")
-  ); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
-  const [selectedEndDate, setSelectedEndDate] = React.useState<Date>(
-    new Date()
-  );
+
+  // const handleStartDateChange = (date: Date | null) => {
+  //   const dateAsString = (date as Date).toISOString().slice(0, 10);
+  //   props.setSelectedStartDate(dateAsString);
+  //   props.updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
+  // };
+
+  // const handleEndDateChange = (date: Date | null) => {
+  //   const dateAsString = (date as Date).toISOString().slice(0, 10);
+  //   props.setSelectedEndDate(dateAsString);
+  //   props.updateStartEndTimeHandler(
+  //     props.selectedStartDate,
+  //     dateAsString,
+  //     false
+  //   );
+  // };
 
 
-  const handleStartDateChange = (date: Date | null) => {
-    const dateAsString = (date as Date).toISOString().slice(0, 10);
-    props.setSelectedStartDate(dateAsString);
-    props.updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
-  };
-
-  const handleEndDateChange = (date: Date | null) => {
-    const dateAsString = (date as Date).toISOString().slice(0, 10);
-    props.setSelectedEndDate(dateAsString);
-    props.updateStartEndTimeHandler(
-      props.selectedStartDate,
-      dateAsString,
-      false
-    );
-  };
-
-
-  useEffect(() => {
-    console.log(props.selectedEndDate)
-    if (props.selectedStartDate && props.selectedStartDate !== "")
-      setSelectedStartDate(new Date(props.selectedStartDate));
-    if (props.selectedEndDate && props.selectedEndDate !== "")
-      setSelectedEndDate(new Date(props.selectedEndDate));
-  }, [props.selectedStartDate, props.selectedEndDate]);
+  // useEffect(() => {
+  //   console.log(props.selectedEndDate)
+  //   if (props.selectedStartDate && props.selectedStartDate !== "")
+  //     setSelectedStartDate(new Date(props.selectedStartDate));
+  //   if (props.selectedEndDate && props.selectedEndDate !== "")
+  //     setSelectedEndDate(new Date(props.selectedEndDate));
+  // }, [props.selectedStartDate, props.selectedEndDate]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -75,8 +68,8 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
        
    
               format="MM/dd/yy"
-              value={selectedStartDate}
-              onChange={handleStartDateChange}
+              value={props.selectedStartDate}
+              onChange={props.handleStartDateChange}
               KeyboardButtonProps={{
                 "aria-label": "change date",
               }}
@@ -86,8 +79,8 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
    
  <ExternalLabel>to</ExternalLabel><StyledKeyboardDatePicker
               format="MM/dd/yy"
-              value={selectedEndDate}
-              onChange={handleEndDateChange}
+              value={props.selectedEndDate}
+              onChange={props.handleEndDateChange}
               KeyboardButtonProps={{
                 "aria-label": "change date",
               }}
@@ -101,13 +94,12 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
 }
 
 interface ITimeSelectorPickerProps {
-  updateStartEndTimeHandler: (
-    startDate: string,
-    endDate: string,
-    isRealTime: boolean
-  ) => void;
+
   selectedStartDate: string;
   setSelectedStartDate: Dispatch<SetStateAction<string>>;
   selectedEndDate: string;
   setSelectedEndDate: Dispatch<SetStateAction<string>>;
+
+  handleStartDateChange: any;
+  handleEndDateChange: any;
 }

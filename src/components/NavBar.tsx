@@ -152,11 +152,12 @@ export default function NavBar(props: INavBarProps) {
           
                          <TimeSelectorPickerWrapper>
             <TimeSelectorPicker
-          updateStartEndTimeHandler={props.updateStartEndTimeHandler}
+          handleStartDateChange={props.handleStartDateChange}
           selectedStartDate={props.selectedStartDate}
           selectedEndDate={props.selectedEndDate}
           setSelectedStartDate={props.setSelectedStartDate}
           setSelectedEndDate={props.setSelectedEndDate}
+          handleEndDateChange={props.handleEndDateChange}
         />
         </TimeSelectorPickerWrapper>
               <RadioItem
@@ -322,9 +323,11 @@ interface INavBarProps {
   tailSearch: string;
   handleTemplateVersionChange: any;
 
-  updateStartEndTimeHandler: any;
+  // updateStartEndTimeHandler: any;
+  handleStartDateChange: any;
   selectedStartDate: any;
   selectedEndDate: any;
   setSelectedStartDate: any;
   setSelectedEndDate: any;
+  handleEndDateChange: any;
 }

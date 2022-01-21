@@ -259,6 +259,25 @@ function App() {
         alert("Cannot select a data ahead of itself");
       }
     }
+
+    console.log('startdate:', startDate,'enddate:', endDate)
+  };
+
+
+  const handleStartDateChange = (date: Date | null) => {
+    const dateAsString = (date as Date).toISOString().slice(0, 10);
+   setSelectedStartDate(dateAsString);
+
+   console.log(selectedStartDate)
+  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    const dateAsString = (date as Date).toISOString().slice(0, 10);
+   setSelectedEndDate(dateAsString);
+
+   console.log(selectedEndDate)
+  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
   };
 
 
@@ -276,15 +295,20 @@ function App() {
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
 
-        updateStartEndTimeHandler={updateStartEndTimeHandler}
+        // updateStartEndTimeHandler={updateStartEndTimeHandler}
+        handleStartDateChange={handleStartDateChange}
         selectedStartDate={selectedStartDate}
         selectedEndDate={selectedEndDate}
         setSelectedStartDate={setSelectedStartDate}
         setSelectedEndDate={setSelectedEndDate}
+        handleEndDateChange={handleEndDateChange}
+
       />
 
+     
       <Content darkMode={darkMode}>
         <SliderWrapper>
+
           <Slider>
             {logtailIsVisible && (
               <ComponentWindow
