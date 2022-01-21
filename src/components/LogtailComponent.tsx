@@ -81,7 +81,13 @@ const dispatch = useDispatch();
   };
 
   if (!logTailData.length) {
-    return <div> Loading ...</div>;
+    return    <LogtailComponentWrapper
+    templateIsVisible={props.templateIsVisible}
+    wordCloudIsVisible={props.wordCloudIsVisible}
+    darkMode={props.darkMode}
+  >
+    Loading...
+  </LogtailComponentWrapper>;
   }
 
   return (

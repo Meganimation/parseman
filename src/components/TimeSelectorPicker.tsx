@@ -33,30 +33,6 @@ import styled from 'styled-components'
 
 export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
 
-  // const handleStartDateChange = (date: Date | null) => {
-  //   const dateAsString = (date as Date).toISOString().slice(0, 10);
-  //   props.setSelectedStartDate(dateAsString);
-  //   props.updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
-  // };
-
-  // const handleEndDateChange = (date: Date | null) => {
-  //   const dateAsString = (date as Date).toISOString().slice(0, 10);
-  //   props.setSelectedEndDate(dateAsString);
-  //   props.updateStartEndTimeHandler(
-  //     props.selectedStartDate,
-  //     dateAsString,
-  //     false
-  //   );
-  // };
-
-
-  // useEffect(() => {
-  //   console.log(props.selectedEndDate)
-  //   if (props.selectedStartDate && props.selectedStartDate !== "")
-  //     setSelectedStartDate(new Date(props.selectedStartDate));
-  //   if (props.selectedEndDate && props.selectedEndDate !== "")
-  //     setSelectedEndDate(new Date(props.selectedEndDate));
-  // }, [props.selectedStartDate, props.selectedEndDate]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>

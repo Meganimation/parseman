@@ -60,7 +60,7 @@ function App() {
   const templateListData = useSelector(
     (state: RootState) => state.returnedData.templateListData
   );
-
+    const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
@@ -130,7 +130,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -155,7 +155,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -179,7 +179,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -225,10 +225,14 @@ function App() {
   };
 
   const updateTailSearchResultsHandler = (value: string) => {
+    setLoading(true);
+  
     setTailSearch(value);
     fetchLogTailData(value);
     fetchWordCloudData(value);
     fetchTemplateListData(value);
+
+    setLoading(false);
   };
 
   const handleExit = () => {
@@ -243,24 +247,6 @@ function App() {
     setCheckedTemplateId(templateIdValue);
     setCheckedTemplateVersion(templateVersionValue);
     setCheckedTemplateLiteral(templateLiteralValue);
-  };
-
-  const updateStartEndTimeHandler = (
-    startDate: string,
-    endDate: string,
-    isRealTime: boolean
-  ) => {
-    if (isRealTime) {
-      // TODO
-    } else {
-      setSelectedStartDate(startDate);
-      setSelectedEndDate(endDate);
-      if (startDate >= endDate) {
-        alert("Cannot select a data ahead of itself");
-      }
-    }
-
-    console.log('startdate:', startDate,'enddate:', endDate)
   };
 
 
@@ -308,7 +294,6 @@ function App() {
      
       <Content darkMode={darkMode}>
         <SliderWrapper>
-
           <Slider>
             {logtailIsVisible && (
               <ComponentWindow
