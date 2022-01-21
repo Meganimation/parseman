@@ -15,7 +15,7 @@ const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
   color: ${(props) => (props.darkMode ? "white" : "#26374b")};
   overflow: hidden;
   max-width: 100vw;
-  min-height: 13vh;
+  min-height: 6vh;
   overlow: auto;
 `;
 

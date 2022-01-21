@@ -77,7 +77,7 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
   display: flex;
-  color: ${(props: StyledNavType) => (props.darkMode ? "white" : "white")};
+  color:  white;
 
   > div {
     margin-left: 0.3rem;
@@ -121,11 +121,17 @@ padding-right: 10px;
 position: absolute;
 bottom: 0;
 right: 8%;
+color: white;
 
 `;
 
 const TimeSelectorPickerWrapper = styled.div`
 padding-top: 10px;
+
+`
+
+const ShowingResultsFor = styled.i`
+color: white;
 
 `
 
@@ -201,7 +207,7 @@ export default function NavBar(props: INavBarProps) {
                   value="Both"
                   checked={radioValue === "Both" ? true : false}
                 />
-                <b>Both</b>
+                <b> Both</b>
 
                 
               </RadioItem>
@@ -283,7 +289,7 @@ export default function NavBar(props: INavBarProps) {
                </UnhideComponentWrapper>
        
                </ShowingResultsWrapper>
-               <i style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</i>
+               <ShowingResultsFor style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</ShowingResultsFor>
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {

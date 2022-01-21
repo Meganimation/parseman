@@ -33,9 +33,7 @@ const StyledApp = styled.div<StyledAppType>`
   height: 100vh;
   overflow-x: hidden;
 
-  > p {
-    background-color: ${(props) => (props.darkMode ? "white" : "black")};
-  }
+
 
   > nav {
     background-color: #4b0c5e;
@@ -349,7 +347,7 @@ function App() {
             onExit={() => {
               setWordCloudIsVisible(false);
             }}
-            headerHeight="1px"
+            headerHeight="20px"
           >
             <WordCloudComponent darkMode={darkMode} />
           </ComponentWindow>
