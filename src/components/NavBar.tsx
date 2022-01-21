@@ -4,17 +4,18 @@ import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "./Menu";
+import TimeSelectorPicker from "./TimeSelectorPicker";
 
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  height: 80px;
+  
+  min-height: 110px;
   width: 100%;
   opacity: 0.9;
 
   overflow: hidden;
   resize: vertical;
-  max-height: 120px;
 
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   z-index: 2;
@@ -22,27 +23,26 @@ const StyledNavWrapper = styled.nav`
 
 const StyledNav = styled.nav<StyledNavType>``;
 
-const UnhideComponentItem = styled.span<StyledNavType>`
-  top: -7px;
+const UnhideComponentItem = styled.sup<StyledNavType>`
+
   position: relative;
   margin-right: 1rem;
 `;
 
 const UnhideComponentWrapper = styled.div`
-  height: 50px;
-  display: flex;
-  position: relative;
-  height: fit-content;
 
-  top: 0;
-  right: 0;
+  display: flex;
+  padding-left: 0.5rem;
+
+
+
 
   > div {
     margin-left: 0.3rem;
     margin-right: 0.8rem;
     font-size: 0.8rem;
     position: relative;
-    top: 7px;
+
     cursor: pointer;
 
     &:hover {
@@ -53,17 +53,18 @@ const UnhideComponentWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 90vw;
-  margin: 3px;
+
   height: 2rem;
   border: none;
   border-radius: 10px;
   font-family: "IBM Plex Mono", sans-serif;
   margin-left: 10px;
+  position: relative;
 `;
 
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 7rem;
-  height: 100%;
+  height: 7rem;
   background: #4b0c5e;
   color: white;
   border: none;
@@ -76,7 +77,7 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
   display: flex;
-  color: ${(props: StyledNavType) => (props.darkMode ? "white" : "white")};
+  color:  white;
 
   > div {
     margin-left: 0.3rem;
@@ -90,20 +91,49 @@ const RadioButtonGroup = styled.span`
   }
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.nav`
+  width: 90vw;
   display: flex;
-  justify-content: space-between;
-  height: 15px;
-  padding: 10px;
+  flex-direction: column;
+ 
+  justify-content: center;
+  padding-top: 10px;
+  
+
 `;
 
 const RadioItem = styled.div`
   cursor: pointer;
+  position: relative;
+  top: 0;
+  right: -25%;
 
   &:hover {
     transform: scale(1.1);
   }
 `;
+
+const ShowingResultsWrapper = styled.div`
+display: flex;
+flex-direction: row;
+font-size: 0.8em;
+padding-right: 10px;
+position: absolute;
+bottom: 0;
+right: 8%;
+color: white;
+
+`;
+
+const TimeSelectorPickerWrapper = styled.div`
+padding-top: 10px;
+
+`
+
+const ShowingResultsFor = styled.i`
+color: white;
+
+`
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
@@ -125,19 +155,31 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
           <ContentWrapper>
             <RadioButtonGroup>
+          
+                         <TimeSelectorPickerWrapper>
+            <TimeSelectorPicker
+          handleStartDateChange={props.handleStartDateChange}
+          selectedStartDate={props.selectedStartDate}
+          selectedEndDate={props.selectedEndDate}
+          setSelectedStartDate={props.setSelectedStartDate}
+          setSelectedEndDate={props.setSelectedEndDate}
+          handleEndDateChange={props.handleEndDateChange}
+        />
+        </TimeSelectorPickerWrapper>
               <RadioItem
                 onClick={(e) => {
                   props.handleTemplateVersionChange("1");
                   setRadioValue("Templates");
                 }}
               >
-                
+
+               
                 <input
                   type="radio"
                   value="Templates"
                   checked={radioValue === "Templates" ? true : false}
                 />
-                <b>Template</b>
+                   <b> Templates </b>
               </RadioItem>
               <RadioItem
                 onClick={(e) => {
@@ -165,9 +207,36 @@ export default function NavBar(props: INavBarProps) {
                   value="Both"
                   checked={radioValue === "Both" ? true : false}
                 />
-                <b>Both</b>
+                <b> Both</b>
+
+                
               </RadioItem>
+
+          
+  
             </RadioButtonGroup>
+
+ 
+            <UnhideComponentWrapper>
+ 
+      
+           
+            </UnhideComponentWrapper>
+      
+          </ContentWrapper>
+          <StyledInput
+            type="text"
+            placeholder={'Search...'}
+            onChange={(event) => {
+              const val = event.target.value as string;
+              setInputValue(val)
+            }}
+            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              handleSubmit(e);
+            }}
+          />
+      
+          <ShowingResultsWrapper>   
             <UnhideComponentWrapper>
               {!props.logtailIsVisible && (
                 <div
@@ -176,7 +245,7 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <div> x Show Logtail</div>
+                    <b> x Show Logtail</b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -187,7 +256,7 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <div> x Show Template Table</div>
+                    <b> x Show Template Table</b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -198,7 +267,7 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <div> x Show Word Cloud</div>
+                    <b> x Show Word Cloud</b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -209,23 +278,18 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <div> x Show parsedSideInfoIsVisible</div>
+                    <b> x Show parsedSideInfoIsVisible</b>
                   </UnhideComponentItem>
                 </div>
+                
               )}
-            </UnhideComponentWrapper>
-          </ContentWrapper>
-          <StyledInput
-            type="text"
-            placeholder={props.tailSearch}
-            onChange={(event) => {
-              const val = event.target.value as string;
-              setInputValue(val)
-            }}
-            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              handleSubmit(e);
-            }}
-          />
+               
+     
+               
+               </UnhideComponentWrapper>
+       
+               </ShowingResultsWrapper>
+               <ShowingResultsFor style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</ShowingResultsFor>
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {
@@ -234,7 +298,10 @@ export default function NavBar(props: INavBarProps) {
         >
           <MenuIcon />
         </MenuButtonWrapper>
+
+
       </StyledNavWrapper>
+
       <Menu
         menu={menu}
         handleMenu={handleMenu}
@@ -261,4 +328,12 @@ interface INavBarProps {
   updateTailSearchResultsHandler?: any;
   tailSearch: string;
   handleTemplateVersionChange: any;
+
+  // updateStartEndTimeHandler: any;
+  handleStartDateChange: any;
+  selectedStartDate: any;
+  selectedEndDate: any;
+  setSelectedStartDate: any;
+  setSelectedEndDate: any;
+  handleEndDateChange: any;
 }

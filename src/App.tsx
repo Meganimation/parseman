@@ -20,12 +20,10 @@ import {
   convertToLogged,
   convertToWordCloud,
   convertToTemplateList,
-  convertToParsed
+  convertToParsed,
 } from "./slices/currentDataSlice";
 
 import { RootState } from "slices/store";
-
-
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -35,9 +33,7 @@ const StyledApp = styled.div<StyledAppType>`
   height: 100vh;
   overflow-x: hidden;
 
-  > p {
-    background-color: ${(props) => (props.darkMode ? "white" : "black")};
-  }
+
 
   > nav {
     background-color: #4b0c5e;
@@ -45,7 +41,7 @@ const StyledApp = styled.div<StyledAppType>`
 `;
 
 const Content = styled.main<StyledAppType>`
-  padding-top: 12vh;
+  padding-top: 15.5vh;
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
@@ -59,12 +55,10 @@ const Slider = styled.section`
 `;
 
 function App() {
-
   const templateListData = useSelector(
     (state: RootState) => state.returnedData.templateListData
   );
-
-
+    const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
@@ -78,11 +72,17 @@ function App() {
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
+  const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
 
   const messagesEndRef = useRef(null);
 
-
+  const [selectedStartDate, setSelectedStartDate] = React.useState(
+    new Date().toISOString().slice(0, 10)
+  ); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
+  const [selectedEndDate, setSelectedEndDate] = React.useState(
+    new Date().toISOString().slice(0, 10)
+  );
 
   const dispatch = useDispatch();
 
@@ -103,39 +103,24 @@ function App() {
     }
   };
 
-
-
-
-
   const handleParsedDataRendering = () => {
     setParsedDataIsVisible(true);
 
-
-    if (tailSearch.includes('AND') && tailSearch.includes(checkedTemplateId)) {
-      return(console.log('breaking'))
+    if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
+      return console.log("breaking");
     }
     let filterAddOnValue = `${tailSearch} AND checkedTemplateId=${checkedTemplateId}`;
 
-   
-  
-
     updateTailSearchResultsHandler(filterAddOnValue);
 
-      //@ts-ignore
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    return fetchParsedData(
-      checkedTemplateId,
-      templateVersion, 
-      dispatch as any
-    );
-
-    
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    return fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
   };
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
-  }
-
+  };
 
   const fetchLogTailData = (value: string) => {
     const URL: string = SelectorsHelper.getURL(
@@ -143,7 +128,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -154,7 +139,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToLogged(data));
-        console.log('logtail data', data);
+        console.log("logtail data", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -168,7 +153,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -179,7 +164,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToTemplateList(data));
-        console.log('done', data)
+        console.log("done", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -192,7 +177,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/2020-01-17/2022-01-17?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -221,8 +206,6 @@ function App() {
 
     const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`;
 
-    
-
     fetch(urlWithString)
       .then((res) => {
         if (!res.ok) {
@@ -231,9 +214,8 @@ function App() {
         return res.json();
       })
       .then((data) => {
-
         dispatch(convertToParsed(data));
-        console.log('done', data)
+        console.log("done", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -241,20 +223,46 @@ function App() {
   };
 
   const updateTailSearchResultsHandler = (value: string) => {
+    setLoading(true);
+  
     setTailSearch(value);
     fetchLogTailData(value);
     fetchWordCloudData(value);
     fetchTemplateListData(value);
+
+    setLoading(false);
   };
 
   const handleExit = () => {
     setParsedSideInfoIsVisible(false);
   };
 
-  const handleCheckedRadio = (templateIdValue: string, templateVersionValue: string) => {
+  const handleCheckedRadio = (
+    templateIdValue: string,
+    templateVersionValue: string,
+    templateLiteralValue: string
+  ) => {
     setCheckedTemplateId(templateIdValue);
-    setCheckedTemplateVersion(templateVersionValue)
-  }
+    setCheckedTemplateVersion(templateVersionValue);
+    setCheckedTemplateLiteral(templateLiteralValue);
+  };
+
+
+  const handleStartDateChange = (date: Date | null) => {
+    const dateAsString = (date as Date).toISOString().slice(0, 10);
+   setSelectedStartDate(dateAsString);
+
+   console.log(selectedStartDate)
+  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    const dateAsString = (date as Date).toISOString().slice(0, 10);
+   setSelectedEndDate(dateAsString);
+
+   console.log(selectedEndDate)
+  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
+  };
 
 
   return (
@@ -270,8 +278,18 @@ function App() {
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
+
+        // updateStartEndTimeHandler={updateStartEndTimeHandler}
+        handleStartDateChange={handleStartDateChange}
+        selectedStartDate={selectedStartDate}
+        selectedEndDate={selectedEndDate}
+        setSelectedStartDate={setSelectedStartDate}
+        setSelectedEndDate={setSelectedEndDate}
+        handleEndDateChange={handleEndDateChange}
+
       />
-  
+
+     
       <Content darkMode={darkMode}>
         <SliderWrapper>
           <Slider>
@@ -288,7 +306,6 @@ function App() {
                   darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
-                 
                 />
               </ComponentWindow>
             )}
@@ -302,7 +319,8 @@ function App() {
                 title={"Template List"}
                 buttonText="Parse Data"
                 onButtonClick={() => {
-                  handleParsedDataRendering();
+                  checkedTemplateId ?
+                  handleParsedDataRendering() : alert('Please select a template')
                 }}
                 onExit={() => {
                   setTemplateIsVisible(false);
@@ -313,7 +331,9 @@ function App() {
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
                   templateListData={templateListData}
-                  updateTailSearchResultsHandler={updateTailSearchResultsHandler}
+                  updateTailSearchResultsHandler={
+                    updateTailSearchResultsHandler
+                  }
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
                 />
@@ -327,7 +347,7 @@ function App() {
             onExit={() => {
               setWordCloudIsVisible(false);
             }}
-            headerHeight="1px"
+            headerHeight="20px"
           >
             <WordCloudComponent darkMode={darkMode} />
           </ComponentWindow>
@@ -339,7 +359,7 @@ function App() {
           darkMode={darkMode}
           title={"Parsed Data Table"}
           button
-          buttonText="Save"
+          buttonText="Favorite"
           onButtonClick={() => {
             setModal(true);
           }}
@@ -349,6 +369,7 @@ function App() {
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
+              checkedTemplateLiteral={checkedTemplateLiteral}
               darkMode={darkMode}
               handleExit={handleExit}
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}

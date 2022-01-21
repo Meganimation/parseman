@@ -7,18 +7,19 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
-  background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+  background-color: ${(props) => (props.darkMode ? "#1C2937 " : "white")};
   border-radius: 10px;
   overflow: auto;
-  height: ${(props) => (props.wordCloudIsVisible ? "54.5vh" : "35vw")};
+  height: ${(props) => (props.wordCloudIsVisible ? "54.5vh" : "40vw")};
 
   font-size: 12px;
 
 `;
 
-const TableHeaderWrapper = styled.div`
+const TableHeaderWrapper = styled.div<StyledTemplateType>`
   display: grid;
   grid-template-columns: 1.1fr 5fr 1.5fr;
+  background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
 
   position: -webkit-sticky; 
   position: sticky;
@@ -27,10 +28,10 @@ const TableHeaderWrapper = styled.div`
 `;
 
 
-const TableWrapper = styled.div`
+const TableWrapper = styled.div<StyledTemplateType>`
   display: grid;
   grid-template-columns: 1.5fr 4fr 0.5fr;
-  background: #34404E;
+  background-color: ${(props) => (props.darkMode ? "#34404E" : "white")};
   cursor: pointer;
   margin: 0;
   border: 0;
@@ -41,14 +42,14 @@ const TableWrapper = styled.div`
   border-bottom: 1px solid #C1C1C1;
 
   &:hover {
-    background: #28313B;
+    background-color: ${(props) => (props.darkMode ? "#28313B" : "lightgrey")};
   }
 
 `;
-const TableHeader = styled.div`
+const TableHeader = styled.div<StyledTemplateType>`
   padding-left: 10px;
   font-size: 0.75em;
-  background: #2d4460;
+  background-color: ${(props) => (props.darkMode ? "#2d4460 " : "white")};
   align-items: center;
   height: 2rem;
 
@@ -67,7 +68,7 @@ const StyledRadio = styled.input`
 
 
 let testString =
-  " ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved.";
+  " ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved.";
 
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
@@ -113,23 +114,23 @@ export default function TemplateTableComponent(
         wordCloudIsVisible={props.wordCloudIsVisible}
         darkMode={props.darkMode}
       >
-        <TableHeaderWrapper>
-          <TableHeader >
+        <TableHeaderWrapper  darkMode={props.darkMode}>
+          <TableHeader darkMode={props.darkMode} >
             <h2  >Template Id</h2>
-          </TableHeader>
+          </TableHeader >
 
-          <TableHeader>
+          <TableHeader darkMode={props.darkMode}>
             <h2>Template Literal</h2>
           </TableHeader>
 
-          <TableHeader>
+          <TableHeader darkMode={props.darkMode}>
             <h2>Total Logs</h2>
           </TableHeader>
         </TableHeaderWrapper>
 
           <>
             {props.templateListData.map((data: any) => (
-              <TableWrapper onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion)}}>
+              <TableWrapper darkMode={props.darkMode} onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion, data.templateLiteral)}}>
                 <div > <StyledRadio type="radio" checked={props.checkedTemplateId === data.templateId} /> {data.templateId} </div>
                 <div>{data.templateLiteral}</div>
                 <div>{data.totalTemplates}</div>
@@ -137,7 +138,7 @@ export default function TemplateTableComponent(
             ))}
           </>
 
-        <p>{testString}</p>
+        <p style={{opacity: 0}}>{testString}</p>
       </TemplateTableComponentWrapper>
     </>
   );

@@ -14,6 +14,7 @@ const MenuWrapper = styled.div<StyledMenuType>`
   transition: right 1s;
   right: ${(props) => (props.animateMenu ? "0" : "-500px")};
   color: ${(props: StyledMenuType) => (props.darkMode ? "white" : "white")};
+
   padding: 20px;
 
   z-index: 3;
@@ -40,8 +41,21 @@ const MenuGreeting = styled.h3`
   padding-top: 2rem;
 `;
 
+const MenuBackground = styled.div<StyledMenuType>`
+  display: ${(props: StyledMenuType) => (props.animateMenu ? "block" : "none")};
+
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+
+  background: ${(props: StyledMenuType) => (props.animateMenu ? "gba(0, 0, 0, 5)" : "gba(0, 0, 0, 0.05)")};
+  z-index: 2;
+  `
+;
+
 function Menu(props: IStyledMenuProps) {
   return (
+<>
     <MenuWrapper animateMenu={props.menu} darkMode={props.darkMode}>
       <ExitWrapper>
         <Exit onExit={props.handleMenu} />
@@ -73,6 +87,8 @@ function Menu(props: IStyledMenuProps) {
         label={"Report an issue"}
       />
     </MenuWrapper>
+        <MenuBackground animateMenu={props.menu} onClick={props.handleMenu}/>
+      </>
   );
 }
 
