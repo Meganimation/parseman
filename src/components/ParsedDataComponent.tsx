@@ -4,7 +4,7 @@ import Exit from "stories/Exit";
 import { RootState } from "slices/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "stories/Modal";
-
+import { Button } from "stories/Button";
 //import the edit icon from material ui
 import EditIcon from "@material-ui/icons/Edit";
 
@@ -184,6 +184,11 @@ export default function ParsedDataComponent({
 
   const [modal, setModal] = useState(false);
 
+  const [inputTemplateId, setInputTemplateId] = useState('');
+
+
+  const [localTemplateId, setLocalTemplateId] = useState(returnedData.templateId);
+
   const [arrow, setArrow] = useState("V");
 
   const [editInput, setEditInput] = useState([0, 0]);
@@ -270,6 +275,14 @@ export default function ParsedDataComponent({
     }
   };
 
+
+  const handleEditTemplateId = () => {
+
+    setLocalTemplateId(inputTemplateId);
+
+    setModal(false)
+  }
+
   return (
     <ParsedDataComponentWrapper >
       {parsedSideInfoIsVisible && (
@@ -284,7 +297,7 @@ export default function ParsedDataComponent({
                 }}
               >
                 <b>
-                  Template Id: {returnedData.templateId}
+                  Template Id: {localTemplateId}
                   <EditIcon style={{ transform: "scale(0.6)" }} />
                 </b>
               </StyledEditTemplateWrapper>
@@ -296,7 +309,8 @@ export default function ParsedDataComponent({
                   title="Enter Template Id Name"
                   darkMode={darkMode}
                 >
-                  SAVED
+                  <input type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
+                  <Button onClick={()=>{handleEditTemplateId()}} label='Submit' />
                 </Modal>
               )}
             </InfoItem>

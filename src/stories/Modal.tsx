@@ -13,6 +13,7 @@ interface ModalProps {
   width?: string;
   height?: string;
   titleFontSize?: string;
+  onEditSubmit?: any;
 }
 
 const StyledModal = styled.section`
@@ -113,6 +114,7 @@ export const Modal = ({
   height = "70vh",
   width = "60vw",
   titleFontSize = "2rem",
+  onEditSubmit = () => {},
   ...props
 }: ModalProps) => {
   return (
@@ -135,7 +137,7 @@ export const Modal = ({
               <Title darkMode={darkMode}>{title}</Title>
               <StyledInput type="text" darkMode={darkMode} />
               <IconWrapper>
-                <CheckCircleOutlineIcon />
+                <CheckCircleOutlineIcon onClick={onEditSubmit} />
               </IconWrapper>
             </EditModeWrapper>
           </>
