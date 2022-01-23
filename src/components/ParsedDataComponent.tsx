@@ -201,6 +201,7 @@ export default function ParsedDataComponent({
   useEffect(() => {
     if (returnedData.headers) {
       showParsedInfo();
+      setLocalTemplateId(returnedData.templateId);
       console.log("now", returnedData);
     }
   }, [returnedData]);
