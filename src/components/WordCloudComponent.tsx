@@ -51,7 +51,7 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
     
         const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "wordCloud/nonNumerical");
     
-        let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=50&to=0`;
+        let urlWithString = `${URL}/1/2020-01-17/2022-01-25?filter=build&from=50&to=0`;
     
         if (!wordCloudData.length)
           fetch(urlWithString)
