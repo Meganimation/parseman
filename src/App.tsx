@@ -128,7 +128,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -153,7 +153,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -177,7 +177,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=500&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {

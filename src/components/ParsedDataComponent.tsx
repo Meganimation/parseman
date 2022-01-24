@@ -161,6 +161,16 @@ const StyledEditTemplateWrapper = styled.div`
 
 `;
 
+const SortButton = styled.p`
+
+  cursor: pointer;
+  
+  &:hover {
+      font-weight: bold;
+    }
+
+    `;
+
 export interface ISubmitState {
   headers: string[];
   both: {
@@ -258,11 +268,13 @@ export default function ParsedDataComponent({
                     </h1>
                   </TitleContainer>
                 </HeaderContainer>
-                <b
+                <SortButton
                   onClick={(e) => {
-                    // handleSort(e, array.key);
+                    handleSort(e, array.key);
                   }}
-                ></b>
+                >
+                    <u>Sort ^</u>
+                </SortButton>
                 {array.value.map((value: any) =>
                   value.map((val: any, key: any) => {
                     return <Test key={key}>{val}</Test>;
@@ -273,6 +285,54 @@ export default function ParsedDataComponent({
           )}
         </GridContainer>
       );
+    }
+  };
+
+  const handleSort = (e: any, header: string) => {
+    if (arrow === "V") {
+      e.target.innerText = "Sort V";
+      let headerIndex = state.both.array.findIndex(
+        (i: { key: string }) => i.key === header
+      );
+      let valuesToSort = state.both.array[headerIndex].value;
+      let arr;
+
+      !header.includes("NUM")
+        ? (arr = valuesToSort[0].sort((a: any, b: any) => b.localeCompare(a)))
+        : (arr = valuesToSort[0].sort(function (a: any, b: any) {
+            return a - b;
+          }));
+
+      const { both } = state;
+      both.array[headerIndex].value = [arr];
+
+      setState({ headers: state.headers, both });
+
+      setArrow("^");
+    }
+
+    if (arrow === "^") {
+      e.target.innerText = "Sort ^";
+
+      let headerIndex = state.both.array.findIndex(
+        (i: { key: string }) => i.key === header
+      );
+
+      let valuesToSort = state.both.array[headerIndex].value;
+      let arr;
+
+      !header.includes("NUM") //change to includes numbers
+        ? (arr = valuesToSort[0].sort((a: any, b: any) => a.localeCompare(b)))
+        : (arr = valuesToSort[0].sort(function (a: any, b: any) {
+            return b - a;
+          }));
+
+      const { both } = state;
+      both.array[headerIndex].value = [arr];
+
+      setState({ headers: state.headers, both });
+
+      setArrow("V");
     }
   };
 
@@ -311,6 +371,7 @@ export default function ParsedDataComponent({
                   darkMode={darkMode}
                 >
                   <input type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
+                 {/* maybe change to local state */}
                   <Button onClick={()=>{handleEditTemplateId()}} label='Submit' />
                 </Modal>
               )}

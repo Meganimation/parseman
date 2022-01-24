@@ -61,7 +61,7 @@ function Menu(props: IStyledMenuProps) {
         <Exit onExit={props.handleMenu} />
       </ExitWrapper>
 
-      <MenuGreeting>Hello!</MenuGreeting>
+      <MenuGreeting>Hello! Please excuse the meCSS :) </MenuGreeting>
       <StyledButton
         onClick={props.handleTheme}
         label={

@@ -46,7 +46,7 @@ const dispatch = useDispatch();
       "logTail"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=500&to=0`;
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=50&to=0`;
 
     if (!logTailData.length)
       fetch(urlWithString)
