@@ -3,9 +3,10 @@ export enum EnvironmentTypeEnum {
   OFFLINE = "offline",
   LOCAL = "local",
   REMOTE = "remote",
+  AWS = "aws",
 }
 
-export const CURRENT_ENVIRONMENT_TYPE: string = EnvironmentTypeEnum.REMOTE;
+export const CURRENT_ENVIRONMENT_TYPE: string = EnvironmentTypeEnum.AWS;
 
 export default class SelectorsHelper {
   static getURL(environmentType: string, service: String) {
@@ -18,6 +19,9 @@ export default class SelectorsHelper {
       case EnvironmentTypeEnum.REMOTE:
         retVal = `http://10.12.2.249:8081/${service}`;
         break;
+        case EnvironmentTypeEnum.AWS:
+          retVal = `http://10.0.10.30:8081/${service}`;
+          break;
     }
     return retVal;
   }
