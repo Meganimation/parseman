@@ -83,7 +83,7 @@ export default function TemplateTableComponent(
       "templateList"
     );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-17?filter=build&from=50&to=0`;
+    let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
 
     if (!props.templateListData.length)
       fetch(urlWithString)
