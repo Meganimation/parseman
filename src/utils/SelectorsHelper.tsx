@@ -17,7 +17,7 @@ export default class SelectorsHelper {
         retVal = `http://localhost:8081/${service}`;
         break;
       case EnvironmentTypeEnum.REMOTE:
-        retVal = `http://10.12.2.249:8081/${service}`;
+        retVal = `http://10.0.10.30:8081/${service}`;
         break;
         case EnvironmentTypeEnum.AWS:
           retVal = `http://10.0.10.30:8081/${service}`;
