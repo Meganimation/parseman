@@ -23,6 +23,12 @@ const Text = styled.div<StyledWordCloudType>`
   padding-right: 10px;
   font-size: ${(props) => props.handleFontSize(props.count)};
   position: relative;
+  opacity: 70%;
+   &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    opacity: 100%;
+   }
 `;
 
 const WordsContainer = styled.div`
@@ -85,8 +91,8 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
 
     return tempData.map((word: any, key: number) => {
       return (
-        <Text key={key} count={word.count} handleFontSize={handleFontSize}>
- {word.word}
+        <Text onClick={()=>{props.addWordToInput(word.word)}} key={key} count={word.count} handleFontSize={handleFontSize}>
+            {word.word}
         </Text>
       );
     });
@@ -112,4 +118,5 @@ type StyledWordCloudType = {
 
 interface IWordCloudComponentProps {
   darkMode?: boolean;
+  addWordToInput: (word: string) => void;
 }

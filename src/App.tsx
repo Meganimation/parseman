@@ -264,6 +264,17 @@ function App() {
   // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
   };
 
+  
+  const addWordToInput = (word: string) => {
+    let value = `${tailSearch} AND ${word}`
+    setLoading(true);
+    setTailSearch(value);
+    fetchLogTailData(value);
+    fetchWordCloudData(value);
+    fetchTemplateListData(value);
+  
+  }
+
 
   return (
     <StyledApp darkMode={darkMode}>
@@ -349,7 +360,7 @@ function App() {
             }}
             headerHeight="20px"
           >
-            <WordCloudComponent darkMode={darkMode} />
+            <WordCloudComponent darkMode={darkMode} addWordToInput={addWordToInput} />
           </ComponentWindow>
         )}
       </Content>

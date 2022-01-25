@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Button } from "stories/Button";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -138,11 +138,15 @@ color: white;
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
   const [radioValue, setRadioValue] = React.useState("Templates");
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("Build");
 
   const handleMenu = () => {
     setMenu(false);
   };
+
+  useEffect(()=>{
+    setInputValue(props.tailSearch)
+  },[props.tailSearch])
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -226,7 +230,8 @@ export default function NavBar(props: INavBarProps) {
           </ContentWrapper>
           <StyledInput
             type="text"
-            placeholder={'Search...'}
+            value={inputValue}
+            placeholder={props.tailSearch}
             onChange={(event) => {
               const val = event.target.value as string;
               setInputValue(val)
@@ -289,7 +294,7 @@ export default function NavBar(props: INavBarProps) {
                </UnhideComponentWrapper>
        
                </ShowingResultsWrapper>
-               <ShowingResultsFor style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</ShowingResultsFor>
+               {/* <ShowingResultsFor style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</ShowingResultsFor> */}
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {
