@@ -138,7 +138,7 @@ color: white;
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
   const [radioValue, setRadioValue] = React.useState("Templates");
-  const [inputValue, setInputValue] = React.useState("Build");
+ const [inputValue, setInputValue] = React.useState("Hello");
 
   const handleMenu = () => {
     setMenu(false);
@@ -231,7 +231,7 @@ export default function NavBar(props: INavBarProps) {
           <StyledInput
             type="text"
             value={inputValue}
-            placeholder={props.tailSearch}
+            placeholder={"Search..."}
             onChange={(event) => {
               const val = event.target.value as string;
               setInputValue(val)

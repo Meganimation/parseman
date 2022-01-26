@@ -68,7 +68,7 @@ function App() {
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
-  const [tailSearch, setTailSearch] = useState("build");
+  const [tailSearch, setTailSearch] = useState("");
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
