@@ -16,11 +16,11 @@ export default class SelectorsHelper {
       case EnvironmentTypeEnum.LOCAL:
         retVal = `http://localhost:8081/${service}`;
         break;
-      case EnvironmentTypeEnum.REMOTE:
+      case EnvironmentTypeEnum.AWS:
         retVal = `http://clickhouseapi.aws.sliceup.co:8082/${service}`;
         break;
-        case EnvironmentTypeEnum.AWS:
-          retVal = `http://10.0.10.30:8081/${service}`;
+        case EnvironmentTypeEnum.REMOTE:
+          retVal = `http://10.12.2.249:8081/${service}`;
           break;
     }
     return retVal;
