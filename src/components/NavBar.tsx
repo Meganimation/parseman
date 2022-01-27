@@ -9,7 +9,7 @@ import TimeSelectorPicker from "./TimeSelectorPicker";
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  height: 95px;
+  min-height: 110px;
   width: 100%;
   opacity: 0.9;
   overflow: hidden;
