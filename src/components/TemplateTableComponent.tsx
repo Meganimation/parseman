@@ -10,7 +10,7 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   background-color: ${(props) => (props.darkMode ? "#1C2937 " : "white")};
   border-radius: 10px;
   overflow: auto;
-  height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "40vw")};
+  height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
 
   font-size: 12px;
   
