@@ -23,8 +23,9 @@ const Text = styled.div<StyledWordCloudType>`
   padding-right: 10px;
   font-family: arial black;
   font-size: ${(props) => handleFontSize(props.amount)};
+  opacity: 40%;
   position: relative;
-  opacity: 70%;
+
    &:hover {
     cursor: pointer;
     text-decoration: underline;
