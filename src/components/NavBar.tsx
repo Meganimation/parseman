@@ -106,7 +106,7 @@ const RadioItem = styled.div`
   cursor: pointer;
   position: relative;
   top: 0;
-  right: -25%;
+  right: 0;
 
   &:hover {
     transform: scale(1.1);
@@ -130,15 +130,10 @@ padding-top: 10px;
 
 `
 
-const ShowingResultsFor = styled.i`
-color: white;
-
-`
-
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
   const [radioValue, setRadioValue] = React.useState("Templates");
- const [inputValue, setInputValue] = React.useState("Hello");
+ const [inputValue, setInputValue] = React.useState("");
 
   const handleMenu = () => {
     setMenu(false);
@@ -168,6 +163,10 @@ export default function NavBar(props: INavBarProps) {
           setSelectedStartDate={props.setSelectedStartDate}
           setSelectedEndDate={props.setSelectedEndDate}
           handleEndDateChange={props.handleEndDateChange}
+          handleStartTimeChange={props.handleStartTimeChange}
+          selectedStartTime={props.selectedStartTime}
+          handleEndTimeChange={props.handleEndTimeChange}
+          selectedEndTime={props.selectedEndTime}
         />
         </TimeSelectorPickerWrapper>
               <RadioItem
@@ -341,4 +340,8 @@ interface INavBarProps {
   setSelectedStartDate: any;
   setSelectedEndDate: any;
   handleEndDateChange: any;
+  handleStartTimeChange: any;
+  selectedStartTime: string;
+  handleEndTimeChange: any;
+  selectedEndTime: string;
 }

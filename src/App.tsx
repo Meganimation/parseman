@@ -77,12 +77,15 @@ function App() {
 
   const messagesEndRef = useRef(null);
 
-  const [selectedStartDate, setSelectedStartDate] = React.useState(
-    new Date().toISOString().slice(0, 10)
-  ); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
+  const [selectedStartDate, setSelectedStartDate] = React.useState('2019-12-12'); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
   const [selectedEndDate, setSelectedEndDate] = React.useState(
     new Date().toISOString().slice(0, 10)
   );
+
+  const [selectedStartTime, setSelectedStartTime] = React.useState("00:00");
+  const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
+
+  // &10:00:00 is the time format
 
   const dispatch = useDispatch();
 
@@ -128,7 +131,7 @@ function App() {
       "logTail"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -153,7 +156,7 @@ function App() {
     );
 
     //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -177,7 +180,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}/${selectedEndDate}?filter=${value}&from=50&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -251,18 +254,25 @@ function App() {
   const handleStartDateChange = (date: Date | null) => {
     const dateAsString = (date as Date).toISOString().slice(0, 10);
    setSelectedStartDate(dateAsString);
-
-   console.log(selectedStartDate)
-  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
   };
 
   const handleEndDateChange = (date: Date | null) => {
     const dateAsString = (date as Date).toISOString().slice(0, 10);
    setSelectedEndDate(dateAsString);
-
-   console.log(selectedEndDate)
-  // updateStartEndTimeHandler(dateAsString, props.selectedEndDate, false);
   };
+
+  const handleStartTimeChange =(e: any) => {
+
+  setSelectedStartTime(e.target.value);
+
+  console.log('start time', selectedStartTime);
+  }
+
+  const handleEndTimeChange =(e: any) => {
+
+    setSelectedEndTime(e.target.value);
+    console.log('end time', selectedEndTime);
+    }
 
   
   const addWordToInput = (word: string) => {
@@ -297,7 +307,10 @@ function App() {
         setSelectedStartDate={setSelectedStartDate}
         setSelectedEndDate={setSelectedEndDate}
         handleEndDateChange={handleEndDateChange}
-
+        handleStartTimeChange={handleStartTimeChange}
+        selectedStartTime={selectedStartTime}
+        handleEndTimeChange={handleEndTimeChange}
+        selectedEndTime={selectedEndTime}
       />
 
      
@@ -308,7 +321,7 @@ function App() {
               <ComponentWindow
                 darkMode={darkMode}
                 title={"Logtail"}
-                headerHeight="15vh"
+                headerHeight="4vh"
                 onExit={() => {
                   setLogtailIsVisible(false);
                 }}
@@ -325,7 +338,7 @@ function App() {
             {templateIsVisible && (
               <ComponentWindow
                 darkMode={darkMode}
-                headerHeight="11vh"
+                headerHeight="4vh"
                 button={true}
                 title={"Template List"}
                 buttonText="Parse Data"
@@ -338,6 +351,7 @@ function App() {
                 }}
               >
                 <TemplateTableComponent
+              
                   templateIsVisible={templateIsVisible}
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}

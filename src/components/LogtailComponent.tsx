@@ -13,7 +13,7 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
   resize: horizontal;
   max-width: ${(props) => (props.templateIsVisible ? "60vw" : "95vw")};
   min-width: ${(props) => (props.templateIsVisible ? "30vw" : "95vw")};
-  height: ${(props) => (props.wordCloudIsVisible ? "50.5vh" : "37.75vw")};
+  height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "37.75vw")};
   width: ${(props) => (props.templateIsVisible ? "40vw" : "90vw")};
   overflow: auto;
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};

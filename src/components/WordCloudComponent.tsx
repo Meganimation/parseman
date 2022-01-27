@@ -21,7 +21,8 @@ const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
 
 const Text = styled.div<StyledWordCloudType>`
   padding-right: 10px;
-  font-size: ${(props) => props.handleFontSize(props.count)};
+  font-family: arial black;
+  font-size: ${(props) => handleFontSize(props.amount)};
   position: relative;
   opacity: 70%;
    &:hover {
@@ -37,6 +38,25 @@ const WordsContainer = styled.div`
 
   width: 100%;
 `;
+
+
+const handleFontSize = (amount: any) => {
+
+  if (amount < 5) {
+    return `${amount / 1.5}vh`;
+   
+  }
+  else if (amount < 20) {
+    return `${amount / 3}vh`;
+  }
+  else if (amount < 50) {
+    return `${amount / 4}vh`;
+  }
+
+  else return '3rem'
+
+}
+
 
 export default function WordCloudComponent(props: IWordCloudComponentProps) {
 
@@ -82,17 +102,15 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
     
       }, [wordCloudData, dispatch]);
 
-  const handleFontSize = (wordcount: any) => {
-    return Math.log(wordcount) * 1 - 1 / 2 + "rem";
-  };
+
 
   const mapWords = (tempData: any[]) => {
     // will likely need to sort by count before initializing
 
     return tempData.map((word: any, key: number) => {
       return (
-        <Text onClick={()=>{props.addWordToInput(word.word)}} key={key} count={word.count} handleFontSize={handleFontSize}>
-            {word.word}
+        <Text onClick={()=>{props.addWordToInput(word.word)}} key={key} amount={word.totalMatch} >
+            {word.word} {word.totalMatch}
         </Text>
       );
     });
@@ -112,8 +130,7 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
 
 type StyledWordCloudType = {
   darkMode?: boolean;
-  count?: number;
-  handleFontSize?: any;
+ amount?: number;
 };
 
 interface IWordCloudComponentProps {

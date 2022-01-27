@@ -5,6 +5,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  KeyboardTimePicker
 } from "@material-ui/pickers";
 import styled from 'styled-components'
 
@@ -31,6 +32,15 @@ import styled from 'styled-components'
   padding-left: 10px;
   `
 
+  const StyledTimePicker = styled.input`
+    position: relative;
+    top: -12px;
+    border-radius: 10px;
+
+
+  `
+
+  
 export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
 
 
@@ -50,6 +60,11 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
                 "aria-label": "change date",
               }}
             />
+            <StyledTimePicker 
+            type='time'
+            value={props.selectedStartTime}
+            onChange={(e)=>{props.handleStartTimeChange(e)}}
+             />
  
  
    
@@ -61,6 +76,11 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
                 "aria-label": "change date",
               }}
             />
+                <StyledTimePicker 
+            type='time'
+            value={props.selectedEndTime}
+            onChange={(e)=>{props.handleEndTimeChange(e)}}
+             />
    
           </Grid>
 
@@ -78,4 +98,8 @@ interface ITimeSelectorPickerProps {
 
   handleStartDateChange: any;
   handleEndDateChange: any;
+  handleStartTimeChange: any;
+  selectedStartTime: string;
+  handleEndTimeChange: any;
+  selectedEndTime: string;
 }

@@ -31,7 +31,6 @@ const ComponentWindowWrapper = styled.section`
 
     padding: 5px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-
 `;
 
 const HeaderContent = styled.div`
@@ -44,7 +43,7 @@ const HeaderContent = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 1em;
+  font-size: 0.3em;
   font-family: arial;
   color: ${(props: ComponentWindowProps) =>
     props.darkMode ? "white" : "#26374C"};
@@ -61,11 +60,20 @@ const ExitWrapper = styled.span`
   &:active {
     opacity: 0.5;
   }
+  z-index: 1;
 `;
 
 const FakeDiv = styled.div`
   color: #26374c;
   font-size: 1px;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-right: 15%;
+  margin-top: 2.5%;
+  z-Index: 1;
+  position: relative;
+  top: 10px;
 `;
 
 export const ComponentWindow = ({
@@ -90,16 +98,17 @@ export const ComponentWindow = ({
           <FakeDiv>.</FakeDiv>
         )}
         {props.button && (
-          <div style={{ marginRight: "15%", marginTop: "2.5%" }}>
+          <ButtonWrapper>
             <Button
               onClick={onButtonClick}
               label={buttonText}
               fontSize="12px"
+              height="30px"
             />
-          </div>
+          </ButtonWrapper>
         )}
         <ExitWrapper>
-          <Exit onExit={onExit} />{" "}
+          <Exit onExit={onExit} />
         </ExitWrapper>
       </HeaderContent>
       {children}
