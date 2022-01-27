@@ -110,7 +110,7 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
     return tempData.map((word: any, key: number) => {
       return (
         <Text onClick={()=>{props.addWordToInput(word.word)}} key={key} amount={word.totalMatch} >
-            {word.word} {word.totalMatch}
+            {word.word} 
         </Text>
       );
     });
