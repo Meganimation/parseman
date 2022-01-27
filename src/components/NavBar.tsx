@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Button } from "stories/Button";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -9,14 +9,11 @@ import TimeSelectorPicker from "./TimeSelectorPicker";
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  
-  min-height: 110px;
+  height: 95px;
   width: 100%;
   opacity: 0.9;
-
   overflow: hidden;
   resize: vertical;
-
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   z-index: 2;
 `;
@@ -24,25 +21,19 @@ const StyledNavWrapper = styled.nav`
 const StyledNav = styled.nav<StyledNavType>``;
 
 const UnhideComponentItem = styled.sup<StyledNavType>`
-
   position: relative;
   margin-right: 1rem;
 `;
 
 const UnhideComponentWrapper = styled.div`
-
   display: flex;
   padding-left: 0.5rem;
-
-
-
 
   > div {
     margin-left: 0.3rem;
     margin-right: 0.8rem;
     font-size: 0.8rem;
     position: relative;
-
     cursor: pointer;
 
     &:hover {
@@ -53,7 +44,6 @@ const UnhideComponentWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 90vw;
-
   height: 2rem;
   border: none;
   border-radius: 10px;
@@ -77,7 +67,7 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
 
 const RadioButtonGroup = styled.span`
   display: flex;
-  color:  white;
+  color: white;
 
   > div {
     margin-left: 0.3rem;
@@ -95,11 +85,9 @@ const ContentWrapper = styled.nav`
   width: 90vw;
   display: flex;
   flex-direction: column;
- 
+
   justify-content: center;
   padding-top: 10px;
-  
-
 `;
 
 const RadioItem = styled.div`
@@ -114,34 +102,32 @@ const RadioItem = styled.div`
 `;
 
 const ShowingResultsWrapper = styled.div`
-display: flex;
-flex-direction: row;
-font-size: 0.8em;
-padding-right: 10px;
-position: absolute;
-bottom: 0;
-right: 8%;
-color: white;
-
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8em;
+  padding-right: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 8%;
+  color: white;
 `;
 
 const TimeSelectorPickerWrapper = styled.div`
-padding-top: 10px;
-
-`
+  padding-top: 10px;
+`;
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
   const [radioValue, setRadioValue] = React.useState("Templates");
- const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("");
 
   const handleMenu = () => {
     setMenu(false);
   };
 
-  useEffect(()=>{
-    setInputValue(props.tailSearch)
-  },[props.tailSearch])
+  useEffect(() => {
+    setInputValue(props.tailSearch);
+  }, [props.tailSearch]);
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -154,35 +140,32 @@ export default function NavBar(props: INavBarProps) {
         <StyledNav>
           <ContentWrapper>
             <RadioButtonGroup>
-          
-                         <TimeSelectorPickerWrapper>
-            <TimeSelectorPicker
-          handleStartDateChange={props.handleStartDateChange}
-          selectedStartDate={props.selectedStartDate}
-          selectedEndDate={props.selectedEndDate}
-          setSelectedStartDate={props.setSelectedStartDate}
-          setSelectedEndDate={props.setSelectedEndDate}
-          handleEndDateChange={props.handleEndDateChange}
-          handleStartTimeChange={props.handleStartTimeChange}
-          selectedStartTime={props.selectedStartTime}
-          handleEndTimeChange={props.handleEndTimeChange}
-          selectedEndTime={props.selectedEndTime}
-        />
-        </TimeSelectorPickerWrapper>
+              <TimeSelectorPickerWrapper>
+                <TimeSelectorPicker
+                  handleStartDateChange={props.handleStartDateChange}
+                  selectedStartDate={props.selectedStartDate}
+                  selectedEndDate={props.selectedEndDate}
+                  setSelectedStartDate={props.setSelectedStartDate}
+                  setSelectedEndDate={props.setSelectedEndDate}
+                  handleEndDateChange={props.handleEndDateChange}
+                  handleStartTimeChange={props.handleStartTimeChange}
+                  selectedStartTime={props.selectedStartTime}
+                  handleEndTimeChange={props.handleEndTimeChange}
+                  selectedEndTime={props.selectedEndTime}
+                />
+              </TimeSelectorPickerWrapper>
               <RadioItem
                 onClick={(e) => {
                   props.handleTemplateVersionChange("1");
                   setRadioValue("Templates");
                 }}
               >
-
-               
                 <input
                   type="radio"
                   value="Templates"
                   checked={radioValue === "Templates" ? true : false}
                 />
-                   <b> Templates </b>
+                <b> Templates </b>
               </RadioItem>
               <RadioItem
                 onClick={(e) => {
@@ -190,7 +173,6 @@ export default function NavBar(props: INavBarProps) {
                   setRadioValue("Variables");
                 }}
               >
-                
                 <input
                   type="radio"
                   value="Variables"
@@ -204,28 +186,16 @@ export default function NavBar(props: INavBarProps) {
                   setRadioValue("Both");
                 }}
               >
-                
                 <input
                   type="radio"
                   value="Both"
                   checked={radioValue === "Both" ? true : false}
                 />
                 <b> Both</b>
-
-                
               </RadioItem>
-
-          
-  
             </RadioButtonGroup>
 
- 
-            <UnhideComponentWrapper>
- 
-      
-           
-            </UnhideComponentWrapper>
-      
+            <UnhideComponentWrapper></UnhideComponentWrapper>
           </ContentWrapper>
           <StyledInput
             type="text"
@@ -233,14 +203,14 @@ export default function NavBar(props: INavBarProps) {
             placeholder={"Search..."}
             onChange={(event) => {
               const val = event.target.value as string;
-              setInputValue(val)
+              setInputValue(val);
             }}
             onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
               handleSubmit(e);
             }}
           />
-      
-          <ShowingResultsWrapper>   
+
+          <ShowingResultsWrapper>
             <UnhideComponentWrapper>
               {!props.logtailIsVisible && (
                 <div
@@ -285,15 +255,9 @@ export default function NavBar(props: INavBarProps) {
                     <b> x Show parsedSideInfoIsVisible</b>
                   </UnhideComponentItem>
                 </div>
-                
               )}
-               
-     
-               
-               </UnhideComponentWrapper>
-       
-               </ShowingResultsWrapper>
-               {/* <ShowingResultsFor style={{position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px'}}> currently showing results for: {props.tailSearch}</ShowingResultsFor> */}
+            </UnhideComponentWrapper>
+          </ShowingResultsWrapper>
         </StyledNav>
         <MenuButtonWrapper
           onClick={() => {
@@ -302,8 +266,6 @@ export default function NavBar(props: INavBarProps) {
         >
           <MenuIcon />
         </MenuButtonWrapper>
-
-
       </StyledNavWrapper>
 
       <Menu

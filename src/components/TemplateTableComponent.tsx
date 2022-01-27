@@ -18,7 +18,7 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
 
 const TableHeaderWrapper = styled.div<StyledTemplateType>`
   display: grid;
-  grid-template-columns: 1.1fr 5fr 1.5fr;
+  grid-template-columns: 1.5fr 4fr 0.5fr;
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
 
   position: -webkit-sticky; 

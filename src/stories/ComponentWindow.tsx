@@ -73,7 +73,7 @@ const ButtonWrapper = styled.div`
   margin-top: 2.5%;
   z-Index: 1;
   position: relative;
-  top: 10px;
+  top: -20px;
 `;
 
 export const ComponentWindow = ({
