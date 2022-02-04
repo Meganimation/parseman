@@ -31,7 +31,7 @@ export default function useTemplateFetch(templateVersion, selectedStartDate, sel
             setError(false)
             axios.get(urlWithString)
             .then(res => {
-                setData(prevData => {return (setData(...prevData, res.data))})
+                setData(res.data)
                 setHasMore(res.data.length > 0)
                 setLoadingTemplateData(false)
                 console.log('I AM DATA', res.data);

@@ -157,28 +157,30 @@ function App() {
   };
 
   const fetchTemplateListData = (value: string) => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "templateList"
-    );
 
-    //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
+    console.log('this has now been deprecated hopefully')
+    // const URL: string = SelectorsHelper.getURL(
+    //   CURRENT_ENVIRONMENT_TYPE,
+    //   "templateList"
+    // );
 
-    return fetch(urlWithString)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(`Error code: ${res.status}. Please try again.`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        dispatch(convertToTemplateList(data));
-        console.log("done", data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    // //TO DO: Regex selectedStartDate and pass it in
+    // let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
+
+    // return fetch(urlWithString)
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw Error(`Error code: ${res.status}. Please try again.`);
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     dispatch(convertToTemplateList(data));
+    //     console.log("done", data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //   });
   };
 
   const fetchWordCloudData = (value: string) => {

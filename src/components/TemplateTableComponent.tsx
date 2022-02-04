@@ -126,7 +126,7 @@ export default function TemplateTableComponent(
           </TableHeader>
         </TableHeaderWrapper>
         {console.log('TEST', props.templateListData)}
-        {/* {props.templateListData.map((data: any) => (
+        {props.templateListData.map((data: any) => (
           <TableWrapper
             darkMode={props.darkMode}
             onClick={() => {
@@ -148,7 +148,7 @@ export default function TemplateTableComponent(
             <div>{data.templateLiteral}</div>
             <div>{data.totalTemplates}</div>
           </TableWrapper>
-        ))} */}
+        ))}
         <p style={{ opacity: 0 }}>{testString}</p>
       </TemplateTableComponentWrapper>
       {props.loadingTemplateData && <h1>Loading...</h1>}
