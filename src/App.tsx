@@ -183,6 +183,11 @@ function App() {
     //   });
   };
 
+  const handlePagination=()=>{
+    console.log('its nearly time')
+    setPageAmount(pageAmount+50);
+  }
+
   const fetchWordCloudData = (value: string) => {
     const URL: string = SelectorsHelper.getURL(
       CURRENT_ENVIRONMENT_TYPE,
@@ -360,7 +365,8 @@ function App() {
                 }}
               >
                 <TemplateTableComponent
-              
+              handlePagination={handlePagination}
+              hasMore={hasMore}
                   templateIsVisible={templateIsVisible}
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
@@ -373,7 +379,7 @@ function App() {
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
                 />
-                <button onClick={()=>{setPageAmount(pageAmount + 50)}}>Use Template</button>
+
               </ComponentWindow>
             )}
           </Slider>

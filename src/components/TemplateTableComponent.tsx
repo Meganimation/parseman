@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback} from "react";
 import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
@@ -74,8 +74,24 @@ let testString =
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
-  const [templateId, setTemplateId] = useState("");
-  const dispatch = useDispatch();
+
+  const observer = useRef<any>();
+
+  //@ts-ignore
+  const lastElementRef = useCallback(node => {
+    if (props.loadingTemplateData) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && props.hasMore) {
+        props.handlePagination();
+      }
+
+    })
+    if (node)  observer.current.observe(node);
+    console.log('NODE', node)
+  }, [props.loadingTemplateData, props.hasMore]);
+  // const [templateId, setTemplateId] = useState("");
+  // const dispatch = useDispatch();
 
   // useEffect(() => {
   //   const URL: string = SelectorsHelper.getURL(
@@ -126,29 +142,59 @@ export default function TemplateTableComponent(
           </TableHeader>
         </TableHeaderWrapper>
         {console.log('TEST', props.templateListData)}
-        {props.templateListData.map((data: any) => (
-          <TableWrapper
-            darkMode={props.darkMode}
-            onClick={() => {
-              props.handleCheckedRadio(
-                data.templateId,
-                data.templateVersion,
-                data.templateLiteral
-              );
-            }}
-          >
-            <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
-
-              <RadioButton
-                value={data.templateId}
-                checked={data.templateId === props.checkedTemplateId}
-                label={data.templateId}
-              />
-            </RadioButtonWrapper>
-            <div>{data.templateLiteral}</div>
-            <div>{data.totalTemplates}</div>
-          </TableWrapper>
-        ))}
+        {props.templateListData.map((data: any, index: any) => {
+          if (props.templateListData.length === index + 1) {
+            return ( <TableWrapper
+              ref={lastElementRef}
+                darkMode={props.darkMode}
+                onClick={() => {
+                  props.handleCheckedRadio(
+                    data.templateId,
+                    data.templateVersion,
+                    data.templateLiteral
+                  );
+                }}
+              >
+                <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
+    
+                  <RadioButton
+                    value={data.templateId}
+                    checked={data.templateId === props.checkedTemplateId}
+                    label={data.templateId}
+                  />
+                </RadioButtonWrapper>
+                <div>{data.templateLiteral}</div>
+                <div>{data.totalTemplates}</div>
+              </TableWrapper>)
+          }
+          else {
+            return (
+              <TableWrapper
+                darkMode={props.darkMode}
+                onClick={() => {
+                  props.handleCheckedRadio(
+                    data.templateId,
+                    data.templateVersion,
+                    data.templateLiteral
+                  );
+                }}
+              >
+                <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
+    
+                  <RadioButton
+                    value={data.templateId}
+                    checked={data.templateId === props.checkedTemplateId}
+                    label={data.templateId}
+                  />
+                </RadioButtonWrapper>
+                <div>{data.templateLiteral}</div>
+                <div>{data.totalTemplates}</div>
+              </TableWrapper>
+            )
+          }
+         
+         
+        })}
         <p style={{ opacity: 0 }}>{testString}</p>
       </TemplateTableComponentWrapper>
       {props.loadingTemplateData && <h1>Loading...</h1>}
@@ -173,4 +219,6 @@ interface TemplateTableComponentProps {
   checkedTemplateId?: string;
   loadingTemplateData?: boolean;
   error?: boolean;
+  handlePagination?: any;
+  hasMore?: boolean;
 }
