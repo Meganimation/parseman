@@ -25,6 +25,8 @@ import {
 
 import { RootState } from "slices/store";
 
+import useTemplateFetch from "./hooks/useTemplateFetch";
+
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
   max-width: 100vw;
@@ -84,6 +86,11 @@ function App() {
 
   const [selectedStartTime, setSelectedStartTime] = React.useState("00:00");
   const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
+
+  const [pageAmount, setPageAmount] = React.useState(50);
+
+
+  useTemplateFetch(templateVersion,selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, tailSearch, pageAmount);
 
   // &10:00:00 is the time format
 
@@ -362,6 +369,7 @@ function App() {
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
                 />
+                <button onClick={()=>{setPageAmount(pageAmount + 50)}}>Use Template</button>
               </ComponentWindow>
             )}
           </Slider>
