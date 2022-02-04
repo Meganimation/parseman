@@ -77,32 +77,32 @@ export default function TemplateTableComponent(
   const [templateId, setTemplateId] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "templateList"
-    );
+  // useEffect(() => {
+  //   const URL: string = SelectorsHelper.getURL(
+  //     CURRENT_ENVIRONMENT_TYPE,
+  //     "templateList"
+  //   );
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
+  //   let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
 
-    if (!props.templateListData.length)
-      fetch(urlWithString)
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(`Error code: ${res.status}. Please try again.`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          //@ts-ignore
-          dispatch(convertToTemplateList(data));
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    // }
-  }, [props.templateListData, dispatch]);
+  //   if (!props.templateListData.length)
+  //     fetch(urlWithString)
+  //       .then((res) => {
+  //         if (!res.ok) {
+  //           throw Error(`Error code: ${res.status}. Please try again.`);
+  //         }
+  //         return res.json();
+  //       })
+  //       .then((data) => {
+  //         //@ts-ignore
+  //         dispatch(convertToTemplateList(data));
+  //         console.log(data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err.message);
+  //       });
+  //   // }
+  // }, [props.templateListData, dispatch]);
 
   if (!props.templateListData) return <h1>Loading...</h1>;
 
@@ -125,7 +125,8 @@ export default function TemplateTableComponent(
             <h2>Total Logs</h2>
           </TableHeader>
         </TableHeaderWrapper>
-        {props.templateListData.map((data: any) => (
+        {console.log('TEST', props.templateListData)}
+        {/* {props.templateListData.map((data: any) => (
           <TableWrapper
             darkMode={props.darkMode}
             onClick={() => {
@@ -137,19 +138,21 @@ export default function TemplateTableComponent(
             }}
           >
             <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
-              {" "}
+
               <RadioButton
                 value={data.templateId}
                 checked={data.templateId === props.checkedTemplateId}
                 label={data.templateId}
-              />{" "}
+              />
             </RadioButtonWrapper>
             <div>{data.templateLiteral}</div>
             <div>{data.totalTemplates}</div>
           </TableWrapper>
-        ))}
+        ))} */}
         <p style={{ opacity: 0 }}>{testString}</p>
       </TemplateTableComponentWrapper>
+      {props.loadingTemplateData && <h1>Loading...</h1>}
+      {props.error && <h1>Error</h1>}
     </>
   );
 }
@@ -168,4 +171,6 @@ interface TemplateTableComponentProps {
   updateTailSearchResultsHandler?: any;
   handleCheckedRadio?: any;
   checkedTemplateId?: string;
+  loadingTemplateData?: boolean;
+  error?: boolean;
 }

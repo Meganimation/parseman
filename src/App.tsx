@@ -90,7 +90,7 @@ function App() {
   const [pageAmount, setPageAmount] = React.useState(50);
 
 
-  useTemplateFetch(templateVersion,selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, tailSearch, pageAmount);
+  const {loadingTemplateData, testData, error, hasMore} = useTemplateFetch(templateVersion,selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, tailSearch, pageAmount);
 
   // &10:00:00 is the time format
 
@@ -362,7 +362,9 @@ function App() {
                   templateIsVisible={templateIsVisible}
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
-                  templateListData={templateListData}
+                  templateListData={testData}
+                  loadingTemplateData={loadingTemplateData}
+                  error={error}
                   updateTailSearchResultsHandler={
                     updateTailSearchResultsHandler
                   }
