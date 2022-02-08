@@ -26,6 +26,7 @@ import {
 import { RootState } from "slices/store";
 
 import useTemplateFetch from "./hooks/useTemplateFetch";
+import useLogtailFetch from "./hooks/useLogtailFetch";
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -88,11 +89,12 @@ function App() {
   const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
 
   const [pageAmount, setPageAmount] = React.useState(50);
+  const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
 
   const {loadingTemplateData, testData, error, hasMore} = useTemplateFetch(templateVersion,selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, tailSearch, pageAmount);
-
-  // &10:00:00 is the time format
+  const {loadingLogtail, logtailData, logtailError, logtailHasMore} = useLogtailFetch(templateVersion,selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, tailSearch, logtailPageAmount);
+  // inject the logtail component with the useLogtailprops
 
   const dispatch = useDispatch();
 
@@ -186,6 +188,11 @@ function App() {
   const handlePagination=()=>{
     console.log('its nearly time')
     setPageAmount(pageAmount+50);
+  }
+
+  const handleLogtailPagination=()=>{
+    console.log('its nearly time')
+    setLogtailPageAmount(logtailPageAmount+50);
   }
 
   const fetchWordCloudData = (value: string) => {
@@ -314,7 +321,6 @@ function App() {
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
 
-        // updateStartEndTimeHandler={updateStartEndTimeHandler}
         handleStartDateChange={handleStartDateChange}
         selectedStartDate={selectedStartDate}
         selectedEndDate={selectedEndDate}
@@ -341,9 +347,14 @@ function App() {
                 }}
               >
                 <LogtailComponent
+                loadingLogtail={loadingLogtail}
+                logtailData={logtailData}
+                logtailError={logtailError}
+                logtailHasMore={logtailHasMore}
                   darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
+                  handleLogtailPagination={handleLogtailPagination}
                 />
               </ComponentWindow>
             )}
@@ -365,8 +376,8 @@ function App() {
                 }}
               >
                 <TemplateTableComponent
-              handlePagination={handlePagination}
-              hasMore={hasMore}
+                  handlePagination={handlePagination}
+                  hasMore={hasMore}
                   templateIsVisible={templateIsVisible}
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}

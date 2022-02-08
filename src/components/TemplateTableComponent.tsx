@@ -75,21 +75,25 @@ export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
 
+  //deconstruct props
+  const { loadingTemplateData, hasMore, handlePagination, templateListData} = props;
+
   const observer = useRef<any>();
 
   //@ts-ignore
   const lastElementRef = useCallback(node => {
-    if (props.loadingTemplateData) return;
+    if (loadingTemplateData) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && props.hasMore) {
-        props.handlePagination();
+      if (entries[0].isIntersecting && hasMore && templateListData.length > 1) {
+        console.log('this has mor', hasMore, templateListData)
+        handlePagination();
       }
 
     })
     if (node)  observer.current.observe(node);
     console.log('NODE', node)
-  }, [props.loadingTemplateData, props.hasMore]);
+  }, [loadingTemplateData, hasMore, handlePagination, templateListData]);
   // const [templateId, setTemplateId] = useState("");
   // const dispatch = useDispatch();
 
@@ -120,7 +124,7 @@ export default function TemplateTableComponent(
   //   // }
   // }, [props.templateListData, dispatch]);
 
-  if (!props.templateListData) return <h1>Loading...</h1>;
+  // if (!props.templateListData) return <h1>Loading...</h1>;
 
   return (
     <>
@@ -141,7 +145,6 @@ export default function TemplateTableComponent(
             <h2>Total Logs</h2>
           </TableHeader>
         </TableHeaderWrapper>
-        {console.log('TEST', props.templateListData)}
         {props.templateListData.map((data: any, index: any) => {
           if (props.templateListData.length === index + 1) {
             return ( <TableWrapper
@@ -196,9 +199,10 @@ export default function TemplateTableComponent(
          
         })}
         <p style={{ opacity: 0 }}>{testString}</p>
-      </TemplateTableComponentWrapper>
-      {props.loadingTemplateData && <h1>Loading...</h1>}
+        {loadingTemplateData && <h1>Loading...</h1>}
       {props.error && <h1>Error</h1>}
+      </TemplateTableComponentWrapper>
+    
     </>
   );
 }
