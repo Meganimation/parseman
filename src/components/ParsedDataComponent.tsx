@@ -38,44 +38,6 @@ const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>`
   
 `;
 
-const TableHeaderWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1.1fr 5fr 1.5fr;
-
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-`;
-
-const TableWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
-  background: #34404e;
-  cursor: pointer;
-  margin: 0;
-  border: 0;
-  align-items: center;
-
-  &:hover {
-    background: #28313b;
-  }
-`;
-
-const TableHeader = styled.div`
-  padding-left: 10px;
-  font-size: 0.75em;
-  background: #2d4460;
-  align-items: center;
-  height: 2rem;
-
-  h2 {
-    font-size: 1em;
-    font-family: "IBM Plex", sans-serif;
-    display: inline-block;
-    vertical-align: middle;
-  }
-`;
-
 const GridContainer = styled.div<StyledParsedTableType>`
 
   display: grid;

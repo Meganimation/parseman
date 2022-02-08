@@ -1,10 +1,5 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
-import {
-    convertToTemplateList,
-  } from "slices/currentDataSlice";
-
-import { useDispatch, useSelector } from "react-redux"; 
 
 import SelectorsHelper, {
     CURRENT_ENVIRONMENT_TYPE,
@@ -14,10 +9,9 @@ import SelectorsHelper, {
 export default function useTemplateFetch(templateVersion, selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, value, pageAmount) {
 
     const [loadingTemplateData, setLoadingTemplateData] = useState(true);
-    const [error, setError] = useState(false);
-    const [data, setData] = useState([]);
-    const [hasMore, setHasMore] = useState(false);
-    const dispatch = useDispatch();
+    const [templateError, setError] = useState(false);
+    const [templateData, setData] = useState([]);
+    const [templateHasMore, setHasMore] = useState(false);
 
     const URL= SelectorsHelper.getURL(
         CURRENT_ENVIRONMENT_TYPE,
@@ -34,16 +28,14 @@ export default function useTemplateFetch(templateVersion, selectedStartDate, sel
                 setData(res.data)
                 setHasMore(res.data.length > 0)
                 setLoadingTemplateData(false)
-                console.log('I AM DATA', res.data);
-                // dispatch(convertToTemplateList(res.data));
             }).catch(err => {
                 console.log(err);
                 setError(true)
             })
-        }, [urlWithString, dispatch]);
+        }, [urlWithString]);
         return {loadingTemplateData, 
-            testData: data,
-            error, 
-             hasMore};
+            templateData,
+            templateError, 
+            templateHasMore};
 
 }

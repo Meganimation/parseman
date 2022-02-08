@@ -1,12 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback} from "react";
-import SelectorsHelper, {
-  CURRENT_ENVIRONMENT_TYPE,
-} from "utils/SelectorsHelper";
-import {
-  convertToParsed,
-  convertToTemplateList,
-} from "slices/currentDataSlice";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { RadioButton } from "stories/RadioButton";
 
@@ -68,9 +60,6 @@ const RadioButtonWrapper = styled.div`
   }
 `;
 
-let testString =
-  " ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved.";
-
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
@@ -86,45 +75,12 @@ export default function TemplateTableComponent(
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore && templateListData.length > 1) {
-        console.log('this has mor', hasMore, templateListData)
         handlePagination();
       }
 
     })
     if (node)  observer.current.observe(node);
-    console.log('NODE', node)
   }, [loadingTemplateData, hasMore, handlePagination, templateListData]);
-  // const [templateId, setTemplateId] = useState("");
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const URL: string = SelectorsHelper.getURL(
-  //     CURRENT_ENVIRONMENT_TYPE,
-  //     "templateList"
-  //   );
-
-  //   let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
-
-  //   if (!props.templateListData.length)
-  //     fetch(urlWithString)
-  //       .then((res) => {
-  //         if (!res.ok) {
-  //           throw Error(`Error code: ${res.status}. Please try again.`);
-  //         }
-  //         return res.json();
-  //       })
-  //       .then((data) => {
-  //         //@ts-ignore
-  //         dispatch(convertToTemplateList(data));
-  //         console.log(data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.message);
-  //       });
-  //   // }
-  // }, [props.templateListData, dispatch]);
-
-  // if (!props.templateListData) return <h1>Loading...</h1>;
 
   return (
     <>
@@ -198,7 +154,7 @@ export default function TemplateTableComponent(
          
          
         })}
-        <p style={{ opacity: 0 }}>{testString}</p>
+ 
         {loadingTemplateData && <h1>Loading...</h1>}
       {props.error && <h1>Error</h1>}
       </TemplateTableComponentWrapper>
