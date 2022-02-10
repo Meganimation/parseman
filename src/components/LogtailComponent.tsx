@@ -1,11 +1,6 @@
-import React, { useRef, useEffect, useState} from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useRef, useEffect, useState, useCallback} from "react";
 import styled from "styled-components";
-import SelectorsHelper, {
-  CURRENT_ENVIRONMENT_TYPE,
-} from "utils/SelectorsHelper";
-import { convertToLogged } from "slices/currentDataSlice";
-import { RootState } from "slices/store";
+
 
 //background-color:${(props) => props.darkMode ? '#26374C; ' : 'white'};
 const LogtailComponentWrapper = styled.section<StyledLogtailType>`
@@ -33,70 +28,64 @@ const LogtailItem = styled.div<StyledLogtailType>`
 `;
 
 export default function LogtailComponent(props: LogtailComponentProps) {
-
-    const logTailData = useSelector(
-        (state: RootState) => state.returnedData.logTailData
-      );
-
-const dispatch = useDispatch();
-
-  useEffect(() => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "logTail"
-    );
-
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
-
-    if (!logTailData.length)
-      fetch(urlWithString)
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(`Error code: ${res.status}. Please try again.`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-            dispatch(convertToLogged(data));
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-  }, [logTailData, dispatch]);
-
-  const inputEl = useRef(null);
+  const {loadingLogtail, logtailHasMore, darkMode, templateIsVisible, wordCloudIsVisible, logtailData, logtailError, handleLogtailPagination} = props;
+  
+    const observer = useRef<any>();
+  
+    //@ts-ignore
+    const lastElementRef = useCallback(node => {
+      if (loadingLogtail) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && logtailHasMore) {
+          handleLogtailPagination();
+        }
+  
+      })
+      if (node)  observer.current.observe(node);
+    }, [loadingLogtail, logtailHasMore]);
 
 
 
   const mapData = (data: any) => {
-    return data.map((item: any, key: number) => {
+    return data.map((item: any, index: number) => {
+      if (logtailData.length === index + 1) {
       return (
-        <LogtailItem id={key} darkMode={props.darkMode}>
+        <LogtailItem
+         id={index} 
+         darkMode={darkMode}
+         ref={lastElementRef}
+         >
           <code>
             {item.logTail}
-          </code>
-        </LogtailItem>
-      );
+          </code> 
+        </LogtailItem> 
+      )}
+      else return (
+        <LogtailItem
+        id={index} 
+        darkMode={darkMode}
+        ref={lastElementRef}
+        >
+         <code>
+           {item.logTail}
+         </code> 
+
+       </LogtailItem> 
+      )
+      
     });
   };
 
-  if (!logTailData.length) {
-    return    <LogtailComponentWrapper
-    templateIsVisible={props.templateIsVisible}
-    wordCloudIsVisible={props.wordCloudIsVisible}
-    darkMode={props.darkMode}
-  >
-    Loading...
-  </LogtailComponentWrapper>;
-  }
-
   return (
     <LogtailComponentWrapper
-      templateIsVisible={props.templateIsVisible}
-      wordCloudIsVisible={props.wordCloudIsVisible}
-      darkMode={props.darkMode}
+      templateIsVisible={templateIsVisible}
+      wordCloudIsVisible={wordCloudIsVisible}
+      darkMode={darkMode}
     >
-      {mapData(logTailData)}
+      {mapData(logtailData)}
+             {loadingLogtail && <h1>Loading...</h1>}
+     {logtailError && <h1>Error</h1>}
     </LogtailComponentWrapper>
   );
 }
@@ -112,4 +101,12 @@ interface LogtailComponentProps {
   templateIsVisible: boolean;
   wordCloudIsVisible: boolean;
   darkMode: boolean;
+  loadingLogtail: boolean;
+  logtailData: any;
+  logtailError: any;
+  logtailHasMore: boolean;
+  handleLogtailPagination?: any;
+  
 }
+
+

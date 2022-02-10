@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
 import { Modal } from "stories/Modal";
-
 import {
   WordCloudComponent,
   NavBar,
@@ -15,15 +14,10 @@ import {
 import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  convertToLogged,
-  convertToWordCloud,
-  convertToTemplateList,
-  convertToParsed,
-} from "./slices/currentDataSlice";
-
-import { RootState } from "slices/store";
+import { useDispatch } from "react-redux";
+import { convertToWordCloud, convertToParsed } from "./slices/currentDataSlice";
+import useTemplateFetch from "./hooks/useTemplateFetch";
+import useLogtailFetch from "./hooks/useLogtailFetch";
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -32,8 +26,6 @@ const StyledApp = styled.div<StyledAppType>`
   font-family: "IBM Plex Mono", sans-serif;
   height: 100vh;
   overflow-x: hidden;
-
-
 
   > nav {
     background-color: #4b0c5e;
@@ -55,10 +47,7 @@ const Slider = styled.section`
 `;
 
 function App() {
-  const templateListData = useSelector(
-    (state: RootState) => state.returnedData.templateListData
-  );
-    const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
   const [templateIsVisible, setTemplateIsVisible] = useState(true);
@@ -77,7 +66,8 @@ function App() {
 
   const messagesEndRef = useRef(null);
 
-  const [selectedStartDate, setSelectedStartDate] = React.useState('2019-12-12'); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
+  const [selectedStartDate, setSelectedStartDate] =
+    React.useState("2019-12-12"); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
   const [selectedEndDate, setSelectedEndDate] = React.useState(
     new Date().toISOString().slice(0, 10)
   );
@@ -85,7 +75,29 @@ function App() {
   const [selectedStartTime, setSelectedStartTime] = React.useState("00:00");
   const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
 
-  // &10:00:00 is the time format
+  const [templatePageAmount, setTemplatePageAmount] = React.useState(50);
+  const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
+
+  const { loadingTemplateData, templateData, templateError, templateHasMore } = useTemplateFetch(
+    templateVersion,
+    selectedStartDate,
+    selectedStartTime,
+    selectedEndDate,
+    selectedEndTime,
+    tailSearch,
+    templatePageAmount
+  );
+  const { loadingLogtail, logtailData, logtailError, logtailHasMore } =
+    useLogtailFetch(
+      templateVersion,
+      selectedStartDate,
+      selectedStartTime,
+      selectedEndDate,
+      selectedEndTime,
+      tailSearch,
+      logtailPageAmount
+    );
+  // inject the logtail component with the useLogtailprops
 
   const dispatch = useDispatch();
 
@@ -118,60 +130,23 @@ function App() {
 
     //@ts-ignore
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    return fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
+    return fetchParsedData(
+      checkedTemplateId,
+      checkedTemplateVersion,
+      dispatch as any
+    );
   };
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
   };
 
-  const fetchLogTailData = (value: string) => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "logTail"
-    );
-
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
-
-    return fetch(urlWithString)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(`Error code: ${res.status}. Please try again.`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        dispatch(convertToLogged(data));
-        console.log("logtail data", data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  const handlePagination = () => {
+    setTemplatePageAmount(templatePageAmount + 50);
   };
 
-  const fetchTemplateListData = (value: string) => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "templateList"
-    );
-
-    //TO DO: Regex selectedStartDate and pass it in
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
-
-    return fetch(urlWithString)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(`Error code: ${res.status}. Please try again.`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        dispatch(convertToTemplateList(data));
-        console.log("done", data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  const handleLogtailPagination = () => {
+    setLogtailPageAmount(logtailPageAmount + 50);
   };
 
   const fetchWordCloudData = (value: string) => {
@@ -218,7 +193,6 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToParsed(data));
-        console.log("done", data);
       })
       .catch((err) => {
         console.log(err.message);
@@ -226,14 +200,8 @@ function App() {
   };
 
   const updateTailSearchResultsHandler = (value: string) => {
-    setLoading(true);
-  
     setTailSearch(value);
-    fetchLogTailData(value);
     fetchWordCloudData(value);
-    fetchTemplateListData(value);
-
-    setLoading(false);
   };
 
   const handleExit = () => {
@@ -250,41 +218,29 @@ function App() {
     setCheckedTemplateLiteral(templateLiteralValue);
   };
 
-
   const handleStartDateChange = (date: Date | null) => {
     const dateAsString = (date as Date).toISOString().slice(0, 10);
-   setSelectedStartDate(dateAsString);
+    setSelectedStartDate(dateAsString);
   };
 
   const handleEndDateChange = (date: Date | null) => {
     const dateAsString = (date as Date).toISOString().slice(0, 10);
-   setSelectedEndDate(dateAsString);
+    setSelectedEndDate(dateAsString);
   };
 
-  const handleStartTimeChange =(e: any) => {
+  const handleStartTimeChange = (e: any) => {
+    setSelectedStartTime(e.target.value);
+  };
 
-  setSelectedStartTime(e.target.value);
-
-  console.log('start time', selectedStartTime);
-  }
-
-  const handleEndTimeChange =(e: any) => {
-
+  const handleEndTimeChange = (e: any) => {
     setSelectedEndTime(e.target.value);
-    console.log('end time', selectedEndTime);
-    }
+  };
 
-  
   const addWordToInput = (word: string) => {
-    let value = `${tailSearch} AND ${word}`
-    setLoading(true);
+    let value = `${tailSearch} AND ${word}`;
     setTailSearch(value);
-    fetchLogTailData(value);
     fetchWordCloudData(value);
-    fetchTemplateListData(value);
-  
-  }
-
+  };
 
   return (
     <StyledApp darkMode={darkMode}>
@@ -299,8 +255,6 @@ function App() {
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
-
-        // updateStartEndTimeHandler={updateStartEndTimeHandler}
         handleStartDateChange={handleStartDateChange}
         selectedStartDate={selectedStartDate}
         selectedEndDate={selectedEndDate}
@@ -313,7 +267,6 @@ function App() {
         selectedEndTime={selectedEndTime}
       />
 
-     
       <Content darkMode={darkMode}>
         <SliderWrapper>
           <Slider>
@@ -327,9 +280,14 @@ function App() {
                 }}
               >
                 <LogtailComponent
+                  loadingLogtail={loadingLogtail}
+                  logtailData={logtailData}
+                  logtailError={logtailError}
+                  logtailHasMore={logtailHasMore}
                   darkMode={darkMode}
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
+                  handleLogtailPagination={handleLogtailPagination}
                 />
               </ComponentWindow>
             )}
@@ -343,19 +301,23 @@ function App() {
                 title={"Template List"}
                 buttonText="Parse Data"
                 onButtonClick={() => {
-                  checkedTemplateId ?
-                  handleParsedDataRendering() : alert('Please select a template')
+                  checkedTemplateId
+                    ? handleParsedDataRendering()
+                    : alert("Please select a template");
                 }}
                 onExit={() => {
                   setTemplateIsVisible(false);
                 }}
               >
                 <TemplateTableComponent
-              
+                  handlePagination={handlePagination}
+                  hasMore={templateHasMore}
                   templateIsVisible={templateIsVisible}
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
-                  templateListData={templateListData}
+                  templateListData={templateData}
+                  loadingTemplateData={loadingTemplateData}
+                  error={templateError}
                   updateTailSearchResultsHandler={
                     updateTailSearchResultsHandler
                   }
@@ -374,7 +336,10 @@ function App() {
             }}
             headerHeight="20px"
           >
-            <WordCloudComponent darkMode={darkMode} addWordToInput={addWordToInput} />
+            <WordCloudComponent
+              darkMode={darkMode}
+              addWordToInput={addWordToInput}
+            />
           </ComponentWindow>
         )}
       </Content>

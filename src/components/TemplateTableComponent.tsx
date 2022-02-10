@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
-import SelectorsHelper, {
-  CURRENT_ENVIRONMENT_TYPE,
-} from "utils/SelectorsHelper";
-import { convertToParsed, convertToTemplateList } from "slices/currentDataSlice";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState, useRef, useCallback} from "react";
 import styled from "styled-components";
+import { RadioButton } from "stories/RadioButton";
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   background-color: ${(props) => (props.darkMode ? "#1C2937 " : "white")};
@@ -13,7 +9,6 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
 
   font-size: 12px;
-  
 `;
 
 const TableHeaderWrapper = styled.div<StyledTemplateType>`
@@ -21,12 +16,11 @@ const TableHeaderWrapper = styled.div<StyledTemplateType>`
   grid-template-columns: 1.5fr 4fr 0.5fr;
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
 
-  position: -webkit-sticky; 
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-
+  z-index: 1;
 `;
-
 
 const TableWrapper = styled.div<StyledTemplateType>`
   display: grid;
@@ -39,12 +33,11 @@ const TableWrapper = styled.div<StyledTemplateType>`
   overflow-wrap: break-word;
   word-break: break-all;
   grid-column-gap: 20px;
-  border-bottom: 1px solid #C1C1C1;
+  border-bottom: 1px solid #c1c1c1;
 
   &:hover {
     background-color: ${(props) => (props.darkMode ? "#28313B" : "lightgrey")};
   }
-
 `;
 const TableHeader = styled.div<StyledTemplateType>`
   padding-left: 10px;
@@ -61,52 +54,33 @@ const TableHeader = styled.div<StyledTemplateType>`
   }
 `;
 
-
-const StyledRadio = styled.input`
-  margin-right: 10px;
+const RadioButtonWrapper = styled.div`
+  &:active {
+    transform: translateY(2px);
+  }
 `;
-
-
-let testString =
-  " ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved. ©2022 SliceUp, Inc All rights reserved.";
 
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
 
-  const [templateId, setTemplateId] = useState('');
-  const dispatch = useDispatch();
+  //deconstruct props
+  const { loadingTemplateData, hasMore, handlePagination, templateListData} = props;
 
-  useEffect(() => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "templateList"
-    );
+  const observer = useRef<any>();
 
-    let urlWithString = `${URL}/1/2020-01-17/2022-01-25?from=50&to=0`;
+  //@ts-ignore
+  const lastElementRef = useCallback(node => {
+    if (loadingTemplateData) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore && templateListData.length > 1) {
+        handlePagination();
+      }
 
-    if (!props.templateListData.length)
-      fetch(urlWithString)
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(`Error code: ${res.status}. Please try again.`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          //@ts-ignore
-          dispatch(convertToTemplateList(data));
-          console.log(data);
-     
-
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    // }
-  }, [props.templateListData, dispatch]);
-
-  if (!props.templateListData) return <h1>Loading...</h1>;
+    })
+    if (node)  observer.current.observe(node);
+  }, [loadingTemplateData, hasMore, handlePagination, templateListData]);
 
   return (
     <>
@@ -114,10 +88,10 @@ export default function TemplateTableComponent(
         wordCloudIsVisible={props.wordCloudIsVisible}
         darkMode={props.darkMode}
       >
-        <TableHeaderWrapper  darkMode={props.darkMode}>
-          <TableHeader darkMode={props.darkMode} >
-            <h2  >Template Id</h2>
-          </TableHeader >
+        <TableHeaderWrapper darkMode={props.darkMode}>
+          <TableHeader darkMode={props.darkMode}>
+            <h2>Template Id</h2>
+          </TableHeader>
 
           <TableHeader darkMode={props.darkMode}>
             <h2>Template Literal</h2>
@@ -127,19 +101,64 @@ export default function TemplateTableComponent(
             <h2>Total Logs</h2>
           </TableHeader>
         </TableHeaderWrapper>
-
-          <>
-            {props.templateListData.map((data: any) => (
-              <TableWrapper darkMode={props.darkMode} onClick={()=>{props.handleCheckedRadio(data.templateId, data.templateVersion, data.templateLiteral)}}>
-                <div > <StyledRadio type="radio" checked={props.checkedTemplateId === data.templateId} /> {data.templateId} </div>
+        {props.templateListData.map((data: any, index: any) => {
+          if (props.templateListData.length === index + 1) {
+            return ( <TableWrapper
+              ref={lastElementRef}
+                darkMode={props.darkMode}
+                onClick={() => {
+                  props.handleCheckedRadio(
+                    data.templateId,
+                    data.templateVersion,
+                    data.templateLiteral
+                  );
+                }}
+              >
+                <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
+    
+                  <RadioButton
+                    value={data.templateId}
+                    checked={data.templateId === props.checkedTemplateId}
+                    label={data.templateId}
+                  />
+                </RadioButtonWrapper>
+                <div>{data.templateLiteral}</div>
+                <div>{data.totalTemplates}</div>
+              </TableWrapper>)
+          }
+          else {
+            return (
+              <TableWrapper
+                darkMode={props.darkMode}
+                onClick={() => {
+                  props.handleCheckedRadio(
+                    data.templateId,
+                    data.templateVersion,
+                    data.templateLiteral
+                  );
+                }}
+              >
+                <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
+    
+                  <RadioButton
+                    value={data.templateId}
+                    checked={data.templateId === props.checkedTemplateId}
+                    label={data.templateId}
+                  />
+                </RadioButtonWrapper>
                 <div>{data.templateLiteral}</div>
                 <div>{data.totalTemplates}</div>
               </TableWrapper>
-            ))}
-          </>
-
-        <p style={{opacity: 0}}>{testString}</p>
+            )
+          }
+         
+         
+        })}
+ 
+        {loadingTemplateData && <h1>Loading...</h1>}
+      {props.error && <h1>Error</h1>}
       </TemplateTableComponentWrapper>
+    
     </>
   );
 }
@@ -158,5 +177,8 @@ interface TemplateTableComponentProps {
   updateTailSearchResultsHandler?: any;
   handleCheckedRadio?: any;
   checkedTemplateId?: string;
-  
+  loadingTemplateData?: boolean;
+  error?: boolean;
+  handlePagination?: any;
+  hasMore?: boolean;
 }

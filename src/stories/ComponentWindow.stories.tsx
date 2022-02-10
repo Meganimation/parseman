@@ -3,7 +3,6 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { ComponentWindow } from './ComponentWindow';
 
-import { LogtailComponent } from 'components';
 
 export default {
   title: 'ComponentWindow/ComponentWindow',

@@ -5,6 +5,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "./Menu";
 import TimeSelectorPicker from "./TimeSelectorPicker";
+import { RadioButton } from "stories/RadioButton";
 
 const StyledNavWrapper = styled.nav`
   display: flex;
@@ -18,7 +19,9 @@ const StyledNavWrapper = styled.nav`
   z-index: 2;
 `;
 
-const StyledNav = styled.nav<StyledNavType>``;
+const StyledNav = styled.nav<StyledNavType>`
+
+`;
 
 const UnhideComponentItem = styled.sup<StyledNavType>`
   position: relative;
@@ -65,20 +68,16 @@ const MenuButtonWrapper = styled.button<StyledNavType>`
   }
 `;
 
-const RadioButtonGroup = styled.span`
+const RadioButtonGroup = styled.div`
   display: flex;
   color: white;
 
   > div {
     margin-left: 0.3rem;
-    margin-right: 0.8rem;
     font-size: 0.8rem;
   }
 
-  > input {
-    margin-left: 25px;
-    margin-right: 10px;
-  }
+
 `;
 
 const ContentWrapper = styled.nav`
@@ -88,17 +87,6 @@ const ContentWrapper = styled.nav`
 
   justify-content: center;
   padding-top: 10px;
-`;
-
-const RadioItem = styled.div`
-  cursor: pointer;
-  position: relative;
-  top: 0;
-  right: 0;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 const ShowingResultsWrapper = styled.div`
@@ -154,45 +142,39 @@ export default function NavBar(props: INavBarProps) {
                   selectedEndTime={props.selectedEndTime}
                 />
               </TimeSelectorPickerWrapper>
-              <RadioItem
-                onClick={(e) => {
-                  props.handleTemplateVersionChange("1");
-                  setRadioValue("Templates");
-                }}
-              >
-                <input
-                  type="radio"
-                  value="Templates"
-                  checked={radioValue === "Templates" ? true : false}
-                />
-                <b> Templates </b>
-              </RadioItem>
-              <RadioItem
-                onClick={(e) => {
-                  props.handleTemplateVersionChange("2");
-                  setRadioValue("Variables");
-                }}
-              >
-                <input
-                  type="radio"
-                  value="Variables"
-                  checked={radioValue === "Variables" ? true : false}
-                />
-                <b> Variables</b>
-              </RadioItem>
-              <RadioItem
-                onClick={(e) => {
-                  props.handleTemplateVersionChange("3");
-                  setRadioValue("Both");
-                }}
-              >
-                <input
-                  type="radio"
-                  value="Both"
-                  checked={radioValue === "Both" ? true : false}
-                />
-                <b> Both</b>
-              </RadioItem>
+              <>
+              <RadioButton 
+              value="Templates" 
+              label="Templates"
+              checked={radioValue === "Templates" ? true : false}
+              onClick={() => {
+                props.handleTemplateVersionChange("1");
+                setRadioValue("Templates");
+              }}
+              />
+              </>
+              <>
+              <RadioButton 
+              value="Variables" 
+              label="Variables"
+              checked={radioValue === "Variables" ? true : false}
+              onClick={() => {
+                props.handleTemplateVersionChange("2");
+                setRadioValue("Variables");
+              }}
+              />
+              </>
+              <>
+              <RadioButton 
+              value="Both" 
+              label="Both"
+              checked={radioValue === "Both" ? true : false}
+              onClick={() => {
+                props.handleTemplateVersionChange("3");
+                setRadioValue("Both");
+              }}
+              />
+              </>
             </RadioButtonGroup>
 
             <UnhideComponentWrapper></UnhideComponentWrapper>
