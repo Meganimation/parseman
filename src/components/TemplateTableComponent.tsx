@@ -74,7 +74,7 @@ export default function TemplateTableComponent(
     if (loadingTemplateData) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore && templateListData.length > 1) {
+      if (entries[0].isIntersecting && hasMore && templateListData.length > 10) {
         handlePagination();
       }
 

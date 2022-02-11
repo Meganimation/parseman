@@ -75,29 +75,33 @@ function App() {
   const [selectedStartTime, setSelectedStartTime] = React.useState("00:00");
   const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
 
+  const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
+    React.useState(["2019-12-12", "05:00:00"]);
+  const [selectedEndDateAndTime, setSelectedEndDateAndTime] = React.useState([
+    new Date().toISOString().slice(0, 10),
+    "00:00:00",
+  ]);
+
   const [templatePageAmount, setTemplatePageAmount] = React.useState(50);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
-  const { loadingTemplateData, templateData, templateError, templateHasMore } = useTemplateFetch(
-    templateVersion,
-    selectedStartDate,
-    selectedStartTime,
-    selectedEndDate,
-    selectedEndTime,
-    tailSearch,
-    templatePageAmount
-  );
+  const { loadingTemplateData, templateData, templateError, templateHasMore } =
+    useTemplateFetch(
+      templateVersion,
+      selectedStartDateAndTime,
+      selectedEndDateAndTime,
+      tailSearch,
+      templatePageAmount
+    );
   const { loadingLogtail, logtailData, logtailError, logtailHasMore } =
     useLogtailFetch(
       templateVersion,
-      selectedStartDate,
-      selectedStartTime,
-      selectedEndDate,
-      selectedEndTime,
+      selectedStartDateAndTime,
+      selectedEndDateAndTime,
       tailSearch,
       logtailPageAmount
     );
-  // inject the logtail component with the useLogtailprops
+
 
   const dispatch = useDispatch();
 
@@ -124,7 +128,7 @@ function App() {
     if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
       return console.log("breaking");
     }
-    let filterAddOnValue = `${tailSearch} AND checkedTemplateId=${checkedTemplateId}`;
+    let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
 
     updateTailSearchResultsHandler(filterAddOnValue);
 
@@ -218,22 +222,23 @@ function App() {
     setCheckedTemplateLiteral(templateLiteralValue);
   };
 
-  const handleStartDateChange = (date: Date | null) => {
-    const dateAsString = (date as Date).toISOString().slice(0, 10);
-    setSelectedStartDate(dateAsString);
+  const handleStartDateChange = (date: any) => {
+    let rawDate = date.toString();
+    const formattedDate = (date as Date).toISOString().slice(0, 19);
+    const selectedDate = formattedDate.split("T")[0];
+    //BUG ALERT! Date increments by 5 hours every time we set to state
+
+    //Found a janky fix. I need to look up how MUI selectedDatepicker works with timezones
+    let splitRawDate = rawDate.split(" ");
+    setSelectedStartDateAndTime([selectedDate, splitRawDate[4]]);
   };
 
-  const handleEndDateChange = (date: Date | null) => {
-    const dateAsString = (date as Date).toISOString().slice(0, 10);
-    setSelectedEndDate(dateAsString);
-  };
-
-  const handleStartTimeChange = (e: any) => {
-    setSelectedStartTime(e.target.value);
-  };
-
-  const handleEndTimeChange = (e: any) => {
-    setSelectedEndTime(e.target.value);
+  const handleEndDateChange = (date: any) => {
+    let rawDate = date.toString();
+    const formattedDate = (date as Date).toISOString().slice(0, 19);
+    const selectedEndDate = formattedDate.split("T")[0];
+    let splitRawDate = rawDate.split(" ");
+    setSelectedEndDateAndTime([selectedEndDate, splitRawDate[4]]);
   };
 
   const addWordToInput = (word: string) => {
@@ -255,16 +260,10 @@ function App() {
         updateTailSearchResultsHandler={updateTailSearchResultsHandler}
         tailSearch={tailSearch}
         handleTemplateVersionChange={handleTemplateVersionChange}
+        selectedStartDateAndTime={selectedStartDateAndTime}
+        selectedEndDateAndTime={selectedEndDateAndTime}
         handleStartDateChange={handleStartDateChange}
-        selectedStartDate={selectedStartDate}
-        selectedEndDate={selectedEndDate}
-        setSelectedStartDate={setSelectedStartDate}
-        setSelectedEndDate={setSelectedEndDate}
         handleEndDateChange={handleEndDateChange}
-        handleStartTimeChange={handleStartTimeChange}
-        selectedStartTime={selectedStartTime}
-        handleEndTimeChange={handleEndTimeChange}
-        selectedEndTime={selectedEndTime}
       />
 
       <Content darkMode={darkMode}>

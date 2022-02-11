@@ -131,15 +131,14 @@ export default function NavBar(props: INavBarProps) {
               <TimeSelectorPickerWrapper>
                 <TimeSelectorPicker
                   handleStartDateChange={props.handleStartDateChange}
-                  selectedStartDate={props.selectedStartDate}
-                  selectedEndDate={props.selectedEndDate}
-                  setSelectedStartDate={props.setSelectedStartDate}
-                  setSelectedEndDate={props.setSelectedEndDate}
+  
                   handleEndDateChange={props.handleEndDateChange}
-                  handleStartTimeChange={props.handleStartTimeChange}
-                  selectedStartTime={props.selectedStartTime}
-                  handleEndTimeChange={props.handleEndTimeChange}
-                  selectedEndTime={props.selectedEndTime}
+
+  
+
+                  selectedStartDateAndTime={props.selectedStartDateAndTime}
+
+                  selectedEndDateAndTime={props.selectedEndDateAndTime}
                 />
               </TimeSelectorPickerWrapper>
               <>
@@ -276,16 +275,9 @@ interface INavBarProps {
   updateTailSearchResultsHandler?: any;
   tailSearch: string;
   handleTemplateVersionChange: any;
-
-  // updateStartEndTimeHandler: any;
-  handleStartDateChange: any;
-  selectedStartDate: any;
-  selectedEndDate: any;
-  setSelectedStartDate: any;
-  setSelectedEndDate: any;
+  selectedStartDateAndTime: string[];
+  selectedEndDateAndTime: string[];
   handleEndDateChange: any;
-  handleStartTimeChange: any;
-  selectedStartTime: string;
-  handleEndTimeChange: any;
-  selectedEndTime: string;
+  handleStartDateChange: any;
+  
 }

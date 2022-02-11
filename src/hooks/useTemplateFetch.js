@@ -6,7 +6,7 @@ import SelectorsHelper, {
   } from "utils/SelectorsHelper";
 
 
-export default function useTemplateFetch(templateVersion, selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, value, pageAmount) {
+export default function useTemplateFetch(templateVersion, selectedStartDate, selectedEndDate, value, pageAmount) {
 
     const [loadingTemplateData, setLoadingTemplateData] = useState(true);
     const [templateError, setError] = useState(false);
@@ -18,7 +18,7 @@ export default function useTemplateFetch(templateVersion, selectedStartDate, sel
         "templateList"
       );
 
-      let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=${pageAmount}&to=0`;
+      let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${pageAmount}&to=0`;
 
         useEffect(() => {
             setLoadingTemplateData(true)

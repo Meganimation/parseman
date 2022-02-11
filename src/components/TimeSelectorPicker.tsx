@@ -1,105 +1,88 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
-import "date-fns";
-import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-  KeyboardTimePicker
-} from "@material-ui/pickers";
-import styled from 'styled-components'
+import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
+import styled from "styled-components";
+
+const StyledDateTimePickerWrapper = styled.div`
+  align-items: center;
+
+  justify-content: space-between;
+  display: flex;
+
+  width: 21rem;
+  cursor: pointer;
+  margin-right: 20px;
+  margin-left: 20px;
+
+`;
+
+const StyledDateTimePicker = styled(DateTimePicker)`
 
 
-
-
-  const StyledKeyboardDatePicker = styled(KeyboardDatePicker)`
-    all: unset;
-    width: 30%;
     position: relative;
     top: -12px;
     background: white;
     border-radius: 10px;
+    background: #5B246D;
+    align-items: center;
+    display: flex;
+    height: 3em;
 
 
-     * {
-      color: #47115C;
-      }
+   
+    &:hover {
+      background: #9B6BA9;
+ 
     }
-  `
-
-  const ExternalLabel = styled.label`
-  padding-right: 10px;
-  padding-left: 10px;
-  `
-
-  const StyledTimePicker = styled.input`
-    position: relative;
-    top: -12px;
-    border-radius: 10px;
 
 
-  `
+
 
   
-export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
 
+     * {
+      color: white !important;
+
+      width: 10rem;
+      height: 1.5rem;
+      cursor: pointer;
+      
+      }
+
+    }
+  `;
+
+export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
+  let localStartValue =
+    props.selectedStartDateAndTime[0] + " " + props.selectedStartDateAndTime[1];
+  let localEndValue =
+    props.selectedEndDateAndTime[0] + " " + props.selectedEndDateAndTime[1];
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <StyledDateTimePickerWrapper>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        {/* <Localization dateAdapter={AdapterDateFns}> */}
+        <StyledDateTimePicker
+          format="yyyy-MM-dd HH:mm"
+          label={<sup> From</sup>}
+          value={localStartValue}
+          onChange={props.handleStartDateChange}
+        />
 
-
-<Grid container >
-
-            <ExternalLabel>from</ExternalLabel><StyledKeyboardDatePicker
-       
-   
-              format="MM/dd/yy"
-              value={props.selectedStartDate}
-              onChange={props.handleStartDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-            />
-            <StyledTimePicker 
-            type='time'
-            value={props.selectedStartTime}
-            onChange={(e)=>{props.handleStartTimeChange(e)}}
-             />
- 
- 
-   
- <ExternalLabel>to</ExternalLabel><StyledKeyboardDatePicker
-              format="MM/dd/yy"
-              value={props.selectedEndDate}
-              onChange={props.handleEndDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-            />
-                <StyledTimePicker 
-            type='time'
-            value={props.selectedEndTime}
-            onChange={(e)=>{props.handleEndTimeChange(e)}}
-             />
-   
-          </Grid>
-
-
-    </MuiPickersUtilsProvider>
+        <StyledDateTimePicker
+          format="yyyy-MM-dd HH:mm"
+          label={<sup>To</sup>}
+          value={localEndValue}
+          onChange={props.handleEndDateChange}
+        />
+      </MuiPickersUtilsProvider>
+    </StyledDateTimePickerWrapper>
   );
 }
 
 interface ITimeSelectorPickerProps {
-
-  selectedStartDate: string;
-  setSelectedStartDate: Dispatch<SetStateAction<string>>;
-  selectedEndDate: string;
-  setSelectedEndDate: Dispatch<SetStateAction<string>>;
-
   handleStartDateChange: any;
   handleEndDateChange: any;
-  handleStartTimeChange: any;
-  selectedStartTime: string;
-  handleEndTimeChange: any;
-  selectedEndTime: string;
+
+  selectedStartDateAndTime: string[];
+  selectedEndDateAndTime: string[];
 }

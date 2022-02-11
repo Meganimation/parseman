@@ -5,7 +5,7 @@ import SelectorsHelper, {
   } from "utils/SelectorsHelper";
 
 
-export default function useLogtailFetch(templateVersion, selectedStartDate, selectedStartTime, selectedEndDate, selectedEndTime, value, logtailPageAmount) {
+export default function useLogtailFetch(templateVersion, selectedStartDate, selectedEndDate, value, logtailPageAmount) {
 
     const [loadingLogtail, setLoadingLogtail] = useState(true);
     const [error, setError] = useState(false);
@@ -16,7 +16,7 @@ export default function useLogtailFetch(templateVersion, selectedStartDate, sele
         "logTail"
       );
 
-      let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=${logtailPageAmount}&to=0`;
+      let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${logtailPageAmount}&to=0`;
 
         useEffect(() => {
             setLoadingLogtail(true)
