@@ -29,8 +29,8 @@ const ComponentWindowWrapper = styled.section`
   border: ${(props: ComponentWindowProps) =>
     props.darkMode ? "5px #26374C solid" : "5px white solid"};
 
-    padding: 5px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+  padding: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
 `;
 
 const HeaderContent = styled.div`
@@ -51,9 +51,6 @@ const Title = styled.h1`
 
 const ExitWrapper = styled.span`
   cursor: pointer;
-  position: relative;
-  top: 10px;
-  right: 0;
   &:hover {
     transform: scale(1.1);
   }
@@ -69,11 +66,7 @@ const FakeDiv = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  margin-right: 15%;
-  margin-top: 2.5%;
-  z-Index: 1;
-  position: relative;
-  top: -20px;
+  z-index: 1;
 `;
 
 export const ComponentWindow = ({
@@ -88,8 +81,16 @@ export const ComponentWindow = ({
   ...props
 }: ComponentWindowProps) => {
   return (
-    <ComponentWindowWrapper darkMode={darkMode} headerHeight={headerHeight} {...props}>
-      <HeaderContent darkMode={darkMode} title={title} headerHeight={headerHeight}>
+    <ComponentWindowWrapper
+      darkMode={darkMode}
+      headerHeight={headerHeight}
+      {...props}
+    >
+      <HeaderContent
+        darkMode={darkMode}
+        title={title}
+        headerHeight={headerHeight}
+      >
         {title !== "None" ? (
           <Title title={title} darkMode={darkMode}>
             {title}
@@ -103,7 +104,6 @@ export const ComponentWindow = ({
               onClick={onButtonClick}
               label={buttonText}
               fontSize="12px"
-              height="30px"
             />
           </ButtonWrapper>
         )}

@@ -14,9 +14,7 @@ const MenuWrapper = styled.div<StyledMenuType>`
   transition: right 1s;
   right: ${(props) => (props.animateMenu ? "0" : "-500px")};
   color: ${(props: StyledMenuType) => (props.darkMode ? "white" : "white")};
-
   padding: 20px;
-
   z-index: 3;
 `;
 
@@ -43,52 +41,53 @@ const MenuGreeting = styled.h3`
 
 const MenuBackground = styled.div<StyledMenuType>`
   display: ${(props: StyledMenuType) => (props.animateMenu ? "block" : "none")};
-
   position: fixed;
   height: 100vh;
   width: 100vw;
-
-  background: ${(props: StyledMenuType) => (props.animateMenu ? "gba(0, 0, 0, 5)" : "gba(0, 0, 0, 0.05)")};
+  background: ${(props: StyledMenuType) =>
+    props.animateMenu ? "gba(0, 0, 0, 5)" : "gba(0, 0, 0, 0.05)"};
   z-index: 2;
-  `
-;
-
+`;
 function Menu(props: IStyledMenuProps) {
-  return (
-<>
-    <MenuWrapper animateMenu={props.menu} darkMode={props.darkMode}>
-      <ExitWrapper>
-        <Exit onExit={props.handleMenu} />
-      </ExitWrapper>
 
-      <MenuGreeting>Hello! Please excuse the meCSS :) </MenuGreeting>
-      <StyledButton
-        onClick={props.handleTheme}
-        label={
-          props.darkMode ? "Switch to Light Theme" : "Switch to Dark Theme"
-        }
-      />
-      <StyledButton
-        onClick={() => {
-          alert("Coming Soon!");
-        }}
-        label={"View my saved tables"}
-      />
-      <StyledButton
-        onClick={() => {
-          alert("Coming Soon!");
-        }}
-        label={"Change my settings"}
-      />
-      <StyledButton
-        onClick={() => {
-          alert("Coming Soon!");
-        }}
-        label={"Report an issue"}
-      />
-    </MenuWrapper>
-        <MenuBackground animateMenu={props.menu} onClick={props.handleMenu}/>
-      </>
+
+  const { darkMode, menu, handleTheme, handleMenu } = props;
+
+  return (
+    <>
+      <MenuWrapper animateMenu={menu} darkMode={darkMode}>
+        <ExitWrapper>
+          <Exit onExit={handleMenu} />
+        </ExitWrapper>
+
+        <MenuGreeting>Hello!</MenuGreeting>
+        <StyledButton
+          onClick={handleTheme}
+          label={
+            darkMode ? "Switch to Light Theme" : "Switch to Dark Theme"
+          }
+        />
+        {/* <StyledButton
+          onClick={() => {
+            alert("Coming Soon!");
+          }}
+          label={"View my saved tables"}
+        />
+        <StyledButton
+          onClick={() => {
+            alert("Coming Soon!");
+          }}
+          label={"Change my settings"}
+        />
+        <StyledButton
+          onClick={() => {
+            alert("Coming Soon!");
+          }}
+          label={"Report an issue"}
+        /> */}
+      </MenuWrapper>
+      <MenuBackground animateMenu={menu} onClick={handleMenu} />
+    </>
   );
 }
 

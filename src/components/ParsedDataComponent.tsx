@@ -230,13 +230,13 @@ export default function ParsedDataComponent({
                     </h1>
                   </TitleContainer>
                 </HeaderContainer>
-                <SortButton
+                {/* <SortButton
                   onClick={(e) => {
                     handleSort(e, array.key);
                   }}
                 >
                     <u>Sort ^</u>
-                </SortButton>
+                </SortButton> */}
                 {array.value.map((value: any) =>
                   value.map((val: any, key: any) => {
                     return <Test key={key}>{val}</Test>;
