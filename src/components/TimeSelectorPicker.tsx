@@ -4,52 +4,47 @@ import styled from "styled-components";
 
 const StyledDateTimePickerWrapper = styled.div`
   align-items: center;
-
   justify-content: space-between;
   display: flex;
-
   width: 21rem;
   cursor: pointer;
-  margin-right: 20px;
-  margin-left: 20px;
-
+  margin-right: 100px;
 `;
 
 const StyledDateTimePicker = styled(DateTimePicker)`
-
-
-    position: relative;
-    top: -12px;
     background: white;
     border-radius: 10px;
     background: #5B246D;
     align-items: center;
     display: flex;
     height: 3em;
-
-
-   
     &:hover {
       background: #9B6BA9;
  
     }
-
-
-
-
-  
 
      * {
       color: white !important;
 
       width: 10rem;
       height: 1.5rem;
-      cursor: pointer;
-      
+      cursor: pointer;    
       }
-
     }
   `;
+
+const CalendarWrapper = styled.div`
+  background: #5b246d;
+  padding: 10px;
+  position: relative;
+  top: -12px;
+  border-radius: 10px;
+  margin-left: 30px;
+
+  &:hover {
+    background: #9b6ba9;
+  }
+`;
 
 export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
   let localStartValue =
@@ -61,19 +56,22 @@ export default function TimeSelectorPicker(props: ITimeSelectorPickerProps) {
     <StyledDateTimePickerWrapper>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         {/* <Localization dateAdapter={AdapterDateFns}> */}
-        <StyledDateTimePicker
-          format="yyyy-MM-dd HH:mm"
-          label={<sup> From</sup>}
-          value={localStartValue}
-          onChange={props.handleStartDateChange}
-        />
-
-        <StyledDateTimePicker
-          format="yyyy-MM-dd HH:mm"
-          label={<sup>To</sup>}
-          value={localEndValue}
-          onChange={props.handleEndDateChange}
-        />
+        <CalendarWrapper>
+          <StyledDateTimePicker
+            format="yyyy-MM-dd HH:mm"
+            label={<sup> From</sup>}
+            value={localStartValue}
+            onChange={props.handleStartDateChange}
+          />
+        </CalendarWrapper>
+        <CalendarWrapper>
+          <StyledDateTimePicker
+            format="yyyy-MM-dd HH:mm"
+            label={<sup>To</sup>}
+            value={localEndValue}
+            onChange={props.handleEndDateChange}
+          />
+        </CalendarWrapper>
       </MuiPickersUtilsProvider>
     </StyledDateTimePickerWrapper>
   );

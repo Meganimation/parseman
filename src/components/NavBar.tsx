@@ -1,27 +1,24 @@
 import React, { useEffect } from "react";
-import { Button } from "stories/Button";
 import styled from "styled-components";
-import ClearIcon from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "./Menu";
 import TimeSelectorPicker from "./TimeSelectorPicker";
 import { RadioButton } from "stories/RadioButton";
 
+import EyeIcon from "@material-ui/icons/Visibility";
+
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  min-height: 110px;
+  min-height: 130px;
   width: 100%;
   opacity: 0.9;
   overflow: hidden;
-  resize: vertical;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   z-index: 2;
 `;
 
-const StyledNav = styled.nav<StyledNavType>`
-
-`;
+const StyledNav = styled.nav<StyledNavType>``;
 
 const UnhideComponentItem = styled.sup<StyledNavType>`
   position: relative;
@@ -47,12 +44,18 @@ const UnhideComponentWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 90vw;
-  height: 2rem;
+  height: 1.5rem;
   border: none;
   border-radius: 10px;
   font-family: "IBM Plex Mono", sans-serif;
   margin-left: 10px;
   position: relative;
+  top: -5px;
+
+  &:focus {
+    outline: solid 3px #56256A;
+  }
+
 `;
 
 const MenuButtonWrapper = styled.button<StyledNavType>`
@@ -75,8 +78,15 @@ const RadioButtonGroup = styled.div`
   > div {
     margin-left: 0.3rem;
     font-size: 0.8rem;
+
   }
 
+`;
+
+const RadioButtonWrapper = styled.p`
+&:hover {
+  transform: scale(1.1);
+}
 
 `;
 
@@ -103,6 +113,12 @@ const ShowingResultsWrapper = styled.div`
 const TimeSelectorPickerWrapper = styled.div`
   padding-top: 10px;
 `;
+
+const StyledEyeIcon = styled(EyeIcon)`
+vertical-align: middle;
+padding-bottom: 2px;
+color: white;
+  `;
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
@@ -131,49 +147,44 @@ export default function NavBar(props: INavBarProps) {
               <TimeSelectorPickerWrapper>
                 <TimeSelectorPicker
                   handleStartDateChange={props.handleStartDateChange}
-  
                   handleEndDateChange={props.handleEndDateChange}
-
-  
-
                   selectedStartDateAndTime={props.selectedStartDateAndTime}
-
                   selectedEndDateAndTime={props.selectedEndDateAndTime}
                 />
               </TimeSelectorPickerWrapper>
-              <>
-              <RadioButton 
-              value="Templates" 
-              label="Templates"
-              checked={radioValue === "Templates" ? true : false}
-              onClick={() => {
-                props.handleTemplateVersionChange("1");
-                setRadioValue("Templates");
-              }}
-              />
-              </>
-              <>
-              <RadioButton 
-              value="Variables" 
-              label="Variables"
-              checked={radioValue === "Variables" ? true : false}
-              onClick={() => {
-                props.handleTemplateVersionChange("2");
-                setRadioValue("Variables");
-              }}
-              />
-              </>
-              <>
-              <RadioButton 
-              value="Both" 
-              label="Both"
-              checked={radioValue === "Both" ? true : false}
-              onClick={() => {
-                props.handleTemplateVersionChange("3");
-                setRadioValue("Both");
-              }}
-              />
-              </>
+              <RadioButtonWrapper>
+                <RadioButton
+                  value="Templates"
+                  label="Templates"
+                  checked={radioValue === "Templates" ? true : false}
+                  onClick={() => {
+                    props.handleTemplateVersionChange("1");
+                    setRadioValue("Templates");
+                  }}
+                />
+              </RadioButtonWrapper>
+              <RadioButtonWrapper>
+                <RadioButton
+                  value="Variables"
+                  label="Variables"
+                  checked={radioValue === "Variables" ? true : false}
+                  onClick={() => {
+                    props.handleTemplateVersionChange("2");
+                    setRadioValue("Variables");
+                  }}
+                />
+              </RadioButtonWrapper>
+              <RadioButtonWrapper>
+                <RadioButton
+                  value="Both"
+                  label="Both"
+                  checked={radioValue === "Both" ? true : false}
+                  onClick={() => {
+                    props.handleTemplateVersionChange("3");
+                    setRadioValue("Both");
+                  }}
+                />
+              </RadioButtonWrapper>
             </RadioButtonGroup>
 
             <UnhideComponentWrapper></UnhideComponentWrapper>
@@ -200,7 +211,7 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <b> x Show Logtail</b>
+                    <b> <StyledEyeIcon fontSize='small'/>  Show Logtail</b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -279,5 +290,4 @@ interface INavBarProps {
   selectedEndDateAndTime: string[];
   handleEndDateChange: any;
   handleStartDateChange: any;
-  
 }

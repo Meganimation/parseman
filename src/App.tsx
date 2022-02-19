@@ -66,14 +66,6 @@ function App() {
 
   const messagesEndRef = useRef(null);
 
-  const [selectedStartDate, setSelectedStartDate] =
-    React.useState("2019-12-12"); // yesterday - const dayBefore = 1; new Date(Date.now() - dayBefore*24*60*60*1000)
-  const [selectedEndDate, setSelectedEndDate] = React.useState(
-    new Date().toISOString().slice(0, 10)
-  );
-
-  const [selectedStartTime, setSelectedStartTime] = React.useState("00:00");
-  const [selectedEndTime, setSelectedEndTime] = React.useState("23:59");
 
   const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
     React.useState(["2019-12-12", "05:00:00"]);
@@ -159,7 +151,7 @@ function App() {
       "wordCloud/nonNumerical"
     );
 
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDate}&${selectedStartTime}:00/${selectedEndDate}&${selectedEndTime}:00?filter=${value}&from=50&to=0`;
+    let urlWithString = `${URL}/${templateVersion}/${selectedStartDateAndTime[0]}&${selectedStartDateAndTime[1]}/${selectedEndDateAndTime[0]}&${selectedEndDateAndTime[1]}?filter=${value}&from=50&to=0`;
 
     return fetch(urlWithString)
       .then((res) => {
@@ -287,6 +279,7 @@ function App() {
                   templateIsVisible={templateIsVisible}
                   wordCloudIsVisible={wordCloudIsVisible}
                   handleLogtailPagination={handleLogtailPagination}
+                  templateVersion={templateVersion}
                 />
               </ComponentWindow>
             )}
@@ -311,15 +304,14 @@ function App() {
                 <TemplateTableComponent
                   handlePagination={handlePagination}
                   hasMore={templateHasMore}
-                  templateIsVisible={templateIsVisible}
+             
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
                   templateListData={templateData}
+                 
                   loadingTemplateData={loadingTemplateData}
                   error={templateError}
-                  updateTailSearchResultsHandler={
-                    updateTailSearchResultsHandler
-                  }
+
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
                 />

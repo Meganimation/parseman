@@ -1,19 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CurrentDataSliceState {
-  value: number;
   parsedData: any;
-  logTailData: any[];
   wordCloudData: any[];
-  templateListData: any[];
 }
 
 const initialState: CurrentDataSliceState = {
-  value: 0,
   parsedData: [],
-  logTailData: [],
   wordCloudData: [],
-  templateListData: []
 };
 
 
@@ -26,20 +20,14 @@ export const CurrentDataSlice = createSlice({
       console.log(action.payload);
       state.parsedData = action.payload;
     },
-    convertToLogged: (state, action: PayloadAction<string[]>) => {
-      state.logTailData = action.payload;
-    },
     convertToWordCloud:  (state, action: PayloadAction<string[]>) => {
       state.wordCloudData = action.payload;
-    },
-    convertToTemplateList:  (state, action: PayloadAction<string[]>) => {
-      state.templateListData = action.payload;
     },
   },
 });
 
 
-export const { convertToParsed, convertToLogged, convertToWordCloud, convertToTemplateList } =
+export const { convertToParsed, convertToWordCloud } =
   CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;
