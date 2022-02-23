@@ -57,7 +57,7 @@ function Menu(props: IStyledMenuProps) {
     <>
       <MenuWrapper animateMenu={menu} darkMode={darkMode}>
         <ExitWrapper>
-          <Exit onExit={handleMenu} />
+          <Exit onExit={handleMenu} iconColor='white'  darkMode={darkMode}/>
         </ExitWrapper>
 
         <MenuGreeting>Hello!</MenuGreeting>

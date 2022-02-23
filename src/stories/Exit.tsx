@@ -14,16 +14,27 @@ cursor: pointer;
 }
 `
 
+const StyledClearIcon = styled(ClearIcon)<StyledExitType>`
+color: ${(props) => (props.iconColor ? props.iconColor : props.darkMode ? "white" : "#5D266F")};
+`
+
 function Exit(props: IExitProps) {
     return (
         <div>
-             <ExitWrapper><ClearIcon onClick={props.onExit} /> </ExitWrapper>
+             <ExitWrapper><StyledClearIcon iconColor={props.iconColor} darkMode={props.darkMode} onClick={props.onExit} /> </ExitWrapper>
         </div>
     )
 }
 
+type StyledExitType = {
+  darkMode?: boolean;
+  iconColor?: string;
+};
+
 interface IExitProps {
     onExit?: () => void;
+    darkMode: boolean;
+    iconColor?: string;
   }
   
 

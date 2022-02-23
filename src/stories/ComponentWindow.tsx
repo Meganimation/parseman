@@ -66,7 +66,7 @@ const FakeDiv = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  z-index: 1;
+  z-index: 3;
 `;
 
 export const ComponentWindow = ({
@@ -108,7 +108,7 @@ export const ComponentWindow = ({
           </ButtonWrapper>
         )}
         <ExitWrapper>
-          <Exit onExit={onExit} />
+          <Exit onExit={onExit} darkMode={darkMode} />
         </ExitWrapper>
       </HeaderContent>
       {children}

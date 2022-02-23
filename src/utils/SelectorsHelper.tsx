@@ -23,7 +23,7 @@ export default class SelectorsHelper {
         //   retVal = `http://expero-clickhouseapi.local.sliceup.co:8081/${service}`;
         //   break;
         case EnvironmentTypeEnum.REMOTE:
-          retVal = `http://10.14.0.107:8081/${service}`
+          retVal = `http://10.12.2.242:8081/${service}`
           break;
     }
     return retVal;

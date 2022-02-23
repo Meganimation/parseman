@@ -25,15 +25,34 @@ const StyledApp = styled.div<StyledAppType>`
   color: ${(props) => (props.darkMode ? "white" : "black")};
   font-family: "IBM Plex Mono", sans-serif;
   height: 100vh;
+
   overflow-x: hidden;
+  overflow-y: none;
+
+    &::-webkit-scrollbar {
+    width: 10px;
+   
+  }
+
+  &::-webkit-scrollbar-track {
+    background: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${(props) => (props.darkMode ? "#233246; " : "#9C9C9C; ")};
+    opacity: 0.5;
+    border-radius: 10px;
+  }
 
   > nav {
     background-color: #4b0c5e;
   }
+
 `;
 
 const Content = styled.main<StyledAppType>`
-  padding-top: 15.5vh;
+  padding-top: 18.5vh;
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
@@ -42,8 +61,8 @@ const SliderWrapper = styled.section`
   width: 100%;
 `;
 
-const Slider = styled.section`
-  background: #131b25;
+const Slider = styled.section<StyledAppType>`
+  background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
 function App() {
@@ -65,7 +84,6 @@ function App() {
   const [templateVersion, setTemplateVersion] = useState("1");
 
   const messagesEndRef = useRef(null);
-
 
   const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
     React.useState(["2019-12-12", "05:00:00"]);
@@ -93,7 +111,6 @@ function App() {
       tailSearch,
       logtailPageAmount
     );
-
 
   const dispatch = useDispatch();
 
@@ -218,9 +235,6 @@ function App() {
     let rawDate = date.toString();
     const formattedDate = (date as Date).toISOString().slice(0, 19);
     const selectedDate = formattedDate.split("T")[0];
-    //BUG ALERT! Date increments by 5 hours every time we set to state
-
-    //Found a janky fix. I need to look up how MUI selectedDatepicker works with timezones
     let splitRawDate = rawDate.split(" ");
     setSelectedStartDateAndTime([selectedDate, splitRawDate[4]]);
   };
@@ -260,7 +274,7 @@ function App() {
 
       <Content darkMode={darkMode}>
         <SliderWrapper>
-          <Slider>
+          <Slider darkMode={darkMode}>
             {logtailIsVisible && (
               <ComponentWindow
                 darkMode={darkMode}
@@ -284,12 +298,12 @@ function App() {
               </ComponentWindow>
             )}
           </Slider>
-          <Slider>
+          <Slider darkMode={darkMode}>
             {templateIsVisible && (
               <ComponentWindow
                 darkMode={darkMode}
                 headerHeight="4vh"
-                button={true}
+                button={checkedTemplateId ? true : false}
                 title={"Template List"}
                 buttonText="Parse Data"
                 onButtonClick={() => {
@@ -304,14 +318,11 @@ function App() {
                 <TemplateTableComponent
                   handlePagination={handlePagination}
                   hasMore={templateHasMore}
-             
                   darkMode={darkMode}
                   wordCloudIsVisible={wordCloudIsVisible}
                   templateListData={templateData}
-                 
                   loadingTemplateData={loadingTemplateData}
                   error={templateError}
-
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
                 />
@@ -356,8 +367,8 @@ function App() {
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}
             />
           </div>
-        </ComponentWindow>
-      )}
+        </ComponentWindow>)}
+   
 
       {modal && (
         <Modal
