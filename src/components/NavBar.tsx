@@ -4,8 +4,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "./Menu";
 import TimeSelectorPicker from "./TimeSelectorPicker";
 import { RadioButton } from "stories/RadioButton";
-
-import EyeIcon from "@material-ui/icons/Visibility";
+import EyeClosedIcon from "@material-ui/icons/VisibilityOff";
 
 const StyledNavWrapper = styled.nav`
   display: flex;
@@ -13,7 +12,7 @@ const StyledNavWrapper = styled.nav`
   min-height: 130px;
   width: 100%;
   opacity: 0.9;
-  overflow: hidden;
+
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   z-index: 2;
 `;
@@ -23,6 +22,11 @@ const StyledNav = styled.nav<StyledNavType>``;
 const UnhideComponentItem = styled.sup<StyledNavType>`
   position: relative;
   margin-right: 1rem;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const UnhideComponentWrapper = styled.div`
@@ -53,14 +57,13 @@ const StyledInput = styled.input`
   top: -5px;
 
   &:focus {
-    outline: solid 3px #56256A;
+    outline: solid 3px #56256a;
   }
-
 `;
 
 const MenuButtonWrapper = styled.button<StyledNavType>`
-  width: 7rem;
-  height: 7rem;
+  width: 8rem;
+  height: 8rem;
   background: #4b0c5e;
   color: white;
   border: none;
@@ -78,16 +81,13 @@ const RadioButtonGroup = styled.div`
   > div {
     margin-left: 0.3rem;
     font-size: 0.8rem;
-
   }
-
 `;
 
 const RadioButtonWrapper = styled.p`
-&:hover {
-  transform: scale(1.1);
-}
-
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const ContentWrapper = styled.nav`
@@ -114,11 +114,11 @@ const TimeSelectorPickerWrapper = styled.div`
   padding-top: 10px;
 `;
 
-const StyledEyeIcon = styled(EyeIcon)`
-vertical-align: middle;
-padding-bottom: 2px;
-color: white;
-  `;
+const StyledEyeIcon = styled(EyeClosedIcon)`
+  vertical-align: middle;
+  padding-bottom: 3px;
+  color: white;
+`;
 
 export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
@@ -211,7 +211,9 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <b> <StyledEyeIcon fontSize='small'/>  Show Logtail</b>
+                    <b>
+                      <StyledEyeIcon fontSize="small" /> Logtail
+                    </b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -222,7 +224,9 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <b> x Show Template Table</b>
+                    <b>
+                      <StyledEyeIcon fontSize="small" /> Template Table
+                    </b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -233,7 +237,9 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <b> x Show Word Cloud</b>
+                    <b>
+                      <StyledEyeIcon fontSize="small" /> Word Cloud
+                    </b>
                   </UnhideComponentItem>
                 </div>
               )}
@@ -244,7 +250,10 @@ export default function NavBar(props: INavBarProps) {
                   }}
                 >
                   <UnhideComponentItem>
-                    <b> x Show parsedSideInfoIsVisible</b>
+                    <b>
+                      <StyledEyeIcon fontSize="small" /> Parsed Table
+                      Sidebar
+                    </b>
                   </UnhideComponentItem>
                 </div>
               )}

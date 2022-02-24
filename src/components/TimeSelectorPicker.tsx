@@ -12,7 +12,7 @@ const StyledDateTimePickerWrapper = styled.div`
 `;
 
 const StyledDateTimePicker = styled(DateTimePicker)`
-    background: white;
+   
     border-radius: 10px;
     background: #5B246D;
     align-items: center;

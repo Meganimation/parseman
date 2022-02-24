@@ -9,7 +9,7 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 20px;
-`
+`;
 
 const ErrorWrapper = styled.div`
   width: 100%;
@@ -19,11 +19,9 @@ const ErrorWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 20px;
-`
-
+`;
 
 const LogtailComponentWrapper = styled.section<StyledLogtailType>`
-  overflow: hidden;
   resize: horizontal;
   max-width: ${(props) => (props.templateIsVisible ? "60vw" : "95vw")};
   min-width: ${(props) => (props.templateIsVisible ? "30vw" : "95vw")};
@@ -32,6 +30,22 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
   overflow: auto;
   background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
   border-radius: 10px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+   
+  }
+  #9C9C9C; 
+  &::-webkit-scrollbar-track {
+    background: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${(props) => (props.darkMode ? "#233246; " : "#9C9C9C; ")};
+    opacity: 0.5;
+    border-radius: 10px;
+  }
 `;
 
 const LogtailItem = styled.div<StyledLogtailType>`
@@ -54,7 +68,6 @@ const LogtailItem = styled.div<StyledLogtailType>`
 `;
 
 export default function LogtailComponent(props: LogtailComponentProps) {
-
   const {
     loadingLogtail,
     logtailHasMore,
@@ -92,7 +105,12 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       });
       if (node) observer.current.observe(node);
     },
-    [loadingLogtail, logtailHasMore, handleLogtailPagination, logtailData.length]
+    [
+      loadingLogtail,
+      logtailHasMore,
+      handleLogtailPagination,
+      logtailData.length,
+    ]
   );
 
   const mapData = (data: any) => {
@@ -121,7 +139,9 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       darkMode={darkMode}
     >
       {mapData(logtailData)}
-      {loadingLogtail && !logtailError && <LoadingWrapper>Loading...</LoadingWrapper>}
+      {loadingLogtail && !logtailError && (
+        <LoadingWrapper>Loading...</LoadingWrapper>
+      )}
       {logtailError && <ErrorWrapper>Error</ErrorWrapper>}
     </LogtailComponentWrapper>
   );

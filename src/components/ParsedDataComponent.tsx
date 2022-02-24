@@ -45,6 +45,22 @@ const GridContainer = styled.div<StyledParsedTableType>`
   overflow: auto;
   background-color: ${(props) => (props.darkMode ? "#34404e": "white")};
   border: 1px solid #c1c1c1;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    border: 1px solid black;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1c2937;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #233246;
+    opacity: 0.5;
+    border-radius: 10px;
+  }
 `;
 
 const GridItem = styled.div`
@@ -310,7 +326,7 @@ export default function ParsedDataComponent({
     <ParsedDataComponentWrapper >
       {parsedSideInfoIsVisible && (
         <>
-          <Exit onExit={handleExit} />
+          <Exit onExit={handleExit} darkMode={darkMode} />
 
           <InfoBar darkMode={darkMode}>
             <InfoItem>
@@ -331,6 +347,7 @@ export default function ParsedDataComponent({
                   }}
                   title="Enter Template Id Name"
                   darkMode={darkMode}
+                  height='100px'
                 >
                   <input type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
                  {/* maybe change to local state */}

@@ -27,6 +27,22 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   overflow: auto;
   height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
   font-size: 12px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    border: 1px solid black;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1c2937;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #233246;
+    opacity: 0.5;
+    border-radius: 10px;
+  }
 `;
 
 const TableHeaderWrapper = styled.div<StyledTemplateType>`
@@ -197,7 +213,7 @@ export default function TemplateTableComponent(
           <LoadingWrapper>Loading...</LoadingWrapper>
         )}
         {error && <ErrorWrapper>Error</ErrorWrapper>}
-        <div style={{ visibility: "hidden" }}>{jankyString}</div>
+        <div style={{ visibility: "hidden", fontSize: '4rem' }}>{jankyString}</div>
       </TemplateTableComponentWrapper>
     </>
   );

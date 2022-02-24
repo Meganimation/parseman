@@ -1,4 +1,3 @@
-import { type } from "os";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectorsHelper, {
@@ -14,7 +13,6 @@ const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
   color: ${(props) => (props.darkMode ? "white" : "#26374b")};
   overflow: hidden;
   max-width: 100vw;
-  min-height: 6vh;
   overlow: auto;
 `;
 
@@ -35,8 +33,9 @@ const Text = styled.div<StyledWordCloudType>`
 const WordsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-
   width: 100%;
+  position: relative;
+
 `;
 
 const handleFontSize = (amount: any) => {
@@ -72,7 +71,7 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
         "wordCloud/nonNumerical"
       );
 
-      let urlWithString = `${URL}/1/2020-01-17/2022-01-25?filter=*&from=50&to=0`;
+      let urlWithString = `${URL}/1/2020-01-17/2022-01-25?filter=test&from=50&to=0`;
 
       if (!wordCloudData.length)
         fetch(urlWithString)
@@ -121,7 +120,7 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
         <WordsContainer>{mapWords(wordCloudData)}</WordsContainer>
       </WordCloudComponentWrapper>
       {loading && !error[0] && <>Loading...</>}
-      {error[0] && <>{error[1]}</>}
+      {/* {error[0] && <>{error[1]}</>} */}
     </>
   );
 }

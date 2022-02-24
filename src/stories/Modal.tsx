@@ -24,7 +24,7 @@ const StyledModal = styled.section`
   min-height: ${(props: ModalProps) => (props.height ? props.height : "70vh")};
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   position: absolute;
-  z-index: 1;
+  z-index: 9;
   border-radius: 10px;
 
   left: 50%;
