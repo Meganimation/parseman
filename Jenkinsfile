@@ -5,9 +5,6 @@ pipeline {
   }
   stages {
     stage('Build the container image') {
-      when {
-        branch 'main'
-      }
       steps {  
         dir('pipelines/loganomalies_py/ops') {
           withCredentials([usernamePassword(credentialsId: '46cf2c18-710e-4795-a7cb-2274e067754c', passwordVariable: 'dockerPass', usernameVariable: 'dockerUser')]) {
