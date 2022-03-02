@@ -14,7 +14,7 @@ const StyledNavWrapper = styled.nav`
   opacity: 0.9;
 
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  z-index: 2;
+  z-index: 8;
 `;
 
 const StyledNav = styled.nav<StyledNavType>``;

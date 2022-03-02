@@ -147,7 +147,27 @@ const SortButton = styled.p`
       font-weight: bold;
     }
 
-    `;
+`;
+
+const StyledModalInput = styled.input`
+      height: 2rem;
+      width 50%;
+      border-radius: 20px;
+      shadow: 0px 0px 10px #000000;
+      box-shadow: 0px 0px 10px #000000;
+
+      position: relative;
+      top: -2rem;
+
+
+      &:focus {
+          outline: none;
+          shadow: none;
+          box-shadow: none;
+      }
+
+
+  `
 
 export interface ISubmitState {
   headers: string[];
@@ -317,7 +337,17 @@ export default function ParsedDataComponent({
 
   const handleEditTemplateId = () => {
 
+    //check if input is empty
+    if (inputTemplateId === '') return alert('Please enter a template id');
+
+    // if input contains spaces
+    if (inputTemplateId.includes(' ')) return alert('You cannot have spaces in your template id');
+
+    // if input contains anything but letters and numbers
+    if (inputTemplateId.match(/[^a-zA-Z0-9]/g)) return alert('You can only use letters and numbers in your template id');
+
     setLocalTemplateId(inputTemplateId);
+
 
     setModal(false)
   }
@@ -349,8 +379,7 @@ export default function ParsedDataComponent({
                   darkMode={darkMode}
                   height='100px'
                 >
-                  <input type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
-                 {/* maybe change to local state */}
+                  <StyledModalInput type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
                   <Button onClick={()=>{handleEditTemplateId()}} label='Submit' />
                 </Modal>
               )}

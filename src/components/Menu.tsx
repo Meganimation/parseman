@@ -15,7 +15,7 @@ const MenuWrapper = styled.div<StyledMenuType>`
   right: ${(props) => (props.animateMenu ? "0" : "-500px")};
   color: ${(props: StyledMenuType) => (props.darkMode ? "white" : "white")};
   padding: 20px;
-  z-index: 3;
+  z-index: 9;
 `;
 
 const StyledButton = styled(Button)`

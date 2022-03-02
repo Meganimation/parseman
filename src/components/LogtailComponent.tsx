@@ -35,7 +35,7 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
     width: 10px;
    
   }
-  #9C9C9C; 
+
   &::-webkit-scrollbar-track {
     background: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
     border-radius: 10px;
@@ -66,6 +66,10 @@ const LogtailItem = styled.div<StyledLogtailType>`
     color: ${(props) => (props.darkMode ? "#c5c7cb" : "#1C2937")};
   }
 `;
+
+const jankyString =
+"©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved.";
+
 
 export default function LogtailComponent(props: LogtailComponentProps) {
   const {
@@ -130,7 +134,7 @@ export default function LogtailComponent(props: LogtailComponentProps) {
     });
   };
 
-  if (logtailData.length === 0 && !loadingLogtail) return <div> No data!</div>;
+  if (logtailData.length === 0 && !loadingLogtail) return <div> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div></div>;
 
   return (
     <LogtailComponentWrapper
