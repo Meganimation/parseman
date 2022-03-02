@@ -122,7 +122,9 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       if (logtailData.length === index + 1) {
         return (
           <LogtailItem id={index} darkMode={darkMode} ref={lastElementRef}>
+          
             <code>{item.logTail}</code>
+
           </LogtailItem>
         );
       } else
@@ -146,7 +148,7 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       {loadingLogtail && !logtailError && (
         <LoadingWrapper>Loading...</LoadingWrapper>
       )}
-      {logtailError && <ErrorWrapper>Error</ErrorWrapper>}
+      {logtailError && <ErrorWrapper>  <>{process.env.REACT_APP_HELLO}</></ErrorWrapper>}
     </LogtailComponentWrapper>
   );
 }
