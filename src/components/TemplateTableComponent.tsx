@@ -137,7 +137,7 @@ export default function TemplateTableComponent(
   );
 
   if (templateListData.length === 0 && !loadingTemplateData)
-    return <div> No data! </div>;
+    return <div> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </div>;
 
   return (
     <>
