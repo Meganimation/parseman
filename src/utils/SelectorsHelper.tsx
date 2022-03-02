@@ -31,13 +31,13 @@ export default class SelectorsHelper {
         case EnvironmentTypeEnum.AWS:
         retVal = `http://clickhouseapi.aws.sliceup.co:8082/${service}`;
         break;
-        case EnvironmentTypeEnum.REMOTE:
-        retVal = `http://clickhouseapi.kubedemo.sliceup.co/${service}`
-        break;
+        // case EnvironmentTypeEnum.REMOTE:
+        // retVal = `http://clickhouseapi.kubedemo.sliceup.co/${service}`
+        // break;
 
-            // case EnvironmentTypeEnum.REMOTE:
-            //   retVal = `http://10.12.2.242:8081/${service}`
-            //   break;
+            case EnvironmentTypeEnum.REMOTE:
+              retVal = `http://10.12.2.242:8081/${service}`
+              break;
     }
     return retVal;
   }
