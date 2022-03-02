@@ -6,15 +6,15 @@ export enum EnvironmentTypeEnum {
   AWS = "aws",
 }
 
-let person = prompt("Type Y to run on AWS, press N to run locally (This is case-sensitive will solve it later)", "Y");
+let findEnvType = prompt("Type Y to run on AWS, press N to run locally (This is case-sensitive will solve it later)", "Y");
 
 export let CURRENT_ENVIRONMENT_TYPE: string = EnvironmentTypeEnum.AWS;
 
-if (person === "Y") {
+if (findEnvType === "Y") {
   CURRENT_ENVIRONMENT_TYPE = EnvironmentTypeEnum.AWS;
 }
 
-if (person === "N") {
+if (findEnvType === "N") {
   console.log('N')
   CURRENT_ENVIRONMENT_TYPE = EnvironmentTypeEnum.REMOTE;
 }
