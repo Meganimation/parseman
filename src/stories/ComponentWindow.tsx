@@ -7,7 +7,7 @@ interface ComponentWindowProps {
   onClick?: () => void;
   darkMode?: boolean;
   children?: any;
-  onExit?: () => void;
+  onExit?: any;
   width?: string;
   title?: string;
   button?: boolean;
@@ -77,7 +77,7 @@ export const ComponentWindow = ({
   buttonText = "button",
   headerHeight = "auto",
   onButtonClick = () => {},
-  onExit = () => {},
+  onExit = null,
   ...props
 }: ComponentWindowProps) => {
   return (
@@ -108,7 +108,7 @@ export const ComponentWindow = ({
           </ButtonWrapper>
         )}
         <ExitWrapper>
-          <Exit onExit={onExit} darkMode={darkMode} />
+          {onExit && <Exit onExit={onExit} darkMode={darkMode} />}
         </ExitWrapper>
       </HeaderContent>
       {children}

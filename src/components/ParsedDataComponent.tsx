@@ -286,53 +286,53 @@ export default function ParsedDataComponent({
     }
   };
 
-  const handleSort = (e: any, header: string) => {
-    if (arrow === "V") {
-      e.target.innerText = "Sort V";
-      let headerIndex = state.both.array.findIndex(
-        (i: { key: string }) => i.key === header
-      );
-      let valuesToSort = state.both.array[headerIndex].value;
-      let arr;
+  // const handleSort = (e: any, header: string) => {
+  //   if (arrow === "V") {
+  //     e.target.innerText = "Sort V";
+  //     let headerIndex = state.both.array.findIndex(
+  //       (i: { key: string }) => i.key === header
+  //     );
+  //     let valuesToSort = state.both.array[headerIndex].value;
+  //     let arr;
 
-      !header.includes("NUM")
-        ? (arr = valuesToSort[0].sort((a: any, b: any) => b.localeCompare(a)))
-        : (arr = valuesToSort[0].sort(function (a: any, b: any) {
-            return a - b;
-          }));
+  //     !header.includes("NUM")
+  //       ? (arr = valuesToSort[0].sort((a: any, b: any) => b.localeCompare(a)))
+  //       : (arr = valuesToSort[0].sort(function (a: any, b: any) {
+  //           return a - b;
+  //         }));
 
-      const { both } = state;
-      both.array[headerIndex].value = [arr];
+  //     const { both } = state;
+  //     both.array[headerIndex].value = [arr];
 
-      setState({ headers: state.headers, both });
+  //     setState({ headers: state.headers, both });
 
-      setArrow("^");
-    }
+  //     setArrow("^");
+  //   }
 
-    if (arrow === "^") {
-      e.target.innerText = "Sort ^";
+  //   if (arrow === "^") {
+  //     e.target.innerText = "Sort ^";
 
-      let headerIndex = state.both.array.findIndex(
-        (i: { key: string }) => i.key === header
-      );
+  //     let headerIndex = state.both.array.findIndex(
+  //       (i: { key: string }) => i.key === header
+  //     );
 
-      let valuesToSort = state.both.array[headerIndex].value;
-      let arr;
+  //     let valuesToSort = state.both.array[headerIndex].value;
+  //     let arr;
 
-      !header.includes("NUM") //change to includes numbers
-        ? (arr = valuesToSort[0].sort((a: any, b: any) => a.localeCompare(b)))
-        : (arr = valuesToSort[0].sort(function (a: any, b: any) {
-            return b - a;
-          }));
+  //     !header.includes("NUM") //change to includes numbers
+  //       ? (arr = valuesToSort[0].sort((a: any, b: any) => a.localeCompare(b)))
+  //       : (arr = valuesToSort[0].sort(function (a: any, b: any) {
+  //           return b - a;
+  //         }));
 
-      const { both } = state;
-      both.array[headerIndex].value = [arr];
+  //     const { both } = state;
+  //     both.array[headerIndex].value = [arr];
 
-      setState({ headers: state.headers, both });
+  //     setState({ headers: state.headers, both });
 
-      setArrow("V");
-    }
-  };
+  //     setArrow("V");
+  //   }
+  // };
 
 
   const handleEditTemplateId = () => {

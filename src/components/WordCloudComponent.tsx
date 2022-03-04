@@ -13,7 +13,7 @@ const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
   color: ${(props) => (props.darkMode ? "white" : "#26374b")};
   overflow: hidden;
   max-width: 100vw;
-  overlow: auto;
+  min-height: 50px;
 `;
 
 const Text = styled.div<StyledWordCloudType>`
@@ -49,51 +49,8 @@ const handleFontSize = (amount: any) => {
 };
 
 export default function WordCloudComponent(props: IWordCloudComponentProps) {
-  const { addWordToInput, darkMode } = props;
-
-  const wordCloudData: any = useSelector(
-    (state: RootState) => state.returnedData.wordCloudData
-  );
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState([false, ""]);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (wordCloudData.length > 0) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-
-      const URL = SelectorsHelper.getURL(
-        CURRENT_ENVIRONMENT_TYPE,
-        "wordCloud/nonNumerical"
-      );
-
-      let urlWithString = `${URL}/1/2020-01-17/2022-01-25?filter=test&from=50&to=0`;
-
-      if (!wordCloudData.length)
-        fetch(urlWithString)
-          .then((res) => {
-            if (!res.ok) {
-              throw Error(`Error code: ${res.status}. Please try again.`);
-            }
-            return res.json();
-          })
-          .then((data) => {
-            //@ts-ignore
-            dispatch(convertToWordCloud(data));
-            console.log(data);
-          })
-          .catch((err) => {
-            console.log(err.message);
-            setError([true, err.message]);
-          });
-
-      console.log("useEffect", wordCloudData);
-    }
-  }, [wordCloudData, dispatch]);
+  const { addWordToInput, darkMode, wordCloudError, loadingWordCloudData, wordCloudData} = props;
+ 
 
   const mapWords = (tempData: any[]) => {
     return tempData.map((word: any, key: number) => {
@@ -111,16 +68,14 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
     });
   };
 
-  if (!wordCloudData)
-    return <div>That word brought back 0 results, try again!</div>;
-
   return (
     <>
       <WordCloudComponentWrapper darkMode={darkMode}>
+      {loadingWordCloudData && !wordCloudError && <>Loading...</>}
+      {wordCloudError && <>Error!</>}
         <WordsContainer>{mapWords(wordCloudData)}</WordsContainer>
       </WordCloudComponentWrapper>
-      {loading && !error[0] && <>Loading...</>}
-      {/* {error[0] && <>{error[1]}</>} */}
+  
     </>
   );
 }
@@ -133,4 +88,8 @@ type StyledWordCloudType = {
 interface IWordCloudComponentProps {
   darkMode?: boolean;
   addWordToInput: (word: string) => void;
+  wordCloudData: string[];
+  wordCloudError: boolean;
+  loadingWordCloudData: boolean;
+
 }

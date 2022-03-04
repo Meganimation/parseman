@@ -98,7 +98,7 @@ export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
   const jankyString =
-    "©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved.";
+    "©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved.";
 
   const {
     loadingTemplateData,
@@ -128,6 +128,7 @@ export default function TemplateTableComponent(
           templateListData.length > 10
         ) {
           console.log("Triggering pagination");
+          console.log(hasMore)
           handlePagination();
         }
       });
@@ -208,12 +209,13 @@ export default function TemplateTableComponent(
             );
           }
         })}
-
-        {loadingTemplateData && !error && (
-          <LoadingWrapper>Loading...</LoadingWrapper>
+         {loadingTemplateData && !error && templateListData.length > 0 && (
+          <div>Loading...</div>
         )}
-        {error && <ErrorWrapper>Error</ErrorWrapper>}
-        <div style={{ visibility: "hidden", fontSize: '4rem' }}>{jankyString}</div>
+          {loadingTemplateData && !error && templateListData.length < 1 && (
+          <><LoadingWrapper>Loading...</LoadingWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
+        )}
+        {error && <><ErrorWrapper>Error </ErrorWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>} 
       </TemplateTableComponentWrapper>
     </>
   );

@@ -15,9 +15,11 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 import { useDispatch } from "react-redux";
-import { convertToWordCloud, convertToParsed } from "./slices/currentDataSlice";
+import { convertToParsed } from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
+import useWordCloudFetch from './hooks/useWordCloudFetch'
+import useDebounce from "./hooks/useDebounce";
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -52,7 +54,7 @@ const StyledApp = styled.div<StyledAppType>`
 `;
 
 const Content = styled.main<StyledAppType>`
-  padding-top: 18.5vh;
+  padding-top: 8rem;
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
@@ -92,6 +94,13 @@ function App() {
     "00:00:00",
   ]);
 
+  //@ts-ignore
+  const scrollToView = messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+
+
+  
+  useDebounce(() => scrollToView, 2000, [scrollToView]);
+
   const [templatePageAmount, setTemplatePageAmount] = React.useState(50);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
@@ -110,6 +119,14 @@ function App() {
       selectedEndDateAndTime,
       tailSearch,
       logtailPageAmount
+    );
+
+    const { loadingWordCloudData, wordCloudData, wordCloudError } =
+    useWordCloudFetch(
+      templateVersion,
+      selectedStartDateAndTime,
+      selectedEndDateAndTime,
+      tailSearch
     );
 
   const dispatch = useDispatch();
@@ -132,7 +149,6 @@ function App() {
   };
 
   const handleParsedDataRendering = () => {
-    setParsedDataIsVisible(true);
 
     if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
       return console.log("breaking");
@@ -141,13 +157,14 @@ function App() {
 
     updateTailSearchResultsHandler(filterAddOnValue);
 
-    //@ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    return fetchParsedData(
+ fetchParsedData(
       checkedTemplateId,
       checkedTemplateVersion,
       dispatch as any
     );
+
+    setParsedDataIsVisible(true);
+    
   };
 
   const handleTemplateVersionChange = (version: string) => {
@@ -160,29 +177,6 @@ function App() {
 
   const handleLogtailPagination = () => {
     setLogtailPageAmount(logtailPageAmount + 50);
-  };
-
-  const fetchWordCloudData = (value: string) => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "wordCloud/nonNumerical"
-    );
-
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDateAndTime[0]}&${selectedStartDateAndTime[1]}/${selectedEndDateAndTime[0]}&${selectedEndDateAndTime[1]}?filter=${value}&from=50&to=0`;
-
-    return fetch(urlWithString)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(`Error code: ${res.status}. Please try again.`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        dispatch(convertToWordCloud(data));
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
   };
 
   const fetchParsedData = (
@@ -214,7 +208,6 @@ function App() {
 
   const updateTailSearchResultsHandler = (value: string) => {
     setTailSearch(value);
-    fetchWordCloudData(value);
   };
 
   const handleExit = () => {
@@ -250,7 +243,6 @@ function App() {
   const addWordToInput = (word: string) => {
     let value = `${tailSearch} AND ${word}`;
     setTailSearch(value);
-    fetchWordCloudData(value);
   };
 
   return (
@@ -341,6 +333,10 @@ function App() {
             <WordCloudComponent
               darkMode={darkMode}
               addWordToInput={addWordToInput}
+
+              loadingWordCloudData={loadingWordCloudData}
+              wordCloudError={wordCloudError}
+              wordCloudData={wordCloudData}
             />
           </ComponentWindow>
         )}
@@ -354,9 +350,6 @@ function App() {
           buttonText="Favorite"
           onButtonClick={() => {
             setModal(true);
-          }}
-          onExit={() => {
-            setParsedDataIsVisible(false);
           }}
         >
           <div ref={messagesEndRef}>
