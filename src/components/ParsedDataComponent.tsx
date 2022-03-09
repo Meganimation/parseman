@@ -182,7 +182,7 @@ export default function ParsedDataComponent({
     returnedData.templateId
   );
 
-  const [state, setState] = useState<ISubmitState>({
+  let [state, setState] = useState<ISubmitState>({
     headers: [],
     content: [],
   });
@@ -231,6 +231,37 @@ export default function ParsedDataComponent({
     setLocalTemplateId(inputTemplateId);
 
     setModal(false);
+  };
+
+  const handleSort = (e: any, index: any) => {
+    let tempArr: any = []
+    // let anotherArr = state.content
+    
+
+
+    for (let i = 0; i < state.content.length; i++) {
+
+     
+
+ 
+          // console.log(state.content[j][index], 'is more than', state.content[i][index])
+          tempArr.push(state.content[i])
+
+        
+        // else tempArr.unshift(state.content[i])
+
+    }
+
+
+    let newArr = tempArr.sort((a: any, b: any) => {
+      return a[index] - b[index]
+    })
+
+    console.log(newArr, 'newArr')
+    setState({
+      headers: state.headers,
+      content: newArr
+    })
   };
 
   return (
@@ -297,7 +328,7 @@ export default function ParsedDataComponent({
               >
                 <GridContainer>
                   {state.headers.map((header: string, index: number) => {
-                    return <GridItem key={index}>{header} hi</GridItem>;
+                    return <GridItem key={index}>{header} <button onClick={(e)=>{handleSort(e, index)}}>sort</button></GridItem>;
                   })}
                 </GridContainer>
                 {showContent()}

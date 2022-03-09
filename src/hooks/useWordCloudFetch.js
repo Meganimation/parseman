@@ -25,7 +25,9 @@ export default function useWordCloudFetch(
     setLoadingWordCloudData(true);
     setWordCloudError(false);
     axios
-      .get(urlWithString)
+    .get(urlWithString, {
+      headers: {"Access-Control-Allow-Origin": "*"}
+    })
       .then((res) => {
         setWordCloudData(res.data);
         // setHasMore(res.data.length > 0);
