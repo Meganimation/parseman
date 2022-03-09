@@ -1,4 +1,3 @@
-
 export const EnvironmentTypeEnum: any = {
   AWS:  process.env.REACT_APP_AWS,
   URL: process.env.REACT_APP_URL
@@ -13,7 +12,3 @@ export default class SelectorsHelper {
     return retVal;
     }
   }
-
-
-
-
