@@ -5,7 +5,6 @@ import { RootState } from "slices/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "stories/Modal";
 import { Button } from "stories/Button";
-//import the edit icon from material ui
 import EditIcon from "@material-ui/icons/Edit";
 
 const ParsedDataComponentWrapper = styled.section`
@@ -15,16 +14,16 @@ const ParsedDataComponentWrapper = styled.section`
 `;
 
 const InfoBar = styled.aside<StyledParsedTableType>`
-  background-color: ${(props) => (props.darkMode ? "#26374B": "white")};
+  background-color: ${(props) => (props.darkMode ? "#26374B" : "white")};
   margin: 10px;
   width: 25vw;
-
   overflow-y: auto;
 `;
 
 const ParsedTableWrapper = styled.div`
   height: 100%;
   width: 100%;
+  overflow-y: auto;
 `;
 
 const InfoItem = styled.div`
@@ -33,44 +32,24 @@ const InfoItem = styled.div`
   width: 15vw;
 `;
 
-const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>`
-  width: ${(props) => (props.parsedSideInfoIsVisible ? "70vw" : "100vw")};
-  
-`;
+const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>``;
+
 
 const GridContainer = styled.div<StyledParsedTableType>`
-
   display: grid;
   grid-auto-flow: column;
-  overflow: auto;
-  background-color: ${(props) => (props.darkMode ? "#34404e": "white")};
-  border: 1px solid #c1c1c1;
 
-  &::-webkit-scrollbar {
-    width: 10px;
-    border: 1px solid black;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #1c2937;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #233246;
-    opacity: 0.5;
-    border-radius: 10px;
-  }
 `;
 
 const GridItem = styled.div`
   background: rgba(51, 170, 51, 0.01);
   border-radius: 3px;
   text-align: left;
-  min-width: fit-content;
-
-  height: 71vh;
+  min-width: 150px;
+  word-break: break-word;
 `;
+
+const GridRow = styled.div``;
 
 const TitleContainer = styled.div`
   height: 65px;
@@ -79,31 +58,35 @@ const TitleContainer = styled.div`
 `;
 
 const HeaderContainer = styled.div<StyledParsedTableType>`
-  display: flex;
+
   border-right: 1px solid #c1c1c1;
-  padding-left: 10px;
-  padding-right: 10px;
   font-size: 1em;
 
   position: -webkit-sticky;
   position: sticky;
   top: 0;
 
-  background-color: ${(props) => (props.darkMode ? "#2d4460": "white")};
+  background-color: ${(props) => (!props.darkMode ? "#2d4460" : "white")};
   align-items: center;
   height: 4rem;
+  width: max-content;
 
-  h2 {
-    font-size: 1em;
-    font-family: "IBM Plex", sans-serif;
-    display: inline-block;
-    vertical-align: middle;
-  }
+  display: grid;
+  grid-auto-flow: column;
 
   &:hover: {
     backgroundcolor: #3a3a3a;
   }
 `;
+
+const HeaderTitle = styled.h2`
+  font-size: 1em;
+  font-family: "IBM Plex", sans-serif;
+  display: inline-block;
+  vertical-align: middle;
+  width: 400px;
+`;
+
 
 const Title = styled.div`
   cursor: pointer;
@@ -140,13 +123,11 @@ const StyledEditTemplateWrapper = styled.div`
 `;
 
 const SortButton = styled.p`
-
   cursor: pointer;
-  
-  &:hover {
-      font-weight: bold;
-    }
 
+  &:hover {
+    font-weight: bold;
+  }
 `;
 
 const StyledModalInput = styled.input`
@@ -167,14 +148,11 @@ const StyledModalInput = styled.input`
       }
 
 
-  `
+  `;
 
 export interface ISubmitState {
   headers: string[];
-  both: {
-    array: any;
-    arrow: string;
-  };
+  content: string[];
 }
 
 export default function ParsedDataComponent({
@@ -190,170 +168,73 @@ export default function ParsedDataComponent({
     (state: RootState) => state.returnedData.parsedData
   );
 
+  const newReturnedData: any = useSelector(
+    (state: RootState) => state.returnedData.newParsedData
+  );
+
+  const newReturnedHeaders: any = useSelector(
+    (state: RootState) => state.returnedData.newParsedHeaders
+  );
+
   const [modal, setModal] = useState(false);
-
-  const [inputTemplateId, setInputTemplateId] = useState('');
-
-
-  const [localTemplateId, setLocalTemplateId] = useState(returnedData.templateId);
-
-  const [arrow, setArrow] = useState("V");
-
-  const [editInput, setEditInput] = useState([0, 0]);
+  const [inputTemplateId, setInputTemplateId] = useState("");
+  const [localTemplateId, setLocalTemplateId] = useState(
+    returnedData.templateId
+  );
 
   const [state, setState] = useState<ISubmitState>({
     headers: [],
-    both: { array: [], arrow: "V" },
+    content: [],
   });
 
   useEffect(() => {
     if (returnedData.headers) {
       showParsedInfo();
       setLocalTemplateId(returnedData.templateId);
-      console.log("now", returnedData);
     }
   }, [returnedData]);
-
-  let arrKey: string[] = [];
-  let arrBoth: any[] = [];
-  let i = 0;
 
   const showParsedInfo = () => {
     if (!returnedData) return console.log("no data");
     else {
-      while (i < returnedData.headers.length) {
-        arrKey = [
-          ...arrKey,
-          returnedData.lines
-            .map((line: any) => line.itemBody)
-            .map((y: any) => y[i].bodyHeader)[0],
-        ];
-
-        arrBoth[i] = {
-          key: returnedData.lines
-            .map((line: any) => line.itemBody)
-            .map((y: any) => y[i].bodyHeader)[0],
-          value: [
-            returnedData.lines
-              .map((line: any) => line.itemBody)
-              .map((y: any) => y[i].bodyValue),
-          ],
-        };
-
-        i = i + 1;
-      }
-
-      setState({ headers: arrKey, both: { array: arrBoth, arrow: "V" } });
+      setState({ headers: newReturnedHeaders, content: newReturnedData });
     }
   };
 
-  const showColumns = () => {
-    if (i < state.both.array.length) {
-      return (
-        <GridContainer darkMode={darkMode}>
-          {state.both.array.map(
-            (array: { key: string; value: string[] }, key: number) => (
-              <GridItem>
-                <HeaderContainer
-                darkMode={darkMode}
-                  onClick={(e) => {
-                    setEditInput([e.pageY - 50, e.clientX - 100]);
-                  }}
-                >
-                  <TitleContainer>
-                    <h1 id={"header" + key} contentEditable="true">
-                      {array.key}
-                    </h1>
-                  </TitleContainer>
-                </HeaderContainer>
-                {/* <SortButton
-                  onClick={(e) => {
-                    handleSort(e, array.key);
-                  }}
-                >
-                    <u>Sort ^</u>
-                </SortButton> */}
-                {array.value.map((value: any) =>
-                  value.map((val: any, key: any) => {
-                    return <Test key={key}>{val}</Test>;
-                  })
-                )}
-              </GridItem>
-            )
-          )}
-        </GridContainer>
-      );
+  const showItems = (content: any) => {
+    if (content.length === 0) return <p>No data</p>;
+    else {
+      return content.map((item: any, index: any) => {
+        return <GridItem onClick={()=>{alert(index)}} key={index}>{item}</GridItem>;
+      });
     }
   };
 
-  // const handleSort = (e: any, header: string) => {
-  //   if (arrow === "V") {
-  //     e.target.innerText = "Sort V";
-  //     let headerIndex = state.both.array.findIndex(
-  //       (i: { key: string }) => i.key === header
-  //     );
-  //     let valuesToSort = state.both.array[headerIndex].value;
-  //     let arr;
-
-  //     !header.includes("NUM")
-  //       ? (arr = valuesToSort[0].sort((a: any, b: any) => b.localeCompare(a)))
-  //       : (arr = valuesToSort[0].sort(function (a: any, b: any) {
-  //           return a - b;
-  //         }));
-
-  //     const { both } = state;
-  //     both.array[headerIndex].value = [arr];
-
-  //     setState({ headers: state.headers, both });
-
-  //     setArrow("^");
-  //   }
-
-  //   if (arrow === "^") {
-  //     e.target.innerText = "Sort ^";
-
-  //     let headerIndex = state.both.array.findIndex(
-  //       (i: { key: string }) => i.key === header
-  //     );
-
-  //     let valuesToSort = state.both.array[headerIndex].value;
-  //     let arr;
-
-  //     !header.includes("NUM") //change to includes numbers
-  //       ? (arr = valuesToSort[0].sort((a: any, b: any) => a.localeCompare(b)))
-  //       : (arr = valuesToSort[0].sort(function (a: any, b: any) {
-  //           return b - a;
-  //         }));
-
-  //     const { both } = state;
-  //     both.array[headerIndex].value = [arr];
-
-  //     setState({ headers: state.headers, both });
-
-  //     setArrow("V");
-  //   }
-  // };
-
+  const showContent = () => {
+    return state.content.map((content: string, index: number) => {
+      return <GridContainer  onClick={()=>{alert(index)}}>{showItems(content)}</GridContainer>;
+    });
+  };
 
   const handleEditTemplateId = () => {
-
     //check if input is empty
-    if (inputTemplateId === '') return alert('Please enter a template id');
+    if (inputTemplateId === "") return alert("Please enter a template id");
 
     // if input contains spaces
-    if (inputTemplateId.includes(' ')) return alert('You cannot have spaces in your template id');
+    if (inputTemplateId.includes(" "))
+      return alert("You cannot have spaces in your template id");
 
     // if input contains anything but letters and numbers
-    if (inputTemplateId.match(/[^a-zA-Z0-9]/g)) return alert('You can only use letters and numbers in your template id');
+    if (inputTemplateId.match(/[^a-zA-Z0-9]/g))
+      return alert("You can only use letters and numbers in your template id");
 
     setLocalTemplateId(inputTemplateId);
 
-
-    setModal(false)
-  }
+    setModal(false);
+  };
 
   return (
-    <ParsedDataComponentWrapper >
+    <ParsedDataComponentWrapper>
       {parsedSideInfoIsVisible && (
         <>
           <Exit onExit={handleExit} darkMode={darkMode} />
@@ -377,10 +258,19 @@ export default function ParsedDataComponent({
                   }}
                   title="Enter Template Id Name"
                   darkMode={darkMode}
-                  height='100px'
+                  height="100px"
                 >
-                  <StyledModalInput type='text' value={inputTemplateId} onChange={(e) => setInputTemplateId(e.target.value)} /> 
-                  <Button onClick={()=>{handleEditTemplateId()}} label='Submit' />
+                  <StyledModalInput
+                    type="text"
+                    value={inputTemplateId}
+                    onChange={(e) => setInputTemplateId(e.target.value)}
+                  />
+                  <Button
+                    onClick={() => {
+                      handleEditTemplateId();
+                    }}
+                    label="Submit"
+                  />
                 </Modal>
               )}
             </InfoItem>
@@ -396,17 +286,31 @@ export default function ParsedDataComponent({
           </InfoBar>
         </>
       )}
-      <ParsedTableWrapper >
+      <ParsedTableWrapper>
         <>
           <div>
-            {!state.headers.length ? (
+            {!newReturnedHeaders ? (
               <p>Loading...</p>
             ) : (
-              <ParsedTableResultsWrapper parsedSideInfoIsVisible={parsedSideInfoIsVisible}>
-                {showColumns()}
+              <ParsedTableResultsWrapper
+                parsedSideInfoIsVisible={parsedSideInfoIsVisible}
+              >
+                <GridContainer>
+                  {state.headers.map((header: string, index: number) => {
+                    return <GridItem key={index}>{header} hi</GridItem>;
+                  })}
+                </GridContainer>
+                {showContent()}
               </ParsedTableResultsWrapper>
             )}
           </div>
+          <button
+            onClick={() => {
+              console.log(state);
+            }}
+          >
+            click me to render state
+          </button>
         </>
       </ParsedTableWrapper>
     </ParsedDataComponentWrapper>

@@ -8,6 +8,7 @@ interface ButtonProps {
   label?: string;
   onClick?: () => void;
   darkMode?: boolean;
+  onMouseUp?: () => void;
 }
 
 

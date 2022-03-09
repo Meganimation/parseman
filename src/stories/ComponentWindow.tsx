@@ -15,6 +15,7 @@ interface ComponentWindowProps {
   onButtonClick?: () => void;
   headerHeight?: string;
   handleCheckedData?: any;
+  onButtonMouseUp?: () => void;
 }
 
 const ComponentWindowWrapper = styled.section`
@@ -77,6 +78,7 @@ export const ComponentWindow = ({
   buttonText = "button",
   headerHeight = "auto",
   onButtonClick = () => {},
+  onButtonMouseUp = () => {},
   onExit = null,
   ...props
 }: ComponentWindowProps) => {
@@ -102,6 +104,7 @@ export const ComponentWindow = ({
           <ButtonWrapper>
             <Button
               onClick={onButtonClick}
+              onMouseUp={onButtonMouseUp}
               label={buttonText}
               fontSize="12px"
             />

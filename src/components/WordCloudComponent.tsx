@@ -3,7 +3,6 @@ import styled from "styled-components";
 import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
-import { convertToWordCloud } from "slices/currentDataSlice";
 import { RootState } from "slices/store";
 import { useSelector, useDispatch } from "react-redux";
 
