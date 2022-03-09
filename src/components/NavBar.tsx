@@ -9,7 +9,7 @@ import EyeClosedIcon from "@material-ui/icons/VisibilityOff";
 const StyledNavWrapper = styled.nav`
   display: flex;
   position: fixed;
-  min-height: 130px;
+  height: 8rem;
   width: 100%;
   opacity: 0.9;
 

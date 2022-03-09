@@ -122,7 +122,9 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       if (logtailData.length === index + 1) {
         return (
           <LogtailItem id={index} darkMode={darkMode} ref={lastElementRef}>
+            
             <code>{item.logTail}</code>
+
           </LogtailItem>
         );
       } else

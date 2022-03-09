@@ -7,7 +7,7 @@ interface ComponentWindowProps {
   onClick?: () => void;
   darkMode?: boolean;
   children?: any;
-  onExit?: () => void;
+  onExit?: any;
   width?: string;
   title?: string;
   button?: boolean;
@@ -15,6 +15,7 @@ interface ComponentWindowProps {
   onButtonClick?: () => void;
   headerHeight?: string;
   handleCheckedData?: any;
+  onButtonMouseUp?: () => void;
 }
 
 const ComponentWindowWrapper = styled.section`
@@ -77,7 +78,8 @@ export const ComponentWindow = ({
   buttonText = "button",
   headerHeight = "auto",
   onButtonClick = () => {},
-  onExit = () => {},
+  onButtonMouseUp = () => {},
+  onExit = null,
   ...props
 }: ComponentWindowProps) => {
   return (
@@ -102,13 +104,14 @@ export const ComponentWindow = ({
           <ButtonWrapper>
             <Button
               onClick={onButtonClick}
+              onMouseUp={onButtonMouseUp}
               label={buttonText}
               fontSize="12px"
             />
           </ButtonWrapper>
         )}
         <ExitWrapper>
-          <Exit onExit={onExit} darkMode={darkMode} />
+          {onExit && <Exit onExit={onExit} darkMode={darkMode} />}
         </ExitWrapper>
       </HeaderContent>
       {children}

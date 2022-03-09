@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
@@ -15,9 +15,11 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 import { useDispatch } from "react-redux";
-import { convertToWordCloud, convertToParsed } from "./slices/currentDataSlice";
+import { convertToParsed } from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
+import useWordCloudFetch from "./hooks/useWordCloudFetch";
+
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -29,9 +31,8 @@ const StyledApp = styled.div<StyledAppType>`
   overflow-x: hidden;
   overflow-y: none;
 
-    &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 10px;
-   
   }
 
   &::-webkit-scrollbar-track {
@@ -48,11 +49,10 @@ const StyledApp = styled.div<StyledAppType>`
   > nav {
     background-color: #4b0c5e;
   }
-
 `;
 
 const Content = styled.main<StyledAppType>`
-  padding-top: 18.5vh;
+  padding-top: 8rem;
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
@@ -92,6 +92,15 @@ function App() {
     "00:00:00",
   ]);
 
+
+  const [test, setTest] = useState(false)
+
+  //@ts-ignore
+  const scrollToView = () => messagesEndRef.current?.scrollIntoView({
+    behavior: "smooth",
+  }) 
+
+
   const [templatePageAmount, setTemplatePageAmount] = React.useState(50);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
@@ -110,6 +119,14 @@ function App() {
       selectedEndDateAndTime,
       tailSearch,
       logtailPageAmount
+    );
+
+  const { loadingWordCloudData, wordCloudData, wordCloudError } =
+    useWordCloudFetch(
+      templateVersion,
+      selectedStartDateAndTime,
+      selectedEndDateAndTime,
+      tailSearch
     );
 
   const dispatch = useDispatch();
@@ -132,8 +149,8 @@ function App() {
   };
 
   const handleParsedDataRendering = () => {
-    setParsedDataIsVisible(true);
 
+    fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
     if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
       return console.log("breaking");
     }
@@ -141,14 +158,18 @@ function App() {
 
     updateTailSearchResultsHandler(filterAddOnValue);
 
-    //@ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    return fetchParsedData(
-      checkedTemplateId,
-      checkedTemplateVersion,
-      dispatch as any
-    );
+  // alert('wtf')
+
+    setParsedDataIsVisible(true);
   };
+
+
+  const scrollToBottom = () =>{
+    return setTimeout(function(){
+      scrollToView(); 
+   }, 500);
+    // return scrollToView()
+  }
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
@@ -162,29 +183,6 @@ function App() {
     setLogtailPageAmount(logtailPageAmount + 50);
   };
 
-  const fetchWordCloudData = (value: string) => {
-    const URL: string = SelectorsHelper.getURL(
-      CURRENT_ENVIRONMENT_TYPE,
-      "wordCloud/nonNumerical"
-    );
-
-    let urlWithString = `${URL}/${templateVersion}/${selectedStartDateAndTime[0]}&${selectedStartDateAndTime[1]}/${selectedEndDateAndTime[0]}&${selectedEndDateAndTime[1]}?filter=${value}&from=50&to=0`;
-
-    return fetch(urlWithString)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(`Error code: ${res.status}. Please try again.`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        dispatch(convertToWordCloud(data));
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
-
   const fetchParsedData = (
     checkedTemplateId: string,
     templateVersion: string, //this needs to be the parsed templateversion
@@ -195,7 +193,7 @@ function App() {
       "parsedDataTable"
     );
 
-    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`;
+    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=50`;
 
     fetch(urlWithString)
       .then((res) => {
@@ -214,7 +212,6 @@ function App() {
 
   const updateTailSearchResultsHandler = (value: string) => {
     setTailSearch(value);
-    fetchWordCloudData(value);
   };
 
   const handleExit = () => {
@@ -250,7 +247,6 @@ function App() {
   const addWordToInput = (word: string) => {
     let value = `${tailSearch} AND ${word}`;
     setTailSearch(value);
-    fetchWordCloudData(value);
   };
 
   return (
@@ -306,6 +302,7 @@ function App() {
                 button={checkedTemplateId ? true : false}
                 title={"Template List"}
                 buttonText="Parse Data"
+                onButtonMouseUp={()=>{scrollToBottom()}}
                 onButtonClick={() => {
                   checkedTemplateId
                     ? handleParsedDataRendering()
@@ -341,6 +338,9 @@ function App() {
             <WordCloudComponent
               darkMode={darkMode}
               addWordToInput={addWordToInput}
+              loadingWordCloudData={loadingWordCloudData}
+              wordCloudError={wordCloudError}
+              wordCloudData={wordCloudData}
             />
           </ComponentWindow>
         )}
@@ -355,9 +355,6 @@ function App() {
           onButtonClick={() => {
             setModal(true);
           }}
-          onExit={() => {
-            setParsedDataIsVisible(false);
-          }}
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
@@ -367,8 +364,8 @@ function App() {
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}
             />
           </div>
-        </ComponentWindow>)}
-   
+        </ComponentWindow>
+      )}
 
       {modal && (
         <Modal
@@ -378,7 +375,7 @@ function App() {
           title="Saved!"
           darkMode={darkMode}
         >
-          SAVED
+          In the next version, there will be a button in the menu you can click which will take you to a list of previously saved tables (Likely stored in localStorage for now)
         </Modal>
       )}
     </StyledApp>
