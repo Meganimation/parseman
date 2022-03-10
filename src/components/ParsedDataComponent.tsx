@@ -189,17 +189,15 @@ export default function ParsedDataComponent({
 
   useEffect(() => {
     if (returnedData.headers) {
-      showParsedInfo();
-      setLocalTemplateId(returnedData.templateId);
-    }
-  }, [returnedData]);
-
-  const showParsedInfo = () => {
-    if (!returnedData) return console.log("no data");
+      if (!returnedData) return console.log("no data");
     else {
       setState({ headers: newReturnedHeaders, content: newReturnedData });
     }
-  };
+      setLocalTemplateId(returnedData.templateId);
+    }
+  }, [returnedData, newReturnedData, newReturnedHeaders]);
+
+
 
   const showItems = (content: any) => {
     if (content.length === 0) return <p>No data</p>;
@@ -234,16 +232,20 @@ export default function ParsedDataComponent({
   };
 
   const handleSort = (e: any, index: any) => {
+
     let tempArr: any = []
     // let anotherArr = state.content
+
     
+
 
 
     for (let i = 0; i < state.content.length; i++) {
 
-     
+    
 
- 
+
+
           // console.log(state.content[j][index], 'is more than', state.content[i][index])
           tempArr.push(state.content[i])
 
@@ -253,7 +255,9 @@ export default function ParsedDataComponent({
     }
 
 
+
     let newArr = tempArr.sort((a: any, b: any) => {
+      console.log('hey', a[index], b[index])
       return a[index] - b[index]
     })
 
