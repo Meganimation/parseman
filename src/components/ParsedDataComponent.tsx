@@ -34,11 +34,9 @@ const InfoItem = styled.div`
 
 const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>``;
 
-
 const GridContainer = styled.div<StyledParsedTableType>`
   display: grid;
   grid-auto-flow: column;
-
 `;
 
 const GridItem = styled.div`
@@ -47,60 +45,6 @@ const GridItem = styled.div`
   text-align: left;
   min-width: 150px;
   word-break: break-word;
-`;
-
-const GridRow = styled.div``;
-
-const TitleContainer = styled.div`
-  height: 65px;
-  resize: horizontal;
-  cursor: pointer;
-`;
-
-const HeaderContainer = styled.div<StyledParsedTableType>`
-
-  border-right: 1px solid #c1c1c1;
-  font-size: 1em;
-
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-
-  background-color: ${(props) => (!props.darkMode ? "#2d4460" : "white")};
-  align-items: center;
-  height: 4rem;
-  width: max-content;
-
-  display: grid;
-  grid-auto-flow: column;
-
-  &:hover: {
-    backgroundcolor: #3a3a3a;
-  }
-`;
-
-const HeaderTitle = styled.h2`
-  font-size: 1em;
-  font-family: "IBM Plex", sans-serif;
-  display: inline-block;
-  vertical-align: middle;
-  width: 400px;
-`;
-
-
-const Title = styled.div`
-  cursor: pointer;
-  margin-top: auto;
-  margin-bottom: auto;
-  color: white;
-`;
-
-const Test = styled.div`
-  margin: 10px;
-
-  &:hover {
-    background: rgba(51, 170, 51, 0.1);
-  }
 `;
 
 const StyledEditTemplateWrapper = styled.div`
@@ -120,14 +64,6 @@ const StyledEditTemplateWrapper = styled.div`
   }
 }
 
-`;
-
-const SortButton = styled.p`
-  cursor: pointer;
-
-  &:hover {
-    font-weight: bold;
-  }
 `;
 
 const StyledModalInput = styled.input`
@@ -158,22 +94,22 @@ export interface ISubmitState {
 export default function ParsedDataComponent({
   templateId = "123456789",
   version = "1",
-  templateLiteral = "20px",
+  templateLiteral = "None",
   darkMode = false,
   handleExit = () => {},
   parsedSideInfoIsVisible = true,
   ...props
 }: IParsedDataComponentProps) {
   const returnedData: any = useSelector(
-    (state: RootState) => state.returnedData.parsedData
+    (state: RootState) => state.returnedData.parsedDataSidebarInfo
   );
 
-  const newReturnedData: any = useSelector(
-    (state: RootState) => state.returnedData.newParsedData
+  const parsedDataRows: any = useSelector(
+    (state: RootState) => state.returnedData.parsedDataRows
   );
 
-  const newReturnedHeaders: any = useSelector(
-    (state: RootState) => state.returnedData.newParsedHeaders
+  const parsedDataHeaders: any = useSelector(
+    (state: RootState) => state.returnedData.parsedDataHeaders
   );
 
   const [modal, setModal] = useState(false);
@@ -190,27 +126,42 @@ export default function ParsedDataComponent({
   useEffect(() => {
     if (returnedData.headers) {
       if (!returnedData) return console.log("no data");
-    else {
-      setState({ headers: newReturnedHeaders, content: newReturnedData });
-    }
+      else {
+        setState({ headers: parsedDataHeaders, content: parsedDataRows });
+      }
       setLocalTemplateId(returnedData.templateId);
     }
-  }, [returnedData, newReturnedData, newReturnedHeaders]);
-
-
+  }, [returnedData, parsedDataRows, parsedDataHeaders]);
 
   const showItems = (content: any) => {
     if (content.length === 0) return <p>No data</p>;
     else {
       return content.map((item: any, index: any) => {
-        return <GridItem onClick={()=>{alert(index)}} key={index}>{item}</GridItem>;
+        return (
+          <GridItem
+            onClick={() => {
+              alert(index);
+            }}
+            key={index}
+          >
+            {item}
+          </GridItem>
+        );
       });
     }
   };
 
   const showContent = () => {
     return state.content.map((content: string, index: number) => {
-      return <GridContainer  onClick={()=>{alert(index)}}>{showItems(content)}</GridContainer>;
+      return (
+        <GridContainer
+          onClick={() => {
+            alert(index);
+          }}
+        >
+          {showItems(content)}
+        </GridContainer>
+      );
     });
   };
 
@@ -231,41 +182,22 @@ export default function ParsedDataComponent({
     setModal(false);
   };
 
-  const handleSort = (e: any, index: any) => {
-
-    let tempArr: any = []
-    // let anotherArr = state.content
-
-    
-
-
-
+  const handleSort = (e: unknown, index: number) => {
+    let tempArr: string[] = [];
     for (let i = 0; i < state.content.length; i++) {
-
-    
-
-
-
-          // console.log(state.content[j][index], 'is more than', state.content[i][index])
-          tempArr.push(state.content[i])
-
-        
-        // else tempArr.unshift(state.content[i])
-
+      tempArr.push(state.content[i]);
     }
 
-
-
     let newArr = tempArr.sort((a: any, b: any) => {
-      console.log('hey', a[index], b[index])
-      return a[index] - b[index]
-    })
+      console.log("hey", a[index], b[index]);
+      return a[index] - b[index];
+    });
 
-    console.log(newArr, 'newArr')
+    console.log(newArr, "newArr");
     setState({
       headers: state.headers,
-      content: newArr
-    })
+      content: newArr,
+    });
   };
 
   return (
@@ -273,7 +205,6 @@ export default function ParsedDataComponent({
       {parsedSideInfoIsVisible && (
         <>
           <Exit onExit={handleExit} darkMode={darkMode} />
-
           <InfoBar darkMode={darkMode}>
             <InfoItem>
               <StyledEditTemplateWrapper
@@ -324,7 +255,7 @@ export default function ParsedDataComponent({
       <ParsedTableWrapper>
         <>
           <div>
-            {!newReturnedHeaders ? (
+            {!parsedDataHeaders ? (
               <p>Loading...</p>
             ) : (
               <ParsedTableResultsWrapper
@@ -332,20 +263,24 @@ export default function ParsedDataComponent({
               >
                 <GridContainer>
                   {state.headers.map((header: string, index: number) => {
-                    return <GridItem key={index}>{header} <button onClick={(e)=>{handleSort(e, index)}}>sort</button></GridItem>;
+                    return (
+                      <GridItem key={index}>
+                        {header}
+                        <button
+                          onClick={(e) => {
+                            handleSort(e, index);
+                          }}
+                        >
+                          Sort By Newest
+                        </button>
+                      </GridItem>
+                    );
                   })}
                 </GridContainer>
                 {showContent()}
               </ParsedTableResultsWrapper>
             )}
           </div>
-          <button
-            onClick={() => {
-              console.log(state);
-            }}
-          >
-            click me to render state
-          </button>
         </>
       </ParsedTableWrapper>
     </ParsedDataComponentWrapper>

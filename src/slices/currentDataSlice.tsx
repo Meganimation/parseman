@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CurrentDataSliceState {
-  parsedData: any;
-  newParsedData: any;
-  newParsedHeaders: any;
+  parsedDataSidebarInfo: string[];
+  parsedDataRows: string[];
+  parsedDataHeaders: string[] | string;
   hashedParsedData: any;
 }
 
 const initialState: CurrentDataSliceState = {
-  parsedData: [],
-  newParsedData: [],
-  newParsedHeaders: [],
+  parsedDataSidebarInfo: [],
+  parsedDataRows: [],
+  parsedDataHeaders: [],
   hashedParsedData: {},
 };
 
@@ -19,10 +19,11 @@ export const CurrentDataSlice = createSlice({
   initialState,
   reducers: {
     convertToParsed: (state, action: PayloadAction<any>) => {
- 
-      state.parsedData = action.payload;
-      let arrOfRows: any = [];
-      let arrOfHeaders: any = [];
+      let {host, recordId, templateId, timestamp, version} = action.payload
+      state.parsedDataSidebarInfo = [host, recordId, templateId, timestamp, version]
+      state.parsedDataSidebarInfo = action.payload;
+      let arrOfRows: string[] = [];
+      let arrOfHeaders: string[] = [];
       const tempHash: any = {};
 
       action.payload.lines.map((line: any) => {
@@ -45,8 +46,8 @@ export const CurrentDataSlice = createSlice({
         arrOfHeaders = [tempArrOfHeaders];
       });
 
-      state.newParsedData = arrOfRows;
-      state.newParsedHeaders = Array.from(new Set(arrOfHeaders))[0];
+      state.parsedDataRows = arrOfRows;
+      state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))[0];
       state.hashedParsedData = tempHash;
     },
   },
