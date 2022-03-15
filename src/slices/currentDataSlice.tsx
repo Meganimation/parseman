@@ -41,7 +41,7 @@ export const CurrentDataSlice = createSlice({
           tempHash[arrayOfLines[i].bodyHeader] = tempHash[
             arrayOfLines[i].bodyHeader
           ].concat(arrayOfLines[i].bodyValue);
-          tempSortArr.push(false)
+          tempSortArr.push('descending')
           tempArr.push(arrayOfLines[i].bodyValue);
           tempArrOfHeaders.push([arrayOfLines[i].bodyHeader]); //if I cant figure out a better way to do the sort thing, change this to [arrayOfLines[i].bodyHeader, false]
         }

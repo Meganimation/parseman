@@ -141,7 +141,7 @@ export default function ParsedDataComponent({
       }
       setLocalTemplateId(returnedData.templateId);
     }
-  }, [returnedData, parsedDataRows, parsedDataHeaders]);
+  }, [returnedData, parsedDataRows, parsedDataHeaders, parsedSortBool]);
 
   const showItems = (content: any) => {
     if (content.length === 0) return <p>No data</p>;
@@ -193,11 +193,11 @@ export default function ParsedDataComponent({
   };
 
   const handleSort = (e: unknown, index: number) => {
-    if (!state.arrOfSortBools[index]) {
+    if (state.arrOfSortBools[index] === "descending") {
       let tempNewSortArr = [];
 
       for (let i = 0; i < state.arrOfSortBools.length; i++) {
-        if (index === i) tempNewSortArr.push(true);
+        if (index === i) tempNewSortArr.push("ascending");
         else tempNewSortArr.push(state.arrOfSortBools[i]);
       }
 
@@ -215,13 +215,11 @@ export default function ParsedDataComponent({
         content: newArr,
         arrOfSortBools: tempNewSortArr,
       });
-    } else if (state.arrOfSortBools[index]) {
+    } else if (state.arrOfSortBools[index] === "ascending") {
       let tempNewSortArr = [];
 
-      console.log('when is this happening?')
-
       for (let i = 0; i < state.arrOfSortBools.length; i++) {
-        if (index === i) tempNewSortArr.push(false);
+        if (index === i) tempNewSortArr.push("descending");
         else tempNewSortArr.push(state.arrOfSortBools[i]);
       }
 
@@ -240,6 +238,19 @@ export default function ParsedDataComponent({
         arrOfSortBools: tempNewSortArr,
       });
     }
+  };
+
+  const renderSortButtonByNumber = (index: number) => {
+    return (
+      <button
+        onClick={(e) => {
+          handleSort(e, index);
+        }}
+      >
+        Sort By
+        {state.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+      </button>
+    );
   };
 
   return (
@@ -308,14 +319,20 @@ export default function ParsedDataComponent({
                     return (
                       <GridItem key={index}>
                         {header}
-                        <button
-                          onClick={(e) => {
-                            handleSort(e, index);
-                          }}
-                        >
-                          Sort By{" "}
-                          {state.arrOfSortBools[index] ? "highest" : "lowest"}
-                        </button>
+                        {
+                          //is state.content's eles contains anything but numbers
+                        }
+                        {
+                          // if all the elements in state.content are the same
+                          state.content.every((item: any) => {
+                            return item[index] === state.content[0][index];
+                          }) ? (
+                            <div>these are all dupes</div>
+                          ) : //is state.content's eles contains anything but numbers
+                          !state.content[0][index].match(/[^0-9]/g) ? (
+                            renderSortButtonByNumber(index)
+                          ) : null
+                        }
                       </GridItem>
                     );
                   })}
