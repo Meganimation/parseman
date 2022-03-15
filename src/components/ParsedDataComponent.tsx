@@ -89,6 +89,7 @@ const StyledModalInput = styled.input`
 export interface ISubmitState {
   headers: string[];
   content: string[];
+  arrOfSortBools: any[];
 }
 
 export default function ParsedDataComponent({
@@ -112,6 +113,10 @@ export default function ParsedDataComponent({
     (state: RootState) => state.returnedData.parsedDataHeaders
   );
 
+  const parsedSortBool: any = useSelector(
+    (state: RootState) => state.returnedData.parsedSortBool
+  );
+
   const [modal, setModal] = useState(false);
   const [inputTemplateId, setInputTemplateId] = useState("");
   const [localTemplateId, setLocalTemplateId] = useState(
@@ -121,13 +126,18 @@ export default function ParsedDataComponent({
   let [state, setState] = useState<ISubmitState>({
     headers: [],
     content: [],
+    arrOfSortBools: [],
   });
 
   useEffect(() => {
     if (returnedData.headers) {
       if (!returnedData) return console.log("no data");
       else {
-        setState({ headers: parsedDataHeaders, content: parsedDataRows });
+        setState({
+          headers: parsedDataHeaders,
+          content: parsedDataRows,
+          arrOfSortBools: parsedSortBool,
+        });
       }
       setLocalTemplateId(returnedData.templateId);
     }
@@ -183,21 +193,53 @@ export default function ParsedDataComponent({
   };
 
   const handleSort = (e: unknown, index: number) => {
-    let tempArr: string[] = [];
-    for (let i = 0; i < state.content.length; i++) {
-      tempArr.push(state.content[i]);
+    if (!state.arrOfSortBools[index]) {
+      let tempNewSortArr = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push(true);
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      let tempArr: string[] = [];
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.push(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        return a[index] - b[index];
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    } else if (state.arrOfSortBools[index]) {
+      let tempNewSortArr = [];
+
+      console.log('when is this happening?')
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push(false);
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      let tempArr: string[] = [];
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.unshift(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        return b[index] - a[index];
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
     }
-
-    let newArr = tempArr.sort((a: any, b: any) => {
-      console.log("hey", a[index], b[index]);
-      return a[index] - b[index];
-    });
-
-    console.log(newArr, "newArr");
-    setState({
-      headers: state.headers,
-      content: newArr,
-    });
   };
 
   return (
@@ -271,7 +313,8 @@ export default function ParsedDataComponent({
                             handleSort(e, index);
                           }}
                         >
-                          Sort By Newest
+                          Sort By{" "}
+                          {state.arrOfSortBools[index] ? "highest" : "lowest"}
                         </button>
                       </GridItem>
                     );
