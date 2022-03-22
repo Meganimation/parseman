@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Modal } from "stories/Modal";
 import { Button } from "stories/Button";
 import EditIcon from "@material-ui/icons/Edit";
+import ParsedDataTable from "./ParsedDataTable";
 
 const ParsedDataComponentWrapper = styled.section`
   padding-top: 1rem;
@@ -20,31 +21,10 @@ const InfoBar = styled.aside<StyledParsedTableType>`
   overflow-y: auto;
 `;
 
-const ParsedTableWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  overflow-y: auto;
-`;
-
 const InfoItem = styled.div`
   margin-top: 2px;
   font-size: 0.8rem;
   width: 15vw;
-`;
-
-const ParsedTableResultsWrapper = styled.section<StyledParsedTableType>``;
-
-const GridContainer = styled.div<StyledParsedTableType>`
-  display: grid;
-  grid-auto-flow: column;
-`;
-
-const GridItem = styled.div`
-  background: rgba(51, 170, 51, 0.01);
-  border-radius: 3px;
-  text-align: left;
-  min-width: 150px;
-  word-break: break-word;
 `;
 
 const StyledEditTemplateWrapper = styled.div`
@@ -143,37 +123,9 @@ export default function ParsedDataComponent({
     }
   }, [returnedData, parsedDataRows, parsedDataHeaders, parsedSortBool]);
 
-  const showItems = (content: any) => {
-    if (content.length === 0) return <p>No data</p>;
-    else {
-      return content.map((item: any, index: any) => {
-        return (
-          <GridItem
-            onClick={() => {
-              alert(index);
-            }}
-            key={index}
-          >
-            {item}
-          </GridItem>
-        );
-      });
-    }
-  };
 
-  const showContent = () => {
-    return state.content.map((content: string, index: number) => {
-      return (
-        <GridContainer
-          onClick={() => {
-            alert(index);
-          }}
-        >
-          {showItems(content)}
-        </GridContainer>
-      );
-    });
-  };
+
+ 
 
   const handleEditTemplateId = () => {
     //check if input is empty
@@ -240,47 +192,6 @@ export default function ParsedDataComponent({
     }
   };
 
-  const displayCorrectSortButton = (index: number) => {
-
-      // // if all the elements in state.content are the same
-      // state.content.every((item: any) => {
-      //   return item[index] === state.content[0][index];
-      // }) ? (
-      //   <div>these are all dupes</div>
-      // ) : //is state.content's eles contains anything but numbers
-      // !state.content[0][index].match(/[^0-9]/g) ? (
-      //   renderSortButtonByNumber(index)
-      // ) : null
-
-      let areDupes = state.content.every((item: any) => item[index] === state.content[0][index]);
-
-      if (areDupes) return <div>these are all dupes</div>
-
-      let isNumber = state.content[0][index].match(/[^0-9]/g);
-      if (!isNumber) return <div> this is only numbers</div>
-
-      //if any of the elements contain letters
-      let isLetter = state.content[0][index].match(/[a-zA-Z]/g);
-      if (isLetter) return <div> this has letters, nums, and symbols</div>
-
-      else return <div>i assume this is only numbers and symbols then</div>
-
-
-  }
-
-  const renderSortButtonByNumber = (index: number) => {
-    return (
-      <button
-        onClick={(e) => {
-          handleSort(e, index);
-        }}
-      >
-        Sort By
-        {state.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
-      </button>
-    );
-  };
-
   return (
     <ParsedDataComponentWrapper>
       {parsedSideInfoIsVisible && (
@@ -333,34 +244,13 @@ export default function ParsedDataComponent({
           </InfoBar>
         </>
       )}
-      <ParsedTableWrapper>
-        <>
-          <div>
-            {!parsedDataHeaders ? (
-              <p>Loading...</p>
-            ) : (
-              <ParsedTableResultsWrapper
-                parsedSideInfoIsVisible={parsedSideInfoIsVisible}
-              >
-                <GridContainer>
-                  {state.headers.map((header: string, index: number) => {
-                    return (
-                      <GridItem key={index}>
-                        {header}
-                        {
-                          //is state.content's eles contains anything but numbers
-                        }
-                        {displayCorrectSortButton(index)}
-                      </GridItem>
-                    );
-                  })}
-                </GridContainer>
-                {showContent()}
-              </ParsedTableResultsWrapper>
-            )}
-          </div>
-        </>
-      </ParsedTableWrapper>
+    <ParsedDataTable
+    parsedDataHeaders={parsedDataHeaders}
+    headers={state.headers}
+    content={state.content}
+    arrOfSortBools={state.arrOfSortBools}
+    handleSort={handleSort}
+    />
     </ParsedDataComponentWrapper>
   );
 }
