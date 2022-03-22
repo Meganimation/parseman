@@ -240,6 +240,34 @@ export default function ParsedDataComponent({
     }
   };
 
+  const displayCorrectSortButton = (index: number) => {
+
+      // // if all the elements in state.content are the same
+      // state.content.every((item: any) => {
+      //   return item[index] === state.content[0][index];
+      // }) ? (
+      //   <div>these are all dupes</div>
+      // ) : //is state.content's eles contains anything but numbers
+      // !state.content[0][index].match(/[^0-9]/g) ? (
+      //   renderSortButtonByNumber(index)
+      // ) : null
+
+      let areDupes = state.content.every((item: any) => item[index] === state.content[0][index]);
+
+      if (areDupes) return <div>these are all dupes</div>
+
+      let isNumber = state.content[0][index].match(/[^0-9]/g);
+      if (!isNumber) return <div> this is only numbers</div>
+
+      //if any of the elements contain letters
+      let isLetter = state.content[0][index].match(/[a-zA-Z]/g);
+      if (isLetter) return <div> this has letters, nums, and symbols</div>
+
+      else return <div>i assume this is only numbers and symbols then</div>
+
+
+  }
+
   const renderSortButtonByNumber = (index: number) => {
     return (
       <button
@@ -322,17 +350,7 @@ export default function ParsedDataComponent({
                         {
                           //is state.content's eles contains anything but numbers
                         }
-                        {
-                          // if all the elements in state.content are the same
-                          state.content.every((item: any) => {
-                            return item[index] === state.content[0][index];
-                          }) ? (
-                            <div>these are all dupes</div>
-                          ) : //is state.content's eles contains anything but numbers
-                          !state.content[0][index].match(/[^0-9]/g) ? (
-                            renderSortButtonByNumber(index)
-                          ) : null
-                        }
+                        {displayCorrectSortButton(index)}
                       </GridItem>
                     );
                   })}
