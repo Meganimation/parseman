@@ -60,7 +60,23 @@ const displayCorrectSortButton = (index: number, props: any) => {
   );
   let onlyContainsNumbers = props.content[0][index].match(/[^0-9]/g);
   let containsLetters = props.content[0][index].match(/[a-zA-Z]/g);
+
+  //set a variable where props.content[0] only contains letters from the alphabet and not numbers
+  let onlyContainsLetters = props.content[0][index].match(/[^a-zA-Z]/g);
   if (areAllSameValues) return <div> THESE ARE ALL DUPES</div>;
+  if (onlyContainsLetters && containsLetters)
+    return (
+      <button
+        onClick={(e) => {
+          props.handleAllSort(e, index);
+        }}
+      >
+        CONTAINS LETTERS Sort By
+        {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+      </button>
+    );
+
+
   if (!onlyContainsNumbers)
     return (
       <button
@@ -75,11 +91,11 @@ const displayCorrectSortButton = (index: number, props: any) => {
   if (containsLetters)
     return (
       <button
-        onClick={(e) => {
-          props.handleSort(e, index);
-        }}
+        // onClick={(e) => {
+        //   props.handleAllSort(e, index);
+        // }}
       >
-        CONTAINS LETTERS Sort By
+        CHELLLLO
         {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
       </button>
     );
@@ -87,26 +103,13 @@ const displayCorrectSortButton = (index: number, props: any) => {
     return (
       <button
         onClick={(e) => {
-          props.handleSort(e, index);
+          props.handleNumAndSymSort(e, index);
         }}
       >
         Sort By NUMS AND SYMBOLS
         {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
       </button>
     );
-};
-
-const renderSortButtonByNumber = (index: number, props: any) => {
-  return (
-    <button
-      onClick={(e) => {
-        props.handleSort(e, index);
-      }}
-    >
-      Sort By
-      {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
-    </button>
-  );
 };
 
 function ParsedDataTable(props: IParsedDataComponentProps) {
@@ -138,6 +141,8 @@ interface IParsedDataComponentProps {
   headers: string[];
   content: string[];
   handleSort: (e: any, index: number) => void;
+  handleNumAndSymSort: (e: any, index: number) => void;
+  handleAllSort: any;
   arrOfSortBools: string[];
 }
 

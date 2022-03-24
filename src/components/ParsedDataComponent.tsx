@@ -43,7 +43,6 @@ const StyledEditTemplateWrapper = styled.div`
     }
   }
 }
-
 `;
 
 const StyledModalInput = styled.input`
@@ -52,18 +51,14 @@ const StyledModalInput = styled.input`
       border-radius: 20px;
       shadow: 0px 0px 10px #000000;
       box-shadow: 0px 0px 10px #000000;
-
       position: relative;
       top: -2rem;
-
 
       &:focus {
           outline: none;
           shadow: none;
           box-shadow: none;
       }
-
-
   `;
 
 export interface ISubmitState {
@@ -123,18 +118,12 @@ export default function ParsedDataComponent({
     }
   }, [returnedData, parsedDataRows, parsedDataHeaders, parsedSortBool]);
 
-
-
- 
-
   const handleEditTemplateId = () => {
     //check if input is empty
     if (inputTemplateId === "") return alert("Please enter a template id");
-
     // if input contains spaces
     if (inputTemplateId.includes(" "))
       return alert("You cannot have spaces in your template id");
-
     // if input contains anything but letters and numbers
     if (inputTemplateId.match(/[^a-zA-Z0-9]/g))
       return alert("You can only use letters and numbers in your template id");
@@ -183,6 +172,118 @@ export default function ParsedDataComponent({
       let newArr = tempArr.sort((a: any, b: any) => {
         return b[index] - a[index];
       });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    }
+  };
+
+  const handleNumAndSymSort = (e: unknown, index: number) => {
+    if (state.arrOfSortBools[index] === "descending") {
+      let tempNewSortArr = [];
+      let tempArr: string[] = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("ascending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.push(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        //if a[index] contains anything but a number, remove it and return the new string as a seperate value
+        let aNum = a[index].replace(/[^0-9]/g, "");
+        let bNum = b[index].replace(/[^0-9]/g, "");
+
+        return aNum - bNum;
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    } else if (state.arrOfSortBools[index] === "ascending") {
+      let tempNewSortArr = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("descending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      let tempArr: string[] = [];
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.unshift(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        return b[index] - a[index];
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    }
+  };
+
+  const handleAllSort = (e: unknown, index: number) => {
+    if (state.arrOfSortBools[index] === "descending") {
+      let tempNewSortArr = [];
+      let tempArr: string[] = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("ascending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.push(state.content[i]);
+      }
+      console.log("this one?");
+      let newArr = tempArr.sort((a: any, b: any) => {
+        //This will likely need
+        let aNum = a[index].replace(/[^0-9]/g, "");
+        let bNum = b[index].replace(/[^0-9]/g, "");
+        console.log("one", aNum, bNum);
+
+        return aNum - bNum;
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    } else if (state.arrOfSortBools[index] === "ascending") {
+      let tempNewSortArr = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("descending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      let tempArr: string[] = [];
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.unshift(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        //This will likely need
+        let aNum = a[index].replace(/[^0-9]/g, "");
+        let bNum = b[index].replace(/[^0-9]/g, "");
+        console.log("one", aNum, bNum);
+
+        return bNum - aNum;
+      });
+
+      console.log("hi?");
 
       setState({
         headers: state.headers,
@@ -244,13 +345,15 @@ export default function ParsedDataComponent({
           </InfoBar>
         </>
       )}
-    <ParsedDataTable
-    parsedDataHeaders={parsedDataHeaders}
-    headers={state.headers}
-    content={state.content}
-    arrOfSortBools={state.arrOfSortBools}
-    handleSort={handleSort}
-    />
+      <ParsedDataTable
+        parsedDataHeaders={parsedDataHeaders}
+        headers={state.headers}
+        content={state.content}
+        arrOfSortBools={state.arrOfSortBools}
+        handleSort={handleSort}
+        handleNumAndSymSort={handleNumAndSymSort}
+        handleAllSort={handleAllSort}
+      />
     </ParsedDataComponentWrapper>
   );
 }
