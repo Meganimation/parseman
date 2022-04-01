@@ -133,7 +133,7 @@ export default function ParsedDataComponent({
     setModal(false);
   };
 
-  const handleSort = (e: unknown, index: number) => {
+  const handleNumberSort = (e: unknown, index: number) => {
     if (state.arrOfSortBools[index] === "descending") {
       let tempNewSortArr = [];
 
@@ -196,10 +196,10 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-        //if a[index] contains anything but a number, remove it and return the new string as a seperate value
+
         let aNum = a[index].replace(/[^0-9]/g, "");
         let bNum = b[index].replace(/[^0-9]/g, "");
-
+       
         return aNum - bNum;
       });
 
@@ -222,7 +222,9 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-        return b[index] - a[index];
+        let aNum = a[index].replace(/[^0-9]/g, "");
+        let bNum = b[index].replace(/[^0-9]/g, "");
+        return bNum - aNum;
       });
 
       setState({
@@ -246,12 +248,12 @@ export default function ParsedDataComponent({
       for (let i = 0; i < state.content.length; i++) {
         tempArr.push(state.content[i]);
       }
-      console.log("this one?");
+
       let newArr = tempArr.sort((a: any, b: any) => {
-        //This will likely need
+
         let aNum = a[index].replace(/[^0-9]/g, "");
         let bNum = b[index].replace(/[^0-9]/g, "");
-        console.log("one", aNum, bNum);
+
 
         return aNum - bNum;
       });
@@ -275,15 +277,69 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-        //This will likely need
         let aNum = a[index].replace(/[^0-9]/g, "");
         let bNum = b[index].replace(/[^0-9]/g, "");
-        console.log("one", aNum, bNum);
 
         return bNum - aNum;
       });
 
-      console.log("hi?");
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    }
+  };
+
+  const handleDateSort = (e: unknown, index: number) => {
+    if (state.arrOfSortBools[index] === "descending") {
+      let tempNewSortArr = [];
+      let tempArr: string[] = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("ascending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.push(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+        let testA = new Date(a[index]).getTime()
+        let testB = new Date(b[index]).getTime();
+
+
+        return testB - testA;
+      });
+
+      setState({
+        headers: state.headers,
+        content: newArr,
+        arrOfSortBools: tempNewSortArr,
+      });
+    } else if (state.arrOfSortBools[index] === "ascending") {
+      let tempNewSortArr = [];
+
+      for (let i = 0; i < state.arrOfSortBools.length; i++) {
+        if (index === i) tempNewSortArr.push("descending");
+        else tempNewSortArr.push(state.arrOfSortBools[i]);
+      }
+
+      let tempArr: string[] = [];
+      for (let i = 0; i < state.content.length; i++) {
+        tempArr.unshift(state.content[i]);
+      }
+
+      let newArr = tempArr.sort((a: any, b: any) => {
+
+        let testA = new Date(a[index]).getTime()
+        let testB = new Date(b[index]).getTime();
+
+
+        return testA - testB;
+      });
 
       setState({
         headers: state.headers,
@@ -350,9 +406,10 @@ export default function ParsedDataComponent({
         headers={state.headers}
         content={state.content}
         arrOfSortBools={state.arrOfSortBools}
-        handleSort={handleSort}
+        handleNumberSort={handleNumberSort}
         handleNumAndSymSort={handleNumAndSymSort}
         handleAllSort={handleAllSort}
+        handleDateSort={handleDateSort}
       />
     </ParsedDataComponentWrapper>
   );

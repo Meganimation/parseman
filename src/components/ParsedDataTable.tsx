@@ -54,7 +54,7 @@ const showItems = (content: any) => {
 };
 
 const displayCorrectSortButton = (index: number, props: any) => {
-  //TODO: make the buttons and sort functionalitu for these
+
   let areAllSameValues = props.content.every(
     (item: any) => item[index] === props.content[0][index]
   );
@@ -63,7 +63,25 @@ const displayCorrectSortButton = (index: number, props: any) => {
 
   //set a variable where props.content[0] only contains letters from the alphabet and not numbers
   let onlyContainsLetters = props.content[0][index].match(/[^a-zA-Z]/g);
-  if (areAllSameValues) return <div> THESE ARE ALL DUPES</div>;
+
+  //set a variable that checks if props.content[0] contains ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+  let containsMonths = props.content.every(
+    (item: any) => item[index].toLowerCase().match(
+      /jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g
+    ))
+
+  if (areAllSameValues) return <div> Duplicates Only</div>;
+  if (containsMonths)
+  return (
+    <button
+      onClick={(e) => {
+        props.handleDateSort(e, index);
+      }}
+    >
+      Contains Date
+      {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
+    </button>
+  );
   if (onlyContainsLetters && containsLetters)
     return (
       <button
@@ -71,32 +89,30 @@ const displayCorrectSortButton = (index: number, props: any) => {
           props.handleAllSort(e, index);
         }}
       >
-        CONTAINS LETTERS Sort By
-        {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+        Contains Letters
+        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
       </button>
     );
-
-
   if (!onlyContainsNumbers)
     return (
       <button
         onClick={(e) => {
-          props.handleSort(e, index);
+          props.handleNumberSort(e, index);
         }}
       >
-        ALLNUMS Sort By
-        {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+        Contains Numbers
+        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
       </button>
     );
   if (containsLetters)
     return (
       <button
-        // onClick={(e) => {
-        //   props.handleAllSort(e, index);
-        // }}
+        onClick={(e) => {
+          props.handleAllSort(e, index);
+        }}
       >
-        CHELLLLO
-        {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+        Other
+        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
       </button>
     );
   else
@@ -106,8 +122,8 @@ const displayCorrectSortButton = (index: number, props: any) => {
           props.handleNumAndSymSort(e, index);
         }}
       >
-        Sort By NUMS AND SYMBOLS
-        {props.arrOfSortBools[index] === "ascending" ? "highest" : "lowest"}
+        Contains Numbers and Symbols
+        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
       </button>
     );
 };
@@ -140,8 +156,9 @@ interface IParsedDataComponentProps {
   parsedDataHeaders: string[];
   headers: string[];
   content: string[];
-  handleSort: (e: any, index: number) => void;
+  handleNumberSort: (e: any, index: number) => void;
   handleNumAndSymSort: (e: any, index: number) => void;
+  handleDateSort: any;
   handleAllSort: any;
   arrOfSortBools: string[];
 }
