@@ -93,8 +93,6 @@ function App() {
   ]);
 
 
-  const [test, setTest] = useState(false)
-
   //@ts-ignore
   const scrollToView = () => messagesEndRef.current?.scrollIntoView({
     behavior: "smooth",
@@ -130,6 +128,12 @@ function App() {
     );
 
   const dispatch = useDispatch();
+
+  const handleUpdateLogtail = () => {
+    console.log("Updating logtail");
+    setTailSearch("test")
+    return(alert("Updating logtail.. Maybe update the string of the logtail without updating the searchbar?"))
+  }
 
   const showComponent = (nameOfComponents: any) => {
     switch (nameOfComponents) {
@@ -290,6 +294,7 @@ function App() {
                   wordCloudIsVisible={wordCloudIsVisible}
                   handleLogtailPagination={handleLogtailPagination}
                   templateVersion={templateVersion}
+                  
                 />
               </ComponentWindow>
             )}
@@ -322,6 +327,7 @@ function App() {
                   error={templateError}
                   handleCheckedRadio={handleCheckedRadio}
                   checkedTemplateId={checkedTemplateId}
+                  handleUpdateLogtail={handleUpdateLogtail}
                 />
               </ComponentWindow>
             )}

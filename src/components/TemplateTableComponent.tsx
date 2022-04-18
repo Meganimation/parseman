@@ -109,6 +109,7 @@ export default function TemplateTableComponent(
     wordCloudIsVisible,
     handleCheckedRadio,
     checkedTemplateId,
+    handleUpdateLogtail, 
     error,
   } = props;
 
@@ -188,6 +189,7 @@ export default function TemplateTableComponent(
             return (
               <TableWrapper
                 darkMode={darkMode}
+                onMouseUp={() => {handleUpdateLogtail()}}
                 onClick={() => {
                   handleCheckedRadio(
                     data.templateId,
@@ -237,4 +239,5 @@ interface TemplateTableComponentProps {
   error: boolean;
   handlePagination: () => void;
   hasMore: boolean;
+  handleUpdateLogtail: any;
 }
