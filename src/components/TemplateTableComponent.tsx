@@ -190,7 +190,7 @@ export default function TemplateTableComponent(
               <TableWrapper
                 darkMode={darkMode}
                 onMouseUp={() => {handleUpdateLogtail()}}
-                onClick={() => {
+                onMouseDown={() => {
                   handleCheckedRadio(
                     data.templateId,
                     data.templateVersion,

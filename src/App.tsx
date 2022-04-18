@@ -77,7 +77,6 @@ function App() {
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
   const [tailSearch, setTailSearch] = useState("");
-  const [newTailSearch, setNewTailSearch] = useState("");
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
@@ -117,8 +116,7 @@ function App() {
       selectedStartDateAndTime,
       selectedEndDateAndTime,
       tailSearch,
-      logtailPageAmount,
-      newTailSearch
+      logtailPageAmount
     );
 
   const { loadingWordCloudData, wordCloudData, wordCloudError } =
@@ -132,11 +130,9 @@ function App() {
   const dispatch = useDispatch();
 
   const handleUpdateLogtail = () => {
-    console.log("Updating logtail", newTailSearch);
-    //get a new tail search eg. tempTailSearch
-    //set the new tail search to the templateId
-    setNewTailSearch('%20AND%20TemplateId='+checkedTemplateId);
-    console.log("Updated logtail", newTailSearch);
+    let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
+
+    updateTailSearchResultsHandler(filterAddOnValue);
 
   }
 
@@ -158,17 +154,7 @@ function App() {
   };
 
   const handleParsedDataRendering = () => {
-
     fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
-    if (tailSearch.includes("AND") && tailSearch.includes(checkedTemplateId)) {
-      return console.log("breaking");
-    }
-    let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
-
-    updateTailSearchResultsHandler(filterAddOnValue);
-
-  // alert('wtf')
-
     setParsedDataIsVisible(true);
   };
 
