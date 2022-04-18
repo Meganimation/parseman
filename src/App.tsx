@@ -77,6 +77,7 @@ function App() {
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
   const [tailSearch, setTailSearch] = useState("");
+  const [newTailSearch, setNewTailSearch] = useState("");
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
@@ -116,7 +117,8 @@ function App() {
       selectedStartDateAndTime,
       selectedEndDateAndTime,
       tailSearch,
-      logtailPageAmount
+      logtailPageAmount,
+      newTailSearch
     );
 
   const { loadingWordCloudData, wordCloudData, wordCloudError } =
@@ -130,9 +132,12 @@ function App() {
   const dispatch = useDispatch();
 
   const handleUpdateLogtail = () => {
-    console.log("Updating logtail");
-    setTailSearch("test")
-    return(alert("Updating logtail.. Maybe update the string of the logtail without updating the searchbar?"))
+    console.log("Updating logtail", newTailSearch);
+    //get a new tail search eg. tempTailSearch
+    //set the new tail search to the templateId
+    setNewTailSearch('%20AND%20TemplateId='+checkedTemplateId);
+    console.log("Updated logtail", newTailSearch);
+
   }
 
   const showComponent = (nameOfComponents: any) => {
