@@ -244,6 +244,11 @@ function App() {
     setTailSearch(value);
   };
 
+  const goBackOnTailSearch = () => {
+    setCheckedTemplateId("");
+    setTailSearch("");
+  }
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -295,15 +300,19 @@ function App() {
               <ComponentWindow
                 darkMode={darkMode}
                 headerHeight="4vh"
-                button={checkedTemplateId ? true : false}
+                buttonTwo={checkedTemplateId ? true : false}
                 title={"Template List"}
-                buttonText="Parse Data"
-                onButtonMouseUp={()=>{scrollToBottom()}}
-                onButtonClick={() => {
+                buttonTwoText="Parse Data"
+                onButtonTwoMouseUp={()=>{scrollToBottom()}}
+                onButtonTwoClick={() => {
                   checkedTemplateId
                     ? handleParsedDataRendering()
                     : alert("Please select a template");
                 }}
+                buttonOneText="Go Back"
+                buttonOne={checkedTemplateId  ? true : false}
+                onButtonOneClick={() => {goBackOnTailSearch()}}
+          
                 onExit={() => {
                   setTemplateIsVisible(false);
                 }}
@@ -347,9 +356,9 @@ function App() {
         <ComponentWindow
           darkMode={darkMode}
           title={"Parsed Data Table"}
-          button
-          buttonText="Favorite"
-          onButtonClick={() => {
+          buttonOne
+          buttonOneText="Favorite"
+          onButtonOneClick={() => {
             setModal(true);
           }}
         >

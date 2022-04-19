@@ -10,12 +10,16 @@ interface ComponentWindowProps {
   onExit?: any;
   width?: string;
   title?: string;
-  button?: boolean;
-  buttonText?: any;
-  onButtonClick?: () => void;
   headerHeight?: string;
   handleCheckedData?: any;
-  onButtonMouseUp?: () => void;
+  buttonOne?: boolean;
+  buttonOneText?: any;
+  onButtonOneClick?: () => void;
+  onButtonOneMouseUp?: () => void;
+  buttonTwo?: boolean;
+  buttonTwoText?: any;
+  onButtonTwoClick?: () => void;
+  onButtonTwoMouseUp?: () => void;
 }
 
 const ComponentWindowWrapper = styled.section`
@@ -75,10 +79,15 @@ export const ComponentWindow = ({
   children = "this could be anything",
   width = "auto",
   title = "None",
-  buttonText = "button",
   headerHeight = "auto",
-  onButtonClick = () => {},
-  onButtonMouseUp = () => {},
+
+  buttonOneText = "button",
+  onButtonOneClick = () => {},
+  onButtonOneMouseUp = () => {},
+
+  buttonTwoText = "button",
+  onButtonTwoClick = () => {},
+  onButtonTwoMouseUp = () => {},
   onExit = null,
   ...props
 }: ComponentWindowProps) => {
@@ -100,12 +109,22 @@ export const ComponentWindow = ({
         ) : (
           <FakeDiv>.</FakeDiv>
         )}
-        {props.button && (
+        {props.buttonOne && (
           <ButtonWrapper>
             <Button
-              onClick={onButtonClick}
-              onMouseUp={onButtonMouseUp}
-              label={buttonText}
+              onClick={onButtonOneClick}
+              onMouseUp={onButtonOneMouseUp}
+              label={buttonOneText}
+              fontSize="12px"
+            />
+          </ButtonWrapper>
+        )}
+          {props.buttonTwo && (
+          <ButtonWrapper>
+            <Button
+              onClick={onButtonTwoClick}
+              onMouseUp={onButtonTwoMouseUp}
+              label={buttonTwoText}
               fontSize="12px"
             />
           </ButtonWrapper>
