@@ -26,23 +26,23 @@ const showContent = (props: any) => {
     return (
       <GridContainer
         onClick={() => {
-          alert(index);
+          // alert(index);
         }}
       >
-        {showItems(content)}
+        {showItems(content, props)}
       </GridContainer>
     );
   });
 };
 
-const showItems = (content: any) => {
+const showItems = (content: any, props: any) => {
   if (content.length === 0) return <p>No data</p>;
   else {
     return content.map((item: any, index: any) => {
       return (
         <GridItem
           onClick={() => {
-            alert(index);
+            props.highlightOnTemplateLiteral(index, item)
           }}
           key={index}
         >
@@ -52,6 +52,7 @@ const showItems = (content: any) => {
     });
   }
 };
+
 
 const displayCorrectSortButton = (index: number, props: any) => {
 
@@ -161,6 +162,8 @@ interface IParsedDataComponentProps {
   handleDateSort: any;
   handleAllSort: any;
   arrOfSortBools: string[];
+  postNewTemplateId: any;
+  highlightOnTemplateLiteral: any;
 }
 
 export default ParsedDataTable;

@@ -249,6 +249,73 @@ function App() {
     setTailSearch("");
   }
 
+  const postNewHeaderName = () => {
+
+
+    // let j = 0;
+    // let localHeadersArr: string[] = [];
+
+    // while (j < returnedData.headers.length) {
+    //   let localHeaders = document.getElementById(`header${j}`)!.innerText;
+    //   localHeadersArr = [...localHeadersArr, localHeaders];
+    //   const requestOptions = {
+    //     method: "PUT",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       listFields: [
+    //         {
+    //           fieldAlias: localHeadersArr[j], //the updated name (eg. NUM_+0)
+    //           fieldName: props.headers[j], // the original name (eg. TEST)
+    //         },
+    //       ],
+    //     }),
+    //   };
+    //   j++;
+    //   fetch(
+    //     `http://10.12.2.95:8082/customize-template-field/${checkedTemplateId}/${templateVersion}`,
+    //     requestOptions
+    //   )
+    //     .then((response) => response.json())
+    //     .then((data) => console.log(data));
+    // }
+}
+
+const postNewTemplateId = (inputTemplateId: string) => {
+
+console.log('one second...', inputTemplateId)
+
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        templateNameAlias: inputTemplateId, // validator , will not PUT if already exists in database testestest
+      }),
+    };
+    fetch(
+      `http://10.12.2.95:8082/customize-template-id/${checkedTemplateId}/${templateVersion}`,
+      requestOptions
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(
+            `Error code: ${res.status}. That template id probably already exists. Please try again.`
+          );
+        }
+        return res.json();
+      })
+      .then((response) => response.json())
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+}
+
+const updateTemplateLiteral = (newTemplateLiteral: any) => {
+
+
+  setCheckedTemplateLiteral(newTemplateLiteral)
+}
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -368,6 +435,8 @@ function App() {
               darkMode={darkMode}
               handleExit={handleExit}
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}
+              postNewTemplateId={postNewTemplateId}
+              updateTemplateLiteral={updateTemplateLiteral}
             />
           </div>
         </ComponentWindow>

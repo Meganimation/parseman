@@ -74,6 +74,7 @@ export default function ParsedDataComponent({
   darkMode = false,
   handleExit = () => {},
   parsedSideInfoIsVisible = true,
+  postNewTemplateId = () => {},
   ...props
 }: IParsedDataComponentProps) {
   const returnedData: any = useSelector(
@@ -131,6 +132,8 @@ export default function ParsedDataComponent({
     setLocalTemplateId(inputTemplateId);
 
     setModal(false);
+
+    postNewTemplateId(inputTemplateId);
   };
 
   const handleNumberSort = (e: unknown, index: number) => {
@@ -349,6 +352,19 @@ export default function ParsedDataComponent({
     }
   };
 
+  const highlightOnTemplateLiteral =(headerIndex: number, headerString: string) => {
+
+    const targetedHeaderString = state.headers[headerIndex][0]
+
+    console.log(props.checkedTemplateLiteral)
+
+    //get the string of props.checkedTemplateLiteral and where targetedHeaderString is in the string, replace it with 'HELLO' 
+    let newString = props.checkedTemplateLiteral.replace(`<<<${targetedHeaderString}>>>`, headerString)
+
+
+    props.updateTemplateLiteral(newString)
+  }
+
   return (
     <ParsedDataComponentWrapper>
       {parsedSideInfoIsVisible && (
@@ -396,7 +412,7 @@ export default function ParsedDataComponent({
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
-              <p>{props.checkedTemplateLiteral}</p>
+              <p className='templateLiteral'>{props.checkedTemplateLiteral}</p>
             </InfoItem>
           </InfoBar>
         </>
@@ -410,6 +426,9 @@ export default function ParsedDataComponent({
         handleNumAndSymSort={handleNumAndSymSort}
         handleAllSort={handleAllSort}
         handleDateSort={handleDateSort}
+        postNewTemplateId={postNewTemplateId}
+        highlightOnTemplateLiteral={highlightOnTemplateLiteral}
+
       />
     </ParsedDataComponentWrapper>
   );
@@ -431,4 +450,6 @@ interface IParsedDataComponentProps {
   handleExit: () => void;
   parsedSideInfoIsVisible: boolean;
   checkedTemplateLiteral: string;
+  postNewTemplateId: any;
+  updateTemplateLiteral: any;
 }
