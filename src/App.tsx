@@ -281,9 +281,6 @@ function App() {
 }
 
 const postNewTemplateId = (inputTemplateId: string) => {
-
-console.log('one second...', inputTemplateId)
-
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -311,8 +308,6 @@ console.log('one second...', inputTemplateId)
 }
 
 const updateTemplateLiteral = (newTemplateLiteral: any) => {
-
-
   setCheckedTemplateLiteral(newTemplateLiteral)
 }
 
