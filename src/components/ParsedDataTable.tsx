@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Tooltip from "stories/Tooltip/Tooltip";
 
 const ParsedTableWrapper = styled.div`
   height: 100%;
@@ -19,30 +20,8 @@ const GridItem = styled.div`
   text-align: left;
   min-width: 150px;
   word-break: break-word;
-
-  div {
-    display: none;
-    opacity: 0;
-  }
-
-  &:hover {
-    div {
-      display: block;
-      position: relative;
-      top: 1%;
-    
-      background: rgba(51, 170, 51, 1);
-      height: 100px;
-      z-index: 999999999;
-      opacity: 0.9;
-    }
-    height: 0px;
   }
 `;
-
-const Tooltip = styled.div`
- 
-`
 
 const showContent = (props: any) => {
   return props.content.map((content: string, index: number) => {
@@ -59,31 +38,44 @@ const showContent = (props: any) => {
 };
 
 const showItems = (content: any, props: any) => {
+
+  const totalQtyOfItemValue = (value: string, index: any) => {
+
+   //check to see if value is in props.content[index] and if so how many times
+    let totalQtyOfItem = 0;
+    for (let i = 0; i < props.content.length; i++) {
+      if (props.content[i].includes(value)) {
+        totalQtyOfItem++;
+      }
+    }
+    return totalQtyOfItem;
+
+
+  }
+
+
   if (content.length === 0) return <p>No data</p>;
   else {
     return content.map((item: any, index: any) => {
-      return (<>
-
-        <GridItem
-          onClick={() => {
-            props.highlightOnTemplateLiteral(index, item)
-          }}
-          key={index}
-        >
-                 
-         
-          {item}
-          <Tooltip> Amount of Duplicates: 33</Tooltip>
-        </GridItem>
+      return (
+        <>
+          <GridItem
+            onClick={() => {
+              props.highlightOnTemplateLiteral(index, item);
+            }}
+            key={index}
+          >
+            <Tooltip tooltipComponent={<div>total qty: {totalQtyOfItemValue(item, index)}</div>}>
+              <div> {item} </div>
+            </Tooltip>
+          </GridItem>
         </>
       );
     });
   }
 };
 
-
 const displayCorrectSortButton = (index: number, props: any) => {
-
   let areAllSameValues = props.content.every(
     (item: any) => item[index] === props.content[0][index]
   );
@@ -94,23 +86,24 @@ const displayCorrectSortButton = (index: number, props: any) => {
   let onlyContainsLetters = props.content[0][index].match(/[^a-zA-Z]/g);
 
   //set a variable that checks if props.content[0] contains ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-  let containsMonths = props.content.every(
-    (item: any) => item[index].toLowerCase().match(
-      /jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g
-    ))
+  let containsMonths = props.content.every((item: any) =>
+    item[index]
+      .toLowerCase()
+      .match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g)
+  );
 
   if (areAllSameValues) return <p> Duplicates Only</p>;
   if (containsMonths)
-  return (
-    <button
-      onClick={(e) => {
-        props.handleDateSort(e, index);
-      }}
-    >
-      Contains Date
-      {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-    </button>
-  );
+    return (
+      <button
+        onClick={(e) => {
+          props.handleDateSort(e, index);
+        }}
+      >
+        Contains Date
+        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
+      </button>
+    );
   if (onlyContainsLetters && containsLetters)
     return (
       <button
@@ -180,7 +173,6 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     </ParsedTableWrapper>
   );
 }
-
 
 interface IParsedDataComponentProps {
   parsedDataHeaders: string[];
