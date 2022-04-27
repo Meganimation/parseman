@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Tooltip from "stories/Tooltip/Tooltip";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "slices/store";
+
 
 const ParsedTableWrapper = styled.div`
   height: 100%;
@@ -23,28 +26,31 @@ const GridItem = styled.div`
   }
 `;
 
-const showContent = (props: any) => {
+const showContent = (props: any, testSomething: any) => {
   return props.content.map((content: string, index: number) => {
     return (
       <GridContainer
 
       >
-        {showItems(content, props)}
+        {showItems(content, props, testSomething)}
       </GridContainer>
     );
   });
 };
 
-const showItems = (content: any, props: any) => {
+const showItems = (content: any, props: any, testSomething: any) => {
+
 
   const totalQtyOfItemValue = (value: string, index: any) => {
-
     let totalQtyOfItem = 0;
-    for (let i = 0; i < props.content.length; i++) {
-      if (props.content[i].includes(value)) {
+    console.log(testSomething[props.headers[index][0]]);
+
+    for (let i = 0; i < testSomething[props.headers[index][0]].length; i++) {
+      if (testSomething[props.headers[index][0]][i] === value) {
         totalQtyOfItem++;
       }
     }
+
     return totalQtyOfItem;
   }
 
@@ -152,6 +158,12 @@ const displayCorrectSortButton = (index: number, props: any) => {
 };
 
 function ParsedDataTable(props: IParsedDataComponentProps) {
+
+  const testSomething: any = useSelector(
+    (state: RootState) => state.returnedData.ALL_DATA
+  );
+
+
   return (
     <ParsedTableWrapper>
       {!props.parsedDataHeaders ? (
@@ -168,7 +180,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
               );
             })}
           </GridContainer>
-          {showContent(props)}
+          {showContent(props, testSomething)}
         </ParsedTableResultsWrapper>
       )}
     </ParsedTableWrapper>

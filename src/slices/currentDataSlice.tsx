@@ -62,7 +62,7 @@ export const CurrentDataSlice = createSlice({
       }
     },
     testSomething: (state, action: PayloadAction<any>) => {
-      state.ALL_DATA = action.payload;
+     
       console.log('hey', state.ALL_DATA);
 
       const tempHash: any = {};
@@ -82,7 +82,7 @@ export const CurrentDataSlice = createSlice({
    
 
 
-      console.log(tempHash, 'temp');
+        state.ALL_DATA = tempHash
       }
       
     },
