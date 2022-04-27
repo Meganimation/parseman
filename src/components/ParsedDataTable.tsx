@@ -27,9 +27,7 @@ const showContent = (props: any) => {
   return props.content.map((content: string, index: number) => {
     return (
       <GridContainer
-        onClick={() => {
-          alert(index);
-        }}
+
       >
         {showItems(content, props)}
       </GridContainer>
@@ -41,7 +39,6 @@ const showItems = (content: any, props: any) => {
 
   const totalQtyOfItemValue = (value: string, index: any) => {
 
-   //check to see if value is in props.content[index] and if so how many times
     let totalQtyOfItem = 0;
     for (let i = 0; i < props.content.length; i++) {
       if (props.content[i].includes(value)) {
@@ -49,8 +46,6 @@ const showItems = (content: any, props: any) => {
       }
     }
     return totalQtyOfItem;
-
-
   }
 
 
@@ -61,8 +56,14 @@ const showItems = (content: any, props: any) => {
         <>
           <GridItem
             onClick={() => {
-              props.highlightOnTemplateLiteral(index, item);
+              props.replaceTemplateLiteral(index, item);
             }}
+            // onMouseOver={() => {
+            //   props.highlightOnTemplateLiteral(index, true);
+            // }}
+            // onMouseOut={() => {
+            //   props.highlightOnTemplateLiteral(index, false);
+            // }}
             key={index}
           >
             <Tooltip tooltipComponent={<div>total qty: {totalQtyOfItemValue(item, index)}</div>}>
@@ -184,6 +185,7 @@ interface IParsedDataComponentProps {
   handleAllSort: any;
   arrOfSortBools: string[];
   postNewTemplateId: any;
+  replaceTemplateLiteral: any;
   highlightOnTemplateLiteral: any;
 }
 

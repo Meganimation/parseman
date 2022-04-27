@@ -15,7 +15,7 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 import { useDispatch } from "react-redux";
-import { convertToParsed } from "./slices/currentDataSlice";
+import { convertToParsed, testSomething} from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
@@ -82,6 +82,7 @@ function App() {
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
   const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
+  const [templatePageAmount, setTemplatePageAmount] = useState(50);
 
   const messagesEndRef = useRef(null);
 
@@ -99,7 +100,7 @@ function App() {
   }) 
 
 
-  const [templatePageAmount, setTemplatePageAmount] = React.useState(50);
+  const [parsedDataPageAmount, setParsedDataPageAmount] = React.useState(1000);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
   const { loadingTemplateData, templateData, templateError, templateHasMore } =
@@ -188,7 +189,7 @@ function App() {
       "parsedDataTable"
     );
 
-    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=50`;
+    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=${parsedDataPageAmount}`;
 
     fetch(urlWithString)
       .then((res) => {
@@ -199,6 +200,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToParsed(data));
+        dispatch(testSomething(data));
       })
       .catch((err) => {
         console.log(err.message);

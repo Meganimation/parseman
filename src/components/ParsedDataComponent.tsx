@@ -352,18 +352,44 @@ export default function ParsedDataComponent({
     }
   };
 
-  const highlightOnTemplateLiteral =(headerIndex: number, headerString: string) => {
+  const replaceTemplateLiteral =(headerIndex: number, headerString: string) => {
 
     const targetedHeaderString = state.headers[headerIndex][0]
 
     console.log(props.checkedTemplateLiteral)
 
     //get the string of props.checkedTemplateLiteral and where targetedHeaderString is in the string, replace it with 'HELLO' 
-    let newString = props.checkedTemplateLiteral.replace(`<<<${targetedHeaderString}>>>`, headerString)
+    let newString = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString.toLowerCase()}<<<`, headerString)
 
 
     props.updateTemplateLiteral(newString)
   }
+
+  const highlightOnTemplateLiteral =(headerIndex: number, mouseOver: boolean) => {
+ if (mouseOver) {
+    const targetedHeaderString = state.headers[headerIndex][0]
+
+    console.log(props.checkedTemplateLiteral)
+
+//this is for when you hover on the header
+    let newString2 = props.checkedTemplateLiteral.replace(`<<<${targetedHeaderString}>>>`, `>>>${targetedHeaderString.toLowerCase()}<<<`)
+
+
+    props.updateTemplateLiteral(newString2)
+ }
+ if (!mouseOver) {
+  const targetedHeaderString = state.headers[headerIndex][0]
+
+  console.log(props.checkedTemplateLiteral)
+
+//this is for when you hover on the header
+let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString.toLowerCase()}<<<`, `<<<${targetedHeaderString}>>>`)
+
+
+  props.updateTemplateLiteral(newString2)
+}
+  }
+
 
   return (
     <ParsedDataComponentWrapper>
@@ -427,6 +453,7 @@ export default function ParsedDataComponent({
         handleAllSort={handleAllSort}
         handleDateSort={handleDateSort}
         postNewTemplateId={postNewTemplateId}
+        replaceTemplateLiteral={replaceTemplateLiteral}
         highlightOnTemplateLiteral={highlightOnTemplateLiteral}
 
       />
