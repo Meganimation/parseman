@@ -15,7 +15,7 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 import { useDispatch } from "react-redux";
-import { convertToParsed, testSomething} from "./slices/currentDataSlice";
+import { convertToParsed, hashedData} from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
@@ -200,7 +200,7 @@ function App() {
       })
       .then((data) => {
         dispatch(convertToParsed(data));
-        dispatch(testSomething(data));
+        dispatch(hashedData(data));
       })
       .catch((err) => {
         console.log(err.message);

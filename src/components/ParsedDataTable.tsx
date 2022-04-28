@@ -4,7 +4,6 @@ import Tooltip from "stories/Tooltip/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "slices/store";
 
-
 const ParsedTableWrapper = styled.div`
   height: 100%;
   width: 100%;
@@ -26,59 +25,52 @@ const GridItem = styled.div`
   }
 `;
 
-const showContent = (props: any, testSomething: any) => {
-  return props.content.map((content: string, index: number) => {
-    return (
-      <GridContainer
+const loopThroughRows = (props: any, hashedData: any) => {
+  let arr = [];
 
-      >
-        {showItems(content, props, testSomething)}
-      </GridContainer>
+  for (let i = 0; i < props.content.length; i++) {
+    arr.push(
+      <GridContainer>{showItems(props.content[i], props, hashedData)}</GridContainer>
     );
-  });
+  }
+  return arr;
 };
 
-const showItems = (content: any, props: any, testSomething: any) => {
-
-
+const showItems = (content: any, props: any, hashedData: any) => {
   const totalQtyOfItemValue = (value: string, index: any) => {
     let totalQtyOfItem = 0;
-    console.log(testSomething[props.headers[index][0]]);
 
-    for (let i = 0; i < testSomething[props.headers[index][0]].length; i++) {
-      if (testSomething[props.headers[index][0]][i] === value) {
+    for (let i = 0; i < hashedData[props.headers[index][0]].length; i++) {
+      if (hashedData[props.headers[index][0]][i] === value) {
         totalQtyOfItem++;
       }
     }
 
     return totalQtyOfItem;
-  }
-
+  };
 
   if (content.length === 0) return <p>No data</p>;
   else {
-    return content.map((item: any, index: any) => {
-      return (
-        <>
-          <GridItem
-            onClick={() => {
-              props.replaceTemplateLiteral(index, item);
-            }}
-            // onMouseOver={() => {
-            //   props.highlightOnTemplateLiteral(index, true);
-            // }}
-            // onMouseOut={() => {
-            //   props.highlightOnTemplateLiteral(index, false);
-            // }}
-            key={index}
+    let arr = []
+    for (let i = 0; i < content.length; i++) {
+      arr.push(
+        <GridItem
+          onClick={() => {
+            props.replaceTemplateLiteral(i, content[i]);
+          }}
+          key={i}
+        >
+          <Tooltip
+            tooltipComponent={
+              <div>total qty: {totalQtyOfItemValue(content[i], i)}</div>
+            }
           >
-            <Tooltip tooltipComponent={<div>total qty: {totalQtyOfItemValue(item, index)}</div>}>
-              <div> {item} </div>
-            </Tooltip>
-          </GridItem>
-        </>
-      );
-    });
+            <div> {content[i]}</div>
+          </Tooltip>
+        </GridItem>
+      )
+    }
+    return arr;
   }
 };
 
@@ -158,29 +150,44 @@ const displayCorrectSortButton = (index: number, props: any) => {
 };
 
 function ParsedDataTable(props: IParsedDataComponentProps) {
-
-  const testSomething: any = useSelector(
-    (state: RootState) => state.returnedData.ALL_DATA
+  const hashedData: any = useSelector(
+    (state: RootState) => state.returnedData.HASHED_DATA
   );
 
+  const parsedDataIsLoading = useSelector(
+    (state: RootState) => state.returnedData.parsedDataIsLoading
+  );
+
+  const loopThroughHeaders = (props: any) => {
+    let arr = [];
+    for (let i = 0; i < props.headers.length; i++) {
+      arr.push(
+        <GridItem>
+          <p
+            onMouseOver={() => {
+              props.highlightOnTemplateLiteral(i, true);
+            }}
+            onMouseOut={() => {
+              props.highlightOnTemplateLiteral(i, false);
+            }}
+          >
+            {props.headers[i][0]}
+          </p>
+          {displayCorrectSortButton(i, props)}
+        </GridItem>
+      );
+    }
+    return arr;
+  };
 
   return (
     <ParsedTableWrapper>
-      {!props.parsedDataHeaders ? (
+      {props.parsedDataHeaders.length < 1 ? (
         <p>Loading...</p>
       ) : (
         <ParsedTableResultsWrapper>
-          <GridContainer>
-            {props.headers.map((header: string, index: number) => {
-              return (
-                <GridItem key={index}>
-                  {header}
-                  {displayCorrectSortButton(index, props)}
-                </GridItem>
-              );
-            })}
-          </GridContainer>
-          {showContent(props, testSomething)}
+          <GridContainer>{loopThroughHeaders(props)}</GridContainer>
+          {loopThroughRows(props, hashedData)}
         </ParsedTableResultsWrapper>
       )}
     </ParsedTableWrapper>

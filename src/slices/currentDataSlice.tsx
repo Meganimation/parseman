@@ -6,7 +6,8 @@ export interface CurrentDataSliceState {
   parsedDataHeaders: string[] | string;
   hashedParsedData: any;
   parsedSortBool: any;
-  ALL_DATA: any;
+  HASHED_DATA: any;
+  parsedDataIsLoading: boolean;
 }
 
 const initialState: CurrentDataSliceState = {
@@ -15,7 +16,8 @@ const initialState: CurrentDataSliceState = {
   parsedDataHeaders: [],
   parsedSortBool: [],
   hashedParsedData: {},
-  ALL_DATA: [],
+  parsedDataIsLoading: false, 
+  HASHED_DATA: [],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -23,18 +25,24 @@ export const CurrentDataSlice = createSlice({
   initialState,
   reducers: {
     convertToParsed: (state, action: PayloadAction<any>) => {
-      let {host, recordId, templateId, timestamp, version} = action.payload
-      state.parsedDataSidebarInfo = [host, recordId, templateId, timestamp, version]
+      let { host, recordId, templateId, timestamp, version } = action.payload;
+      state.parsedDataSidebarInfo = [
+        host,
+        recordId,
+        templateId,
+        timestamp,
+        version,
+      ];
       state.parsedDataSidebarInfo = action.payload;
       let arrOfRows: string[] = [];
       let arrOfHeaders: string[] = [];
       let arrOfSortBool: any[] = [];
       const tempHash: any = {};
-
+      state.parsedDataIsLoading = true;
       for (let i = 0; i < 50; i++) {
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
-        const tempSortArr: any  = [];
+        const tempSortArr: any = [];
         const arrayOfLines = action.payload.lines[i].itemBody;
         for (let i = 0; i < arrayOfLines.length; i++) {
           if (!tempHash[arrayOfLines[i].bodyHeader]) {
@@ -43,32 +51,29 @@ export const CurrentDataSlice = createSlice({
           tempHash[arrayOfLines[i].bodyHeader] = tempHash[
             arrayOfLines[i].bodyHeader
           ].concat(arrayOfLines[i].bodyValue);
-          tempSortArr.push('descending')
+          tempSortArr.push("descending");
           tempArr.push(arrayOfLines[i].bodyValue);
-          tempArrOfHeaders.push([arrayOfLines[i].bodyHeader]); 
+          tempArrOfHeaders.push([arrayOfLines[i].bodyHeader]);
         }
 
         arrOfRows = [...arrOfRows, tempArr];
         arrOfHeaders = [tempArrOfHeaders];
-        arrOfSortBool = tempSortArr
-   
+        arrOfSortBool = tempSortArr;
 
-      state.parsedDataRows = arrOfRows;
-      state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))[0];
-      state.hashedParsedData = tempHash;
-      state.parsedSortBool = arrOfSortBool;
-
-      console.log(tempHash, 'temp');
+        state.parsedDataRows = arrOfRows;
+        state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))[0];
+        state.hashedParsedData = tempHash;
+        state.parsedSortBool = arrOfSortBool;
+        state.parsedDataIsLoading = false;
       }
     },
-    testSomething: (state, action: PayloadAction<any>) => {
-     
-      console.log('hey', state.ALL_DATA);
+    hashedData: (state, action: PayloadAction<any>) => {
+      console.log("hey", state.HASHED_DATA);
 
       const tempHash: any = {};
 
-      for (let i = 0; i < 500; i++) {
-;
+      for (let i = 0; i < 50; i++) {
+        //change the 50 to action.payload.lines.length once we have redone all the sort functionalities
         const arrayOfLines = action.payload.lines[i].itemBody;
         for (let i = 0; i < arrayOfLines.length; i++) {
           if (!tempHash[arrayOfLines[i].bodyHeader]) {
@@ -79,16 +84,12 @@ export const CurrentDataSlice = createSlice({
           ].concat(arrayOfLines[i].bodyValue);
         }
 
-   
-
-
-        state.ALL_DATA = tempHash
+        state.HASHED_DATA = tempHash;
       }
-      
     },
   },
 });
 
-export const { convertToParsed, testSomething } = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData } = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;
