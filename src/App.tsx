@@ -291,13 +291,13 @@ const postNewTemplateId = (inputTemplateId: string) => {
       }),
     };
     fetch(
-      `http://10.12.2.95:8082/customize-template-id/${checkedTemplateId}/${templateVersion}`,
+      `http://10.12.2.242:8081/customize-template-id/${checkedTemplateId}/${templateVersion}`,
       requestOptions
     )
       .then((res) => {
         if (!res.ok) {
           throw Error(
-            `Error code: ${res.status}. That template id probably already exists. Please try again.`
+            `Error code: ${res.status}. That templateId probably already has a nickname. Try again`
           );
         }
         return res.json();

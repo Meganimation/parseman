@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Tooltip from "stories/Tooltip/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
+import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
 
 const ParsedTableWrapper = styled.div`
@@ -22,6 +23,15 @@ const GridItem = styled.div`
   text-align: left;
   min-width: 150px;
   word-break: break-word;
+  }
+`;
+
+const StyledEditIcon = styled(EditIcon)`
+  cursor: pointer;
+  opacity: 50%;
+
+  &:hover {
+    opacity: 100%;
   }
 `;
 
@@ -163,7 +173,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     for (let i = 0; i < props.headers.length; i++) {
       arr.push(
         <GridItem>
-          <p
+          <span //move these onMouse functions to the template literal so the user hovers over them it hightlights the column
             onMouseOver={() => {
               props.highlightOnTemplateLiteral(i, true);
             }}
@@ -171,8 +181,8 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
               props.highlightOnTemplateLiteral(i, false);
             }}
           >
-            {props.headers[i][0]}
-          </p>
+            {props.headers[i][0]} <StyledEditIcon style={{ transform: "scale(0.6)" }} />
+          </span>
           {displayCorrectSortButton(i, props)}
         </GridItem>
       );

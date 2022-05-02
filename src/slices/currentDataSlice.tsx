@@ -73,7 +73,6 @@ export const CurrentDataSlice = createSlice({
       const tempHash: any = {};
 
       for (let i = 0; i < 50; i++) {
-        //change the 50 to action.payload.lines.length once we have redone all the sort functionalities
         const arrayOfLines = action.payload.lines[i].itemBody;
         for (let i = 0; i < arrayOfLines.length; i++) {
           if (!tempHash[arrayOfLines[i].bodyHeader]) {
