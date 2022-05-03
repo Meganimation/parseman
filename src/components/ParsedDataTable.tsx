@@ -183,7 +183,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     for (let i = 0; i < props.headers.length; i++) {
       arr.push(
         <>
-          <GridItem onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])}>
+          <GridItem >
             <span 
             // onMouseOver={() => {
             //   props.highlightOnTemplateLiteral(i, true);
@@ -193,7 +193,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
             // }}
             >
               {props.headers[i][0]}{" "}
-              <StyledEditIcon style={{ transform: "scale(0.6)" }} />
+              <StyledEditIcon style={{ transform: "scale(0.6)" }} onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])} />
             </span>
             {displayCorrectSortButton(i, props)}
           </GridItem>

@@ -117,7 +117,7 @@ export const Modal = ({
   editMode = false,
   top = 0,
   left = 0,
-  title = "Modal Title",
+  title = "",
   onExit = () => {},
   children = "this could be anything",
   height = "70vh",
