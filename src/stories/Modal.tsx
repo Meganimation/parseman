@@ -14,6 +14,12 @@ interface ModalProps {
   height?: string;
   titleFontSize?: string;
   onEditSubmit?: any;
+  top?: any;
+  left?: any;
+  hasBackground?: boolean;
+  placeholder?: string;
+  inputValue?: string;
+  onInputChange?: any;
 }
 
 const StyledModal = styled.section`
@@ -27,8 +33,8 @@ const StyledModal = styled.section`
   z-index: 9;
   border-radius: 10px;
 
-  left: 50%;
-  top: 50%;
+  left: ${(props: ModalProps) => (props.left ? `${props.left}px` : "50%")};
+  top: ${(props: ModalProps) => (props.top ? `${props.top}px` : "50%")};
   transform: translate(-50%, -50%);
 
   &:hover {
@@ -52,6 +58,7 @@ const ExitWrapper = styled.span`
 `;
 
 const Background = styled.div`
+  display: ${(props: ModalProps) => (props.hasBackground ? "block" : "none")};
   position: absolute;
   top: 0;
   left: 0;
@@ -108,22 +115,30 @@ const Title = styled.h1`
 export const Modal = ({
   darkMode = false,
   editMode = false,
+  top = 0,
+  left = 0,
   title = "Modal Title",
   onExit = () => {},
   children = "this could be anything",
   height = "70vh",
   width = "60vw",
   titleFontSize = "2rem",
+  placeholder = "",
+  hasBackground = true,
   onEditSubmit = () => {},
+  inputValue = "",
+  onInputChange = () => {},
   ...props
 }: ModalProps) => {
   return (
     <>
-      <Background onClick={onExit} />
+      <Background onClick={onExit} hasBackground={hasBackground}/>
       <StyledModal
         darkMode={darkMode}
         width={editMode ? "fit-content" : width}
         height={editMode ? "fit-content" : height}
+        top={top}
+        left={left}
         editMode={editMode}
         {...props}
       >
@@ -135,7 +150,7 @@ export const Modal = ({
           <>
             <EditModeWrapper>
               <Title darkMode={darkMode}>{title}</Title>
-              <StyledInput type="text" darkMode={darkMode} />
+              <StyledInput type="text" darkMode={darkMode} placeholder={placeholder} value={inputValue} onChange={onInputChange} />
               <IconWrapper>
                 <CheckCircleOutlineIcon onClick={onEditSubmit} />
               </IconWrapper>

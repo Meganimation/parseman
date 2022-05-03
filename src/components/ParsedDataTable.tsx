@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useRef} from "react";
 import styled from "styled-components";
 import Tooltip from "stories/Tooltip/Tooltip";
 import { useSelector, useDispatch } from "react-redux";
 import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
+import { Modal } from "stories/Modal";
 
 const ParsedTableWrapper = styled.div`
   height: 100%;
@@ -40,7 +41,9 @@ const loopThroughRows = (props: any, hashedData: any) => {
 
   for (let i = 0; i < props.content.length; i++) {
     arr.push(
-      <GridContainer>{showItems(props.content[i], props, hashedData)}</GridContainer>
+      <GridContainer>
+        {showItems(props.content[i], props, hashedData)}
+      </GridContainer>
     );
   }
   return arr;
@@ -61,7 +64,7 @@ const showItems = (content: any, props: any, hashedData: any) => {
 
   if (content.length === 0) return <p>No data</p>;
   else {
-    let arr = []
+    let arr = [];
     for (let i = 0; i < content.length; i++) {
       arr.push(
         <GridItem
@@ -78,7 +81,7 @@ const showItems = (content: any, props: any, hashedData: any) => {
             <div> {content[i]}</div>
           </Tooltip>
         </GridItem>
-      )
+      );
     }
     return arr;
   }
@@ -160,6 +163,8 @@ const displayCorrectSortButton = (index: number, props: any) => {
 };
 
 function ParsedDataTable(props: IParsedDataComponentProps) {
+  const [editInput, setEditInput] = useState([0, 0, 0]);
+  const [inputValue, setInputValue] = useState("");
   const hashedData: any = useSelector(
     (state: RootState) => state.returnedData.HASHED_DATA
   );
@@ -168,23 +173,31 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     (state: RootState) => state.returnedData.parsedDataIsLoading
   );
 
+  const handleEditSubmit = () => {
+    setEditInput([0, 0, 0]);
+    return props.postNewHeaderName(inputValue, editInput[2], props.templateId, props.templateVersion)
+  }
+
   const loopThroughHeaders = (props: any) => {
     let arr = [];
     for (let i = 0; i < props.headers.length; i++) {
       arr.push(
-        <GridItem>
-          <span //move these onMouse functions to the template literal so the user hovers over them it hightlights the column
-            onMouseOver={() => {
-              props.highlightOnTemplateLiteral(i, true);
-            }}
-            onMouseOut={() => {
-              props.highlightOnTemplateLiteral(i, false);
-            }}
-          >
-            {props.headers[i][0]} <StyledEditIcon style={{ transform: "scale(0.6)" }} />
-          </span>
-          {displayCorrectSortButton(i, props)}
-        </GridItem>
+        <>
+          <GridItem onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])}>
+            <span 
+            // onMouseOver={() => {
+            //   props.highlightOnTemplateLiteral(i, true);
+            // }}
+            // onMouseOut={() => {
+            //   props.highlightOnTemplateLiteral(i, false);
+            // }}
+            >
+              {props.headers[i][0]}{" "}
+              <StyledEditIcon style={{ transform: "scale(0.6)" }} />
+            </span>
+            {displayCorrectSortButton(i, props)}
+          </GridItem>
+        </>
       );
     }
     return arr;
@@ -196,6 +209,23 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
         <p>Loading...</p>
       ) : (
         <ParsedTableResultsWrapper>
+                {(editInput[0] !== 0 && editInput[1] !== 0) && (
+              <Modal
+                top={editInput[0]}
+                left={editInput[1]}
+                onExit={() => {
+                  setEditInput([0, 0]);
+                }}
+                editMode
+                darkMode={props.darkMode}
+                hasBackground={false}
+                placeholder={`${editInput[2]}`}
+                onEditSubmit={()=>{handleEditSubmit()}}
+                inputValue={inputValue}
+                onInputChange={(e: any) => setInputValue(e.target.value)}
+              >
+              </Modal>
+          ) }
           <GridContainer>{loopThroughHeaders(props)}</GridContainer>
           {loopThroughRows(props, hashedData)}
         </ParsedTableResultsWrapper>
@@ -214,8 +244,12 @@ interface IParsedDataComponentProps {
   handleAllSort: any;
   arrOfSortBools: string[];
   postNewTemplateId: any;
+  postNewHeaderName: any;
   replaceTemplateLiteral: any;
   highlightOnTemplateLiteral: any;
+  darkMode: boolean;
+  templateId: string;
+  templateVersion: string;
 }
 
 export default ParsedDataTable;

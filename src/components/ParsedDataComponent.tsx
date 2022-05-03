@@ -75,6 +75,7 @@ export default function ParsedDataComponent({
   handleExit = () => {},
   parsedSideInfoIsVisible = true,
   postNewTemplateId = () => {},
+  postNewHeaderName = () => {},
   ...props
 }: IParsedDataComponentProps) {
   const returnedData: any = useSelector(
@@ -444,6 +445,8 @@ let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString
         </>
       )}
       <ParsedDataTable
+        templateId={localTemplateId}
+        templateVersion={returnedData.version}
         parsedDataHeaders={parsedDataHeaders}
         headers={state.headers}
         content={state.content}
@@ -455,6 +458,8 @@ let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString
         postNewTemplateId={postNewTemplateId}
         replaceTemplateLiteral={replaceTemplateLiteral}
         highlightOnTemplateLiteral={highlightOnTemplateLiteral}
+        darkMode={darkMode}
+        postNewHeaderName={postNewHeaderName}
 
       />
     </ParsedDataComponentWrapper>
@@ -479,4 +484,5 @@ interface IParsedDataComponentProps {
   checkedTemplateLiteral: string;
   postNewTemplateId: any;
   updateTemplateLiteral: any;
+  postNewHeaderName: any; 
 }

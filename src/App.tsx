@@ -251,36 +251,27 @@ function App() {
     setTailSearch("");
   }
 
-  const postNewHeaderName = () => {
-
-
-    // let j = 0;
-    // let localHeadersArr: string[] = [];
-
-    // while (j < returnedData.headers.length) {
-    //   let localHeaders = document.getElementById(`header${j}`)!.innerText;
-    //   localHeadersArr = [...localHeadersArr, localHeaders];
-    //   const requestOptions = {
-    //     method: "PUT",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       listFields: [
-    //         {
-    //           fieldAlias: localHeadersArr[j], //the updated name (eg. NUM_+0)
-    //           fieldName: props.headers[j], // the original name (eg. TEST)
-    //         },
-    //       ],
-    //     }),
-    //   };
-    //   j++;
-    //   fetch(
-    //     `http://10.12.2.95:8082/customize-template-field/${checkedTemplateId}/${templateVersion}`,
-    //     requestOptions
-    //   )
-    //     .then((response) => response.json())
-    //     .then((data) => console.log(data));
-    // }
-}
+  const postNewHeaderName = (fieldAlias: string, fieldName: string, parsedDataTemplateId: string, parsedDataTemplateVersion: string) => {
+alert(parsedDataTemplateVersion)
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          listFields: [
+            {
+              fieldAlias: fieldAlias, //the updated name (eg. NUM_+0)
+              fieldName: fieldName, // the original name (eg. TEST)
+            },
+          ],
+        }),
+      };
+      fetch(
+        `http://10.12.2.242:8081/customize-template-field/${parsedDataTemplateId}/${parsedDataTemplateVersion}`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+  }
 
 const postNewTemplateId = (inputTemplateId: string) => {
     const requestOptions = {
@@ -434,6 +425,7 @@ const updateTemplateLiteral = (newTemplateLiteral: any) => {
               parsedSideInfoIsVisible={parsedSideInfoIsVisible}
               postNewTemplateId={postNewTemplateId}
               updateTemplateLiteral={updateTemplateLiteral}
+              postNewHeaderName={postNewHeaderName}
             />
           </div>
         </ComponentWindow>
