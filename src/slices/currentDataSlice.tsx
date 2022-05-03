@@ -39,7 +39,7 @@ export const CurrentDataSlice = createSlice({
       let arrOfSortBool: any[] = [];
       const tempHash: any = {};
       state.parsedDataIsLoading = true;
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < action.payload.lines.length; i++) {
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
         const tempSortArr: any = [];
@@ -72,7 +72,7 @@ export const CurrentDataSlice = createSlice({
 
       const tempHash: any = {};
 
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < action.payload.lines.length; i++) {
         const arrayOfLines = action.payload.lines[i].itemBody;
         for (let i = 0; i < arrayOfLines.length; i++) {
           if (!tempHash[arrayOfLines[i].bodyHeader]) {

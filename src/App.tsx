@@ -100,7 +100,7 @@ function App() {
   }) 
 
 
-  const [parsedDataPageAmount, setParsedDataPageAmount] = React.useState(1000);
+  const [parsedDataPageAmount, setParsedDataPageAmount] = React.useState(50);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
 
   const { loadingTemplateData, templateData, templateError, templateHasMore } =
@@ -189,6 +189,8 @@ function App() {
       "parsedDataTable"
     );
 
+    console.log('fetching again?')
+
     const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=${parsedDataPageAmount}`;
 
     fetch(urlWithString)
@@ -252,7 +254,6 @@ function App() {
   }
 
   const postNewHeaderName = (fieldAlias: string, fieldName: string, parsedDataTemplateId: string, parsedDataTemplateVersion: string) => {
-alert(parsedDataTemplateVersion)
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -302,6 +303,11 @@ const postNewTemplateId = (inputTemplateId: string) => {
 
 const updateTemplateLiteral = (newTemplateLiteral: any) => {
   setCheckedTemplateLiteral(newTemplateLiteral)
+}
+
+const bringMoreData = () => {
+  setParsedDataPageAmount(parsedDataPageAmount + 50);
+  fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
 }
 
   return (
@@ -416,6 +422,9 @@ const updateTemplateLiteral = (newTemplateLiteral: any) => {
           onButtonOneClick={() => {
             setModal(true);
           }}
+          buttonTwo
+          buttonTwoText='more'
+          onButtonTwoClick={() => {bringMoreData()}}
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
