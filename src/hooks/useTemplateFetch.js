@@ -18,7 +18,7 @@ export default function useTemplateFetch(
   const [templateHasMore, setHasMore] = useState(false);
 
   const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "templateList");
-
+  console.log('debug time', value)
   let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${pageAmount}&to=0`;
 
   useEffect(() => {

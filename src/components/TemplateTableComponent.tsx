@@ -170,7 +170,8 @@ export default function TemplateTableComponent(
                   handleCheckedRadio(
                     data.templateId,
                     data.templateVersion,
-                    data.templateLiteral
+                    data.templateLiteral,
+                    data.totalTemplates
                   );
                 }}
               >
@@ -194,7 +195,8 @@ export default function TemplateTableComponent(
                   handleCheckedRadio(
                     data.templateId,
                     data.templateVersion,
-                    data.templateLiteral
+                    data.templateLiteral,
+                    data.totalTemplates
                   );
                 }}
               >
@@ -233,7 +235,7 @@ interface TemplateTableComponentProps {
   darkMode?: boolean;
   wordCloudIsVisible: boolean;
   templateListData: string[];
-  handleCheckedRadio: (templateIdValue: string, templateVersionValue: string, templateLiteralValue: string) => void
+  handleCheckedRadio: (templateIdValue: string, templateVersionValue: string, templateLiteralValue: string, templateTotalAmount: string) => void
   checkedTemplateId: string;
   loadingTemplateData: boolean;
   error: boolean;

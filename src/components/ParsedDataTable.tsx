@@ -192,7 +192,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
             //   props.highlightOnTemplateLiteral(i, false);
             // }}
             >
-              {props.headers[i][0]}{" "}
+              {props.headers[i][0]}
               <StyledEditIcon style={{ transform: "scale(0.6)" }} onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])} />
             </span>
             {displayCorrectSortButton(i, props)}
@@ -228,6 +228,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
           ) }
           <GridContainer>{loopThroughHeaders(props)}</GridContainer>
           {loopThroughRows(props, hashedData)}
+     
         </ParsedTableResultsWrapper>
       )}
     </ParsedTableWrapper>

@@ -81,6 +81,7 @@ function App() {
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
   const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
+  const [checkedTemplateTotalAmount, setCheckedTemplateTotalAmount] = useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
   const [templatePageAmount, setTemplatePageAmount] = useState(50);
 
@@ -155,7 +156,7 @@ function App() {
   };
 
   const handleParsedDataRendering = () => {
-    fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
+    fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, parsedDataPageAmount);
     setParsedDataIsVisible(true);
   };
 
@@ -182,16 +183,17 @@ function App() {
   const fetchParsedData = (
     checkedTemplateId: string,
     templateVersion: string, //this needs to be the parsed templateversion
-    dispatch: any
+    dispatch: any,
+    parsedDataPageAmount: number
   ) => {
     const URL: string = SelectorsHelper.getURL(
       CURRENT_ENVIRONMENT_TYPE,
       "parsedDataTable"
     );
 
-    console.log('fetching again?')
+    console.log('fetching again?', checkedTemplateTotalAmount)
 
-    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=${parsedDataPageAmount}`;
+    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`; //change to totalTemplate amount
 
     fetch(urlWithString)
       .then((res) => {
@@ -201,7 +203,7 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        dispatch(convertToParsed(data));
+        dispatch(convertToParsed([data, parsedDataPageAmount]));
         dispatch(hashedData(data));
       })
       .catch((err) => {
@@ -220,11 +222,13 @@ function App() {
   const handleCheckedRadio = (
     templateIdValue: string,
     templateVersionValue: string,
-    templateLiteralValue: string
+    templateLiteralValue: string,
+    templateTotalAmount: string
   ) => {
     setCheckedTemplateId(templateIdValue);
     setCheckedTemplateVersion(templateVersionValue);
     setCheckedTemplateLiteral(templateLiteralValue);
+    setCheckedTemplateTotalAmount(templateTotalAmount);
   };
 
   const handleStartDateChange = (date: any) => {
@@ -249,8 +253,8 @@ function App() {
   };
 
   const goBackOnTailSearch = () => {
+    setTailSearch(" ");
     setCheckedTemplateId("");
-    setTailSearch("");
   }
 
   const postNewHeaderName = (fieldAlias: string, fieldName: string, parsedDataTemplateId: string, parsedDataTemplateVersion: string) => {
@@ -305,9 +309,10 @@ const updateTemplateLiteral = (newTemplateLiteral: any) => {
   setCheckedTemplateLiteral(newTemplateLiteral)
 }
 
-const bringMoreData = () => {
-  setParsedDataPageAmount(parsedDataPageAmount + 50);
-  fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any);
+const bringMoreData = (e: any) => {
+  console.log('target', e.target.value)
+  setParsedDataPageAmount(e.target.value);
+  fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, e.target.value);
 }
 
   return (
@@ -422,9 +427,6 @@ const bringMoreData = () => {
           onButtonOneClick={() => {
             setModal(true);
           }}
-          buttonTwo
-          buttonTwoText='more'
-          onButtonTwoClick={() => {bringMoreData()}}
         >
           <div ref={messagesEndRef}>
             <ParsedDataComponent
@@ -435,6 +437,8 @@ const bringMoreData = () => {
               postNewTemplateId={postNewTemplateId}
               updateTemplateLiteral={updateTemplateLiteral}
               postNewHeaderName={postNewHeaderName}
+              bringMoreData={bringMoreData}
+              parsedDataPageAmount={parsedDataPageAmount}
             />
           </div>
         </ComponentWindow>

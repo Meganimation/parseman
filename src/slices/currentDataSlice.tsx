@@ -25,6 +25,9 @@ export const CurrentDataSlice = createSlice({
   initialState,
   reducers: {
     convertToParsed: (state, action: PayloadAction<any>) => {
+      let pageAmount = action.payload[1]
+      action.payload = action.payload[0]
+      
       let { host, recordId, templateId, timestamp, version } = action.payload;
       state.parsedDataSidebarInfo = [
         host,
@@ -39,7 +42,7 @@ export const CurrentDataSlice = createSlice({
       let arrOfSortBool: any[] = [];
       const tempHash: any = {};
       state.parsedDataIsLoading = true;
-      for (let i = 0; i < action.payload.lines.length; i++) {
+      for (let i = 0; i <= pageAmount; i++) {
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
         const tempSortArr: any = [];

@@ -200,10 +200,9 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-
         let aNum = a[index].replace(/[^0-9]/g, "");
         let bNum = b[index].replace(/[^0-9]/g, "");
-       
+
         return aNum - bNum;
       });
 
@@ -254,10 +253,8 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-
         let aNum = a[index].replace(/[^0-9]/g, "");
         let bNum = b[index].replace(/[^0-9]/g, "");
-
 
         return aNum - bNum;
       });
@@ -287,7 +284,6 @@ export default function ParsedDataComponent({
         return bNum - aNum;
       });
 
-
       setState({
         headers: state.headers,
         content: newArr,
@@ -311,9 +307,8 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-        let testA = new Date(a[index]).getTime()
+        let testA = new Date(a[index]).getTime();
         let testB = new Date(b[index]).getTime();
-
 
         return testB - testA;
       });
@@ -337,10 +332,8 @@ export default function ParsedDataComponent({
       }
 
       let newArr = tempArr.sort((a: any, b: any) => {
-
-        let testA = new Date(a[index]).getTime()
+        let testA = new Date(a[index]).getTime();
         let testB = new Date(b[index]).getTime();
-
 
         return testA - testB;
       });
@@ -353,44 +346,53 @@ export default function ParsedDataComponent({
     }
   };
 
-  const replaceTemplateLiteral =(headerIndex: number, headerString: string) => {
+  const replaceTemplateLiteral = (
+    headerIndex: number,
+    headerString: string
+  ) => {
+    const targetedHeaderString = state.headers[headerIndex][0];
 
-    const targetedHeaderString = state.headers[headerIndex][0]
+    console.log(props.checkedTemplateLiteral);
 
-    console.log(props.checkedTemplateLiteral)
+    let newString = props.checkedTemplateLiteral.replace(
+      `<<<${targetedHeaderString}>>>`,
+      headerString
+    );
 
-    //get the string of props.checkedTemplateLiteral and where targetedHeaderString is in the string, replace it with 'HELLO' 
-    let newString = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString.toLowerCase()}<<<`, headerString)
+    props.updateTemplateLiteral(newString);
+  };
 
+  const highlightOnTemplateLiteral = (
+    headerIndex: number,
+    mouseOver: boolean
+  ) => {
+    if (mouseOver) {
+      const targetedHeaderString = state.headers[headerIndex][0];
 
-    props.updateTemplateLiteral(newString)
-  }
+      console.log(props.checkedTemplateLiteral);
 
-  const highlightOnTemplateLiteral =(headerIndex: number, mouseOver: boolean) => {
- if (mouseOver) {
-    const targetedHeaderString = state.headers[headerIndex][0]
+      //this is for when you hover on the header
+      let newString2 = props.checkedTemplateLiteral.replace(
+        `<<<${targetedHeaderString}>>>`,
+        `>>>${targetedHeaderString.toLowerCase()}<<<`
+      );
 
-    console.log(props.checkedTemplateLiteral)
+      props.updateTemplateLiteral(newString2);
+    }
+    if (!mouseOver) {
+      const targetedHeaderString = state.headers[headerIndex][0];
 
-//this is for when you hover on the header
-    let newString2 = props.checkedTemplateLiteral.replace(`<<<${targetedHeaderString}>>>`, `>>>${targetedHeaderString.toLowerCase()}<<<`)
+      console.log(props.checkedTemplateLiteral);
 
+      //this is for when you hover on the header
+      let newString2 = props.checkedTemplateLiteral.replace(
+        `>>>${targetedHeaderString.toLowerCase()}<<<`,
+        `<<<${targetedHeaderString}>>>`
+      );
 
-    props.updateTemplateLiteral(newString2)
- }
- if (!mouseOver) {
-  const targetedHeaderString = state.headers[headerIndex][0]
-
-  console.log(props.checkedTemplateLiteral)
-
-//this is for when you hover on the header
-let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString.toLowerCase()}<<<`, `<<<${targetedHeaderString}>>>`)
-
-
-  props.updateTemplateLiteral(newString2)
-}
-  }
-
+      props.updateTemplateLiteral(newString2);
+    }
+  };
 
   return (
     <ParsedDataComponentWrapper>
@@ -398,6 +400,16 @@ let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString
         <>
           <Exit onExit={handleExit} darkMode={darkMode} />
           <InfoBar darkMode={darkMode}>
+            <>
+              totalTemplates: (enter total templates here) showing
+              <select name="cars" id="cars" onChange={(e)=>{props.bringMoreData(e)}}>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+              </select>out of top 500
+              results
+            </>
             <InfoItem>
               <StyledEditTemplateWrapper
                 onClick={() => {
@@ -439,7 +451,7 @@ let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
-              <p className='templateLiteral'>{props.checkedTemplateLiteral}</p>
+              <p className="templateLiteral">{props.checkedTemplateLiteral}</p>
             </InfoItem>
           </InfoBar>
         </>
@@ -460,7 +472,6 @@ let newString2 = props.checkedTemplateLiteral.replace(`>>>${targetedHeaderString
         highlightOnTemplateLiteral={highlightOnTemplateLiteral}
         darkMode={darkMode}
         postNewHeaderName={postNewHeaderName}
-
       />
     </ParsedDataComponentWrapper>
   );
@@ -484,5 +495,7 @@ interface IParsedDataComponentProps {
   checkedTemplateLiteral: string;
   postNewTemplateId: any;
   updateTemplateLiteral: any;
-  postNewHeaderName: any; 
+  postNewHeaderName: any;
+  bringMoreData: any;
+  parsedDataPageAmount: number;
 }
