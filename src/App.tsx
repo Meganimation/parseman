@@ -14,8 +14,9 @@ import {
 import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
-import { useDispatch } from "react-redux";
-import { convertToParsed, hashedData} from "./slices/currentDataSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "slices/store";
+import { convertToParsed, hashedData, savedParsedData} from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
@@ -93,6 +94,10 @@ function App() {
     new Date().toISOString().slice(0, 10),
     "00:00:00",
   ]);
+
+  const returnedData: any = useSelector(
+    (state: RootState) => state.returnedData.parsedDataSidebarInfo
+  );
 
 
   //@ts-ignore
@@ -315,6 +320,12 @@ const bringMoreData = (e: any) => {
   fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, e.target.value);
 }
 
+const saveParsedInfo = () => {
+  setModal(true);
+  console.log("YEY", returnedData.templateId)
+  dispatch(savedParsedData('enter data here'));
+}
+
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -425,7 +436,7 @@ const bringMoreData = (e: any) => {
           buttonOne
           buttonOneText="Favorite"
           onButtonOneClick={() => {
-            setModal(true);
+            saveParsedInfo()
           }}
         >
           <div ref={messagesEndRef}>
@@ -452,7 +463,8 @@ const bringMoreData = (e: any) => {
           title="Saved!"
           darkMode={darkMode}
         >
-          In the next version, there will be a button in the menu you can click which will take you to a list of previously saved tables (Likely stored in localStorage for now)
+          Saved (enter template modal here)
+          <button> View Saved Modals</button>
         </Modal>
       )}
     </StyledApp>

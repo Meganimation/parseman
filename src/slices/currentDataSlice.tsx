@@ -8,6 +8,7 @@ export interface CurrentDataSliceState {
   parsedSortBool: any;
   HASHED_DATA: any;
   parsedDataIsLoading: boolean;
+  savedParsedData: any;
 }
 
 const initialState: CurrentDataSliceState = {
@@ -18,6 +19,7 @@ const initialState: CurrentDataSliceState = {
   hashedParsedData: {},
   parsedDataIsLoading: false, 
   HASHED_DATA: [],
+  savedParsedData: [],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -89,9 +91,12 @@ export const CurrentDataSlice = createSlice({
         state.HASHED_DATA = tempHash;
       }
     },
-  },
+    savedParsedData: (state, action: PayloadAction<any>) => {
+      state.savedParsedData = action.payload;
+      console.log('new saved parsed info', state.savedParsedData)
+  }},
 });
 
-export const { convertToParsed, hashedData } = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData, savedParsedData } = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;
