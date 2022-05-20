@@ -67,13 +67,13 @@ function Menu(props: IStyledMenuProps) {
             darkMode ? "Switch to Light Theme" : "Switch to Dark Theme"
           }
         />
-        {/* <StyledButton
+        <StyledButton
           onClick={() => {
-            alert("Coming Soon!");
+            alert("Coming Soon! I'll likely have a modal show in Menu.tsx that sets to true with a list of menus from redux");
           }}
           label={"View my saved tables"}
         />
-        <StyledButton
+        {/* <StyledButton
           onClick={() => {
             alert("Coming Soon!");
           }}

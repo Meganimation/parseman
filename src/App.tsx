@@ -16,7 +16,7 @@ import SelectorsHelper, {
 } from "utils/SelectorsHelper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "slices/store";
-import { convertToParsed, hashedData, savedParsedData} from "./slices/currentDataSlice";
+import { convertToParsed, hashedData, saveToParsedData} from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
@@ -99,6 +99,9 @@ function App() {
     (state: RootState) => state.returnedData.parsedDataSidebarInfo
   );
 
+  const savedParsedData: any = useSelector(
+    (state: RootState) => state.returnedData.savedParsedData
+  );
 
   //@ts-ignore
   const scrollToView = () => messagesEndRef.current?.scrollIntoView({
@@ -321,9 +324,11 @@ const bringMoreData = (e: any) => {
 }
 
 const saveParsedInfo = () => {
+  if (savedParsedData.includes (returnedData.templateId)) return alert('its already saved');
   setModal(true);
   console.log("YEY", returnedData.templateId)
-  dispatch(savedParsedData('enter data here'));
+  console.log('check if this matches returnedData.templateId', savedParsedData)
+  dispatch(saveToParsedData(returnedData.templateId));
 }
 
   return (

@@ -19,7 +19,7 @@ const initialState: CurrentDataSliceState = {
   hashedParsedData: {},
   parsedDataIsLoading: false, 
   HASHED_DATA: [],
-  savedParsedData: [],
+  savedParsedData: ['781636836_a8f223'],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -91,12 +91,11 @@ export const CurrentDataSlice = createSlice({
         state.HASHED_DATA = tempHash;
       }
     },
-    savedParsedData: (state, action: PayloadAction<any>) => {
-      state.savedParsedData = action.payload;
-      console.log('new saved parsed info', state.savedParsedData)
+    saveToParsedData: (state, action: PayloadAction<any>) => {
+      state.savedParsedData = [...state.savedParsedData, action.payload];
   }},
 });
 
-export const { convertToParsed, hashedData, savedParsedData } = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData, saveToParsedData } = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;
