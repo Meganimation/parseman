@@ -6,9 +6,16 @@ export const EnvironmentTypeEnum: any = {
 //@ts-ignore
 export let CURRENT_ENVIRONMENT_TYPE: string = process.env.REACT_APP_SERVER
 
-export default class SelectorsHelper {
-  static getURL(environmentType: string, service: string) {
-    let retVal: string = process.env.REACT_APP_URL + service
-    return retVal;
+// export default class SelectorsHelper {
+//   static getURL(environmentType: string, service: string) {
+//     let retVal: string = process.env.REACT_APP_URL + service
+//     return retVal;
+//     }
+//   }
+
+  export default class SelectorsHelper {
+    static getURL(environmentType: string, service: string) {
+      let retVal: string = process.env.REACT_APP_OFFLINE + service
+      return retVal;
+      }
     }
-  }

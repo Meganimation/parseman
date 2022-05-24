@@ -1,9 +1,9 @@
-[
+export const testLocalData = [
     {
     "id": "3220650544971015&0&1954276441",
     "templateId": "1263051146_48797c",
     "version": 1,
-    "logTail": "debug 2022-04-18T23:59:59.997+0 7f2ff3a40700 0 log_channel(cluster) log [INF] : overall HEALTH_OK"
+    "logTail": "Bebug 2022-04-18T23:59:59.997+0 7f2ff3a40700 0 log_channel(cluster) log [INF] : overall HEALTH_OK"
     },
     {
     "id": "3220650645633309&0&1400509135",

@@ -4,6 +4,8 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 
+import {testLocalData} from "utils/offlineData/logTail"
+
 export default function useLogtailFetch(
   templateVersion,
   selectedStartDate,
@@ -17,8 +19,10 @@ export default function useLogtailFetch(
   const [hasMore, setHasMore] = useState(false);
   const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "logTail");
 
-  let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${logtailPageAmount}&to=0`;
 
+  console.log(URL === "OFFLINElogTail" , testLocalData, 'OIIIII')
+
+  let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${logtailPageAmount}&to=0`;
   useEffect(() => {
     setLoadingLogtail(true);
     setError(false);
@@ -27,11 +31,18 @@ export default function useLogtailFetch(
       .then((res) => {
         setData(res.data);
         setHasMore(res.data.length > 0);
-        setLoadingLogtail(false);
+        setLoadingLogtail(false);  
       })
       .catch((err) => {
         console.log(err);
-        setError(true);
+        if (URL === "OFFLINElogTail") {
+          setData(testLocalData);
+          setHasMore(testLocalData.length > 0);
+          setLoadingLogtail(false);
+        }
+        else {
+        setError(true)
+        }
       });
   }, [urlWithString]);
   return {
