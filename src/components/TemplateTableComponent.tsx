@@ -26,6 +26,7 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   border-radius: 10px;
   overflow: auto;
   height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
+  max-height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
   font-size: 12px;
 
   &::-webkit-scrollbar {
@@ -139,7 +140,7 @@ export default function TemplateTableComponent(
   );
 
   if (templateListData.length === 0 && !loadingTemplateData)
-    return <div> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </div>;
+    return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
 
   return (
     <>

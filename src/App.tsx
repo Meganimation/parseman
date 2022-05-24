@@ -68,7 +68,10 @@ const Slider = styled.section<StyledAppType>`
 `;
 
 const SavedParsedDataModal = styled.div`
-
+    display: grid;
+    grid-column: auto;
+    gap: 2rem;
+    justify-items: center;
 `
 
 function App() {
@@ -350,7 +353,7 @@ const fetchSavedParsedData=(data: string)=>{
   handleParsedDataRendering(data, '1')
 }
 
-const doSomething=()=>{
+const switchModals=()=>{
   setSavedParsedDataModal(true)
   setModal(false)
 }
@@ -493,7 +496,7 @@ const doSomething=()=>{
           darkMode={darkMode}
         >
           Saved (enter template modal here)
-          <Button label={"View Modal"} onClick={()=> doSomething()}></Button>
+          <Button label={"View Modal"} onClick={()=> switchModals()}></Button>
         </Modal>
       )}
             {savedParsedDataModal && (
@@ -503,7 +506,8 @@ const doSomething=()=>{
         }}>
           <SavedParsedDataModal>
             <h1> Previously Saved Data </h1>
-              {savedParsedData.map((data:string) => <button onClick={()=>{fetchSavedParsedData(data)}}>{data}</button>)}
+              {savedParsedData.map((data:string) => 
+              <div><Button label={data} onClick={()=>{fetchSavedParsedData(data)}}/></div>)}
           </SavedParsedDataModal>
         </Modal>
       )}
