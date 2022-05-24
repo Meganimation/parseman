@@ -274,6 +274,7 @@ export default function NavBar(props: INavBarProps) {
         handleMenu={handleMenu}
         darkMode={props.darkMode}
         handleTheme={props.handleTheme}
+        handleSavedParsedDataModal={props.handleSavedParsedDataModal}
       />
     </>
   );
@@ -299,4 +300,5 @@ interface INavBarProps {
   selectedEndDateAndTime: string[];
   handleEndDateChange: any;
   handleStartDateChange: any;
+  handleSavedParsedDataModal: any;
 }

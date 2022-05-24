@@ -20,6 +20,7 @@ import { convertToParsed, hashedData, saveToParsedData} from "./slices/currentDa
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
+import { Button } from 'stories/Button'
 
 
 const StyledApp = styled.div<StyledAppType>`
@@ -66,6 +67,10 @@ const Slider = styled.section<StyledAppType>`
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
+const SavedParsedDataModal = styled.div`
+
+`
+
 function App() {
   // const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
@@ -85,7 +90,7 @@ function App() {
   const [checkedTemplateTotalAmount, setCheckedTemplateTotalAmount] = useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
   const [templatePageAmount, setTemplatePageAmount] = useState(50);
-
+  const [savedParsedDataModal, setSavedParsedDataModal] = useState(false);
   const messagesEndRef = useRef(null);
 
   const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
@@ -163,9 +168,12 @@ function App() {
     }
   };
 
-  const handleParsedDataRendering = () => {
+  const handleParsedDataRendering = (checkedTemplateId: string, checkedTemplateVersion: string) => {
+    console.log(checkedTemplateId, 'checked')
     fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, parsedDataPageAmount);
     setParsedDataIsVisible(true);
+    setSavedParsedDataModal(false);
+    scrollToBottom();
   };
 
 
@@ -331,6 +339,21 @@ const saveParsedInfo = () => {
   dispatch(saveToParsedData(returnedData.templateId));
 }
 
+const handleSavedParsedDataModal = () =>{
+  setSavedParsedDataModal(true)
+}
+
+const fetchSavedParsedData=(data: string)=>{
+  setCheckedTemplateId(data)
+  //TODO: also save templateVersion to redux and fetch that
+  //ALSO: Make this async
+  handleParsedDataRendering(data, '1')
+}
+
+const doSomething=()=>{
+  setSavedParsedDataModal(true)
+  setModal(false)
+}
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -348,6 +371,7 @@ const saveParsedInfo = () => {
         selectedEndDateAndTime={selectedEndDateAndTime}
         handleStartDateChange={handleStartDateChange}
         handleEndDateChange={handleEndDateChange}
+        handleSavedParsedDataModal={handleSavedParsedDataModal}
       />
 
       <Content darkMode={darkMode}>
@@ -388,7 +412,7 @@ const saveParsedInfo = () => {
                 onButtonTwoMouseUp={()=>{scrollToBottom()}}
                 onButtonTwoClick={() => {
                   checkedTemplateId
-                    ? handleParsedDataRendering()
+                    ? handleParsedDataRendering(checkedTemplateId, checkedTemplateVersion)
                     : alert("Please select a template");
                 }}
                 buttonOneText="Go Back"
@@ -469,7 +493,18 @@ const saveParsedInfo = () => {
           darkMode={darkMode}
         >
           Saved (enter template modal here)
-          <button> View Saved Modals</button>
+          <Button label={"View Modal"} onClick={()=> doSomething()}></Button>
+        </Modal>
+      )}
+            {savedParsedDataModal && (
+        <Modal darkMode={darkMode}
+        onExit={() => {
+          setSavedParsedDataModal(false);
+        }}>
+          <SavedParsedDataModal>
+            <h1> Previously Saved Data </h1>
+              {savedParsedData.map((data:string) => <button onClick={()=>{fetchSavedParsedData(data)}}>{data}</button>)}
+          </SavedParsedDataModal>
         </Modal>
       )}
     </StyledApp>

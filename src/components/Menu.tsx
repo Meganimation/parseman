@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import Exit from "stories/Exit";
 import { Button } from "stories/Button";
+import {Modal} from "stories/Modal"
 
 const MenuWrapper = styled.div<StyledMenuType>`
   background: #131b25;
@@ -48,10 +49,11 @@ const MenuBackground = styled.div<StyledMenuType>`
     props.animateMenu ? "gba(0, 0, 0, 5)" : "gba(0, 0, 0, 0.05)"};
   z-index: 2;
 `;
+
 function Menu(props: IStyledMenuProps) {
 
 
-  const { darkMode, menu, handleTheme, handleMenu } = props;
+  const { darkMode, menu, handleTheme, handleMenu, handleSavedParsedDataModal } = props;
 
   return (
     <>
@@ -69,7 +71,7 @@ function Menu(props: IStyledMenuProps) {
         />
         <StyledButton
           onClick={() => {
-            alert("Coming Soon! I'll likely have a modal show in Menu.tsx that sets to true with a list of menus from redux");
+            props.handleSavedParsedDataModal(true)
           }}
           label={"View my saved tables"}
         />
@@ -101,6 +103,7 @@ interface IStyledMenuProps {
   darkMode: boolean;
   handleMenu: () => void;
   handleTheme: () => void;
+  handleSavedParsedDataModal: any;
 }
 
 export default Menu;
