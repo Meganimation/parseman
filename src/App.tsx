@@ -16,12 +16,16 @@ import SelectorsHelper, {
 } from "utils/SelectorsHelper";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "slices/store";
-import { convertToParsed, hashedData, saveToParsedData} from "./slices/currentDataSlice";
+import {
+  convertToParsed,
+  hashedData,
+  saveToParsedData,
+} from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
-import { Button } from 'stories/Button'
-
+import { Button } from "stories/Button";
+import { testLocalData } from "utils/offlineData/parsedData";
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -58,6 +62,19 @@ const Content = styled.main<StyledAppType>`
   background: ${(props) => (props.darkMode ? "#26374B" : "white")};
 `;
 
+const OfflineAlert = styled.div<StyledAppType>`
+  position: absolute;
+  z-index: 99999;
+  height: 4rem;
+  display: flex;
+  width: 30%;
+  margin: 2% 35%;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.3);
+`
+
 const SliderWrapper = styled.section`
   display: flex;
   width: 100%;
@@ -68,11 +85,11 @@ const Slider = styled.section<StyledAppType>`
 `;
 
 const SavedParsedDataModal = styled.div`
-    display: grid;
-    grid-column: auto;
-    gap: 2rem;
-    justify-items: center;
-`
+  display: grid;
+  grid-column: auto;
+  gap: 2rem;
+  justify-items: center;
+`;
 
 function App() {
   // const [loading, setLoading] = useState(false);
@@ -90,9 +107,10 @@ function App() {
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
   const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
-  const [checkedTemplateTotalAmount, setCheckedTemplateTotalAmount] = useState("");
+  const [checkedTemplateTotalAmount, setCheckedTemplateTotalAmount] =
+    useState("");
   const [templateVersion, setTemplateVersion] = useState("1");
-  const [templatePageAmount, setTemplatePageAmount] = useState(50);
+  const [templatePageAmount, setTemplatePageAmount] = useState(20);
   const [savedParsedDataModal, setSavedParsedDataModal] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -111,11 +129,12 @@ function App() {
     (state: RootState) => state.returnedData.savedParsedData
   );
 
-  //@ts-ignore
-  const scrollToView = () => messagesEndRef.current?.scrollIntoView({
-    behavior: "smooth",
-  }) 
 
+  const scrollToView = () =>
+    //@ts-ignore
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
 
   const [parsedDataPageAmount, setParsedDataPageAmount] = React.useState(50);
   const [logtailPageAmount, setLogtailPageAmount] = React.useState(50);
@@ -151,8 +170,7 @@ function App() {
     let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
 
     updateTailSearchResultsHandler(filterAddOnValue);
-
-  }
+  };
 
   const showComponent = (nameOfComponents: any) => {
     switch (nameOfComponents) {
@@ -171,28 +189,34 @@ function App() {
     }
   };
 
-  const handleParsedDataRendering = (checkedTemplateId: string, checkedTemplateVersion: string) => {
-    console.log(checkedTemplateId, 'checked')
-    fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, parsedDataPageAmount);
+  const handleParsedDataRendering = (
+    checkedTemplateId: string,
+    checkedTemplateVersion: string
+  ) => {
+    fetchParsedData(
+      checkedTemplateId,
+      checkedTemplateVersion,
+      dispatch as any,
+      parsedDataPageAmount
+    );
     setParsedDataIsVisible(true);
     setSavedParsedDataModal(false);
     scrollToBottom();
   };
 
-
-  const scrollToBottom = () =>{
-    return setTimeout(function(){
-      scrollToView(); 
-   }, 500);
+  const scrollToBottom = () => {
+    return setTimeout(function () {
+      scrollToView();
+    }, 500);
     // return scrollToView()
-  }
+  };
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
   };
 
   const handlePagination = () => {
-    setTemplatePageAmount(templatePageAmount + 50);
+    setTemplatePageAmount(templatePageAmount + 20);
   };
 
   const handleLogtailPagination = () => {
@@ -209,11 +233,8 @@ function App() {
       CURRENT_ENVIRONMENT_TYPE,
       "parsedDataTable"
     );
-
-    console.log('fetching again?', checkedTemplateTotalAmount)
-
     const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`; //change to totalTemplate amount
-
+    console.log("hey PARDES", CURRENT_ENVIRONMENT_TYPE);
     fetch(urlWithString)
       .then((res) => {
         if (!res.ok) {
@@ -226,6 +247,10 @@ function App() {
         dispatch(hashedData(data));
       })
       .catch((err) => {
+        if (URL === "OFFLINEparsedDataTable") {
+          dispatch(convertToParsed([testLocalData, parsedDataPageAmount]));
+          dispatch(hashedData(testLocalData));
+        }
         console.log(err.message);
       });
   };
@@ -274,30 +299,35 @@ function App() {
   const goBackOnTailSearch = () => {
     setTailSearch(" ");
     setCheckedTemplateId("");
-  }
+  };
 
-  const postNewHeaderName = (fieldAlias: string, fieldName: string, parsedDataTemplateId: string, parsedDataTemplateVersion: string) => {
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          listFields: [
-            {
-              fieldAlias: fieldAlias, //the updated name (eg. NUM_+0)
-              fieldName: fieldName, // the original name (eg. TEST)
-            },
-          ],
-        }),
-      };
-      fetch(
-        `http://10.12.2.242:8081/customize-template-field/${parsedDataTemplateId}/${parsedDataTemplateVersion}`,
-        requestOptions
-      )
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-  }
+  const postNewHeaderName = (
+    fieldAlias: string,
+    fieldName: string,
+    parsedDataTemplateId: string,
+    parsedDataTemplateVersion: string
+  ) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        listFields: [
+          {
+            fieldAlias: fieldAlias, //the updated name (eg. NUM_+0)
+            fieldName: fieldName, // the original name (eg. TEST)
+          },
+        ],
+      }),
+    };
+    fetch(
+      `http://10.12.2.242:8081/customize-template-field/${parsedDataTemplateId}/${parsedDataTemplateVersion}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
 
-const postNewTemplateId = (inputTemplateId: string) => {
+  const postNewTemplateId = (inputTemplateId: string) => {
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -321,42 +351,44 @@ const postNewTemplateId = (inputTemplateId: string) => {
       .catch((err) => {
         console.log(err.message);
       });
+  };
 
-}
+  const updateTemplateLiteral = (newTemplateLiteral: any) => {
+    setCheckedTemplateLiteral(newTemplateLiteral);
+  };
 
-const updateTemplateLiteral = (newTemplateLiteral: any) => {
-  setCheckedTemplateLiteral(newTemplateLiteral)
-}
+  const bringMoreData = (e: any) => {
+    setParsedDataPageAmount(e.target.value);
+    fetchParsedData(
+      checkedTemplateId,
+      checkedTemplateVersion,
+      dispatch as any,
+      e.target.value
+    );
+  };
 
-const bringMoreData = (e: any) => {
-  console.log('target', e.target.value)
-  setParsedDataPageAmount(e.target.value);
-  fetchParsedData(checkedTemplateId, checkedTemplateVersion, dispatch as any, e.target.value);
-}
+  const saveParsedInfo = () => {
+    if (savedParsedData.includes(returnedData.templateId))
+      return alert("its already saved");
+    setModal(true);
+    dispatch(saveToParsedData(returnedData.templateId));
+  };
 
-const saveParsedInfo = () => {
-  if (savedParsedData.includes (returnedData.templateId)) return alert('its already saved');
-  setModal(true);
-  console.log("YEY", returnedData.templateId)
-  console.log('check if this matches returnedData.templateId', savedParsedData)
-  dispatch(saveToParsedData(returnedData.templateId));
-}
+  const handleSavedParsedDataModal = () => {
+    setSavedParsedDataModal(true);
+  };
 
-const handleSavedParsedDataModal = () =>{
-  setSavedParsedDataModal(true)
-}
+  const fetchSavedParsedData = (data: string) => {
+    setCheckedTemplateId(data);
+    //TODO: also save templateVersion to redux and fetch that
+    //ALSO: Make this async
+    handleParsedDataRendering(data, "1");
+  };
 
-const fetchSavedParsedData=(data: string)=>{
-  setCheckedTemplateId(data)
-  //TODO: also save templateVersion to redux and fetch that
-  //ALSO: Make this async
-  handleParsedDataRendering(data, '1')
-}
-
-const switchModals=()=>{
-  setSavedParsedDataModal(true)
-  setModal(false)
-}
+  const switchModals = () => {
+    setSavedParsedDataModal(true);
+    setModal(false);
+  };
   return (
     <StyledApp darkMode={darkMode}>
       <NavBar
@@ -376,6 +408,10 @@ const switchModals=()=>{
         handleEndDateChange={handleEndDateChange}
         handleSavedParsedDataModal={handleSavedParsedDataModal}
       />
+
+      {CURRENT_ENVIRONMENT_TYPE === "OFFLINE" && (
+        <OfflineAlert darkMode={darkMode}> If you are seeing this: OFFLINE DEV MODE IS CURRENTLY ON.</OfflineAlert>
+      )}
 
       <Content darkMode={darkMode}>
         <SliderWrapper>
@@ -399,7 +435,6 @@ const switchModals=()=>{
                   wordCloudIsVisible={wordCloudIsVisible}
                   handleLogtailPagination={handleLogtailPagination}
                   templateVersion={templateVersion}
-                  
                 />
               </ComponentWindow>
             )}
@@ -412,16 +447,22 @@ const switchModals=()=>{
                 buttonTwo={checkedTemplateId ? true : false}
                 title={"Template List"}
                 buttonTwoText="Parse Data"
-                onButtonTwoMouseUp={()=>{scrollToBottom()}}
+                onButtonTwoMouseUp={() => {
+                  scrollToBottom();
+                }}
                 onButtonTwoClick={() => {
                   checkedTemplateId
-                    ? handleParsedDataRendering(checkedTemplateId, checkedTemplateVersion)
+                    ? handleParsedDataRendering(
+                        checkedTemplateId,
+                        checkedTemplateVersion
+                      )
                     : alert("Please select a template");
                 }}
                 buttonOneText="Go Back"
-                buttonOne={checkedTemplateId  ? true : false}
-                onButtonOneClick={() => {goBackOnTailSearch()}}
-          
+                buttonOne={checkedTemplateId ? true : false}
+                onButtonOneClick={() => {
+                  goBackOnTailSearch();
+                }}
                 onExit={() => {
                   setTemplateIsVisible(false);
                 }}
@@ -468,7 +509,7 @@ const switchModals=()=>{
           buttonOne
           buttonOneText="Favorite"
           onButtonOneClick={() => {
-            saveParsedInfo()
+            saveParsedInfo();
           }}
         >
           <div ref={messagesEndRef}>
@@ -496,18 +537,28 @@ const switchModals=()=>{
           darkMode={darkMode}
         >
           Saved (enter template modal here)
-          <Button label={"View Modal"} onClick={()=> switchModals()}></Button>
+          <Button label={"View Modal"} onClick={() => switchModals()}></Button>
         </Modal>
       )}
-            {savedParsedDataModal && (
-        <Modal darkMode={darkMode}
-        onExit={() => {
-          setSavedParsedDataModal(false);
-        }}>
+      {savedParsedDataModal && (
+        <Modal
+          darkMode={darkMode}
+          onExit={() => {
+            setSavedParsedDataModal(false);
+          }}
+        >
           <SavedParsedDataModal>
             <h1> Previously Saved Data </h1>
-              {savedParsedData.map((data:string) => 
-              <div><Button label={data} onClick={()=>{fetchSavedParsedData(data)}}/></div>)}
+            {savedParsedData.map((data: string) => (
+              <div>
+                <Button
+                  label={data}
+                  onClick={() => {
+                    fetchSavedParsedData(data);
+                  }}
+                />
+              </div>
+            ))}
           </SavedParsedDataModal>
         </Modal>
       )}

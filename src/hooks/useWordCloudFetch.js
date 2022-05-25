@@ -5,6 +5,8 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 
+import {testLocalData} from "utils/offlineData/wordCloud"
+
 export default function useWordCloudFetch(
   templateVersion,
   selectedStartDate,
@@ -20,7 +22,6 @@ export default function useWordCloudFetch(
   const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "wordCloud/nonNumerical");
 
   let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value === "" ? "*" : value}&from=10&to=0`;
-
   useEffect(() => {
     setLoadingWordCloudData(true);
     setWordCloudError(false);
@@ -35,8 +36,15 @@ export default function useWordCloudFetch(
       })
       .catch((err) => {
         console.log(err);
+        if (URL === "OFFLINEwordCloud/nonNumerical") {
+          setWordCloudData(testLocalData);
+          // setHasMore(testLocalData.length > 0);
+          setLoadingWordCloudData(false);
+        }
+        else {
         setWordCloudError(true);
+        }
       });
-  }, [urlWithString]);
+  }, [urlWithString, URL]);
   return { loadingWordCloudData, wordCloudData, wordCloudError };
 }

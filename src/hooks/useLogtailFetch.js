@@ -19,9 +19,6 @@ export default function useLogtailFetch(
   const [hasMore, setHasMore] = useState(false);
   const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "logTail");
 
-
-  console.log(URL === "OFFLINElogTail" , testLocalData, 'OIIIII')
-
   let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${logtailPageAmount}&to=0`;
   useEffect(() => {
     setLoadingLogtail(true);

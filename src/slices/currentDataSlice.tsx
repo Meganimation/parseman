@@ -73,7 +73,6 @@ export const CurrentDataSlice = createSlice({
       }
     },
     hashedData: (state, action: PayloadAction<any>) => {
-      console.log("hey", state.HASHED_DATA);
 
       const tempHash: any = {};
 

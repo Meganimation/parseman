@@ -1,4 +1,4 @@
-[
+export const testLocalData = [
     {
     "word": "goofy",
     "totalMatch": 2

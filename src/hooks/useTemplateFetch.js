@@ -5,6 +5,8 @@ import SelectorsHelper, {
   CURRENT_ENVIRONMENT_TYPE,
 } from "utils/SelectorsHelper";
 
+import {testLocalData} from "utils/offlineData/templateList"
+
 export default function useTemplateFetch(
   templateVersion,
   selectedStartDate,
@@ -18,7 +20,6 @@ export default function useTemplateFetch(
   const [templateHasMore, setHasMore] = useState(false);
 
   const URL = SelectorsHelper.getURL(CURRENT_ENVIRONMENT_TYPE, "templateList");
-  console.log('debug time', value)
   let urlWithString = `${URL}/${templateVersion}/${selectedStartDate[0]}&${selectedStartDate[1]}/${selectedEndDate[0]}&${selectedEndDate[1]}?filter=${value}&from=${pageAmount}&to=0`;
 
   useEffect(() => {
@@ -33,8 +34,13 @@ export default function useTemplateFetch(
       })
       .catch((err) => {
         console.log(err);
+        if (URL === "OFFLINEtemplateList") {
+          setData(testLocalData);
+          setHasMore(testLocalData.length > 0);
+          setLoadingTemplateData(false);
+        }
         setError(true);
       });
-  }, [urlWithString]);
+  }, [urlWithString, URL]);
   return { loadingTemplateData, templateData, templateError, templateHasMore };
 }

@@ -129,8 +129,6 @@ export default function TemplateTableComponent(
           hasMore &&
           templateListData.length > 10
         ) {
-          console.log("Triggering pagination");
-          console.log(hasMore)
           handlePagination();
         }
       });

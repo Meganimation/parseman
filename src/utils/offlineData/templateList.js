@@ -1,4 +1,4 @@
-[
+export const testLocalData = [
     {
     "templateId": "781636836_a8f223",
     "templateVersion": 1,
