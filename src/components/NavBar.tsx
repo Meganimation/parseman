@@ -64,13 +64,13 @@ const StyledInput = styled.input`
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 8rem;
   height: 8rem;
-  background: #4b0c5e;
+  background: #1251A2;
   color: white;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: #3b1c44;
+    background: #567FB4;
   }
 `;
 

@@ -53,7 +53,7 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   > nav {
-    background-color: #4b0c5e;
+    background-color: #1251A2;
   }
 `;
 
@@ -92,6 +92,8 @@ const SavedParsedDataModal = styled.div`
 `;
 
 function App() {
+  let yesterday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date());
+  let yesterdayStringified = yesterday.toISOString().split('T')[0];
   // const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
@@ -115,7 +117,7 @@ function App() {
   const messagesEndRef = useRef(null);
 
   const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
-    React.useState(["2019-12-12", "05:00:00"]);
+    React.useState([yesterdayStringified, "05:00:00"]);
   const [selectedEndDateAndTime, setSelectedEndDateAndTime] = React.useState([
     new Date().toISOString().slice(0, 10),
     "00:00:00",

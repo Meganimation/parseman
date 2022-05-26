@@ -14,7 +14,7 @@ const StyledDateTimePickerWrapper = styled.div`
 const StyledDateTimePicker = styled(DateTimePicker)`
    
     border-radius: 10px;
-    background: #5B246D;
+    background: #1251A2;
     align-items: center;
     display: flex;
     height: 3em;
@@ -34,7 +34,7 @@ const StyledDateTimePicker = styled(DateTimePicker)`
   `;
 
 const CalendarWrapper = styled.div`
-  background: #5b246d;
+  background: #1251A2;
   padding: 10px;
   position: relative;
   top: -12px;

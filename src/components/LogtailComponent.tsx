@@ -61,6 +61,8 @@ const LogtailItem = styled.div<StyledLogtailType>`
   color: #c5c7cb;
   overflow-wrap: break-word;
   word-break: break-all;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   code {
     color: ${(props) => (props.darkMode ? "#c5c7cb" : "#1C2937")};

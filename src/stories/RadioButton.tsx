@@ -5,7 +5,7 @@ export const RadioButton = ({
   label = "RadioButtonLabel",
   value = "RadioButtonValue",
   checked = false,
-  radioButtonColor = "purple",
+  radioButtonColor = "darkBlue",
   labelFontSize = "0.8em",
   onClick = () => {},
 }: IRadioButtonProps) => {
