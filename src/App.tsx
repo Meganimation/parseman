@@ -105,6 +105,7 @@ function App() {
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
   const [tailSearch, setTailSearch] = useState("");
+  const [previousTailSearch, setPreviousTailSearch] = useState("");
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
   const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
@@ -170,7 +171,6 @@ function App() {
 
   const handleUpdateLogtail = () => {
     let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
-
     updateTailSearchResultsHandler(filterAddOnValue);
   };
 
@@ -258,6 +258,7 @@ function App() {
   };
 
   const updateTailSearchResultsHandler = (value: string) => {
+    setPreviousTailSearch(tailSearch);
     setTailSearch(value);
   };
 
@@ -299,8 +300,18 @@ function App() {
   };
 
   const goBackOnTailSearch = () => {
-    setTailSearch(" ");
-    setCheckedTemplateId("");
+    setTailSearch(previousTailSearch);
+    if (previousTailSearch === tailSearch) {
+      setTailSearch("");
+      setCheckedTemplateId("")
+    }
+    if (previousTailSearch.includes("AND TemplateId=")) {
+      let splitPreviousTailSearch = previousTailSearch.split("=");
+      setCheckedTemplateId(splitPreviousTailSearch[1])
+    }
+    else {
+      setCheckedTemplateId("");
+    };
   };
 
   const postNewHeaderName = (
@@ -453,7 +464,7 @@ function App() {
                   scrollToBottom();
                 }}
                 onButtonTwoClick={() => {
-                  checkedTemplateId
+                  tailSearch
                     ? handleParsedDataRendering(
                         checkedTemplateId,
                         checkedTemplateVersion
