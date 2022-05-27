@@ -185,12 +185,12 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
         <>
           <GridItem >
             <span 
-            // onMouseOver={() => {
-            //   props.highlightOnTemplateLiteral(i, true);
-            // }}
-            // onMouseOut={() => {
-            //   props.highlightOnTemplateLiteral(i, false);
-            // }}
+            onMouseOver={() => {
+              props.highlightOnTemplateLiteral(i, true);
+            }}
+            onMouseOut={() => {
+              props.highlightOnTemplateLiteral(i, false);
+            }}
             >
               {props.headers[i][0]}
               <StyledEditIcon style={{ transform: "scale(0.6)" }} onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])} />

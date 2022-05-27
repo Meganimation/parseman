@@ -372,7 +372,7 @@ export default function ParsedDataComponent({
       //this is for when you hover on the header
       let newString2 = props.checkedTemplateLiteral.replace(
         `<<<${targetedHeaderString}>>>`,
-        `>>>${targetedHeaderString.toLowerCase()}<<<`
+        `>>>${targetedHeaderString}<<<`
       );
 
       props.updateTemplateLiteral(newString2);
@@ -381,7 +381,7 @@ export default function ParsedDataComponent({
       const targetedHeaderString = state.headers[headerIndex][0];
       //this is for when you hover on the header
       let newString2 = props.checkedTemplateLiteral.replace(
-        `>>>${targetedHeaderString.toLowerCase()}<<<`,
+        `>>>${targetedHeaderString}<<<`,
         `<<<${targetedHeaderString}>>>`
       );
 

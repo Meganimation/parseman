@@ -472,7 +472,7 @@ function App() {
                     : alert("Please select a template");
                 }}
                 buttonOneText="Go Back"
-                buttonOne={checkedTemplateId ? true : false}
+                buttonOne={tailSearch ? true : false}
                 onButtonOneClick={() => {
                   goBackOnTailSearch();
                 }}

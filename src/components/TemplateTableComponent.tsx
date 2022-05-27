@@ -152,7 +152,7 @@ export default function TemplateTableComponent(
   );
 
   if (templateListData.length === 0 && !loadingTemplateData)
-    return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> <LoadingWrapper>No results.</LoadingWrapper>  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
+    return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> <PopoutLoader>No results.</PopoutLoader>  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
 
   return (
     <>
@@ -230,7 +230,7 @@ export default function TemplateTableComponent(
           <PopoutLoader>Loading...</PopoutLoader>
         )}
           {loadingTemplateData && !error && templateListData.length < 1 && (
-          <><LoadingWrapper>Loading...</LoadingWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
+          <><PopoutLoader>Loading...</PopoutLoader><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
         )}
         {error && <><ErrorWrapper>Error </ErrorWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>} 
       </TemplateTableComponentWrapper>
