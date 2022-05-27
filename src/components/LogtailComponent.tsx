@@ -2,13 +2,17 @@ import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
-  width: 100%;
-  font-size: 2.5em;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 20px;
+z-index: 999999;
+position: absolute;
+top: 30%;
+left: 10%;
+height: 100px;
+width: 300px;
+background: red;
+background-color: rgba(0, 0, 0, 0.5);
+display: flex;
+justify-content: center;
+align-items: center;
 `;
 
 const ErrorWrapper = styled.div`
@@ -33,7 +37,6 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
 
   &::-webkit-scrollbar {
     width: 10px;
-   
   }
 
   &::-webkit-scrollbar-track {
@@ -70,8 +73,7 @@ const LogtailItem = styled.div<StyledLogtailType>`
 `;
 
 const jankyString =
-"©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved.";
-
+  "©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved. | ©2022 SliceUp, Inc. All rights reserved.";
 
 export default function LogtailComponent(props: LogtailComponentProps) {
   const {
@@ -124,9 +126,7 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       if (logtailData.length === index + 1) {
         return (
           <LogtailItem id={index} darkMode={darkMode} ref={lastElementRef}>
-            
             <code>{item.logTail}</code>
-
           </LogtailItem>
         );
       } else
@@ -138,7 +138,20 @@ export default function LogtailComponent(props: LogtailComponentProps) {
     });
   };
 
-  if (logtailData.length === 0 && !loadingLogtail) return <div> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div></div>;
+  if (logtailData.length === 0 && !loadingLogtail)
+    return (
+      <LogtailComponentWrapper
+        templateIsVisible={templateIsVisible}
+        wordCloudIsVisible={wordCloudIsVisible}
+        darkMode={darkMode}
+      >
+        
+        <LoadingWrapper>No results.</LoadingWrapper>
+        <div style={{ visibility: "hidden", fontSize: "2rem" }}>
+          {jankyString}
+        </div>
+      </LogtailComponentWrapper>
+    );
 
   return (
     <LogtailComponentWrapper

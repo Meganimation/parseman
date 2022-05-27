@@ -95,6 +95,20 @@ const RadioButtonWrapper = styled.div`
   }
 `;
 
+const PopoutLoader = styled.div`
+  z-index: 999999;
+  position: absolute;
+  top: 30%;
+  right: 20%;
+  height: 100px;
+  width: 300px;
+  background: red;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function TemplateTableComponent(
   props: TemplateTableComponentProps
 ) {
@@ -138,7 +152,7 @@ export default function TemplateTableComponent(
   );
 
   if (templateListData.length === 0 && !loadingTemplateData)
-    return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> No data!  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
+    return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> <LoadingWrapper>No results.</LoadingWrapper>  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
 
   return (
     <>
@@ -213,7 +227,7 @@ export default function TemplateTableComponent(
           }
         })}
          {loadingTemplateData && !error && templateListData.length > 0 && (
-          <div>Loading...</div>
+          <PopoutLoader>Loading...</PopoutLoader>
         )}
           {loadingTemplateData && !error && templateListData.length < 1 && (
           <><LoadingWrapper>Loading...</LoadingWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
