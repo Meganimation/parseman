@@ -1,4 +1,10 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useReducer,
+} from "react";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
@@ -92,13 +98,36 @@ const SavedParsedDataModal = styled.div`
 `;
 
 function App() {
+  interface action {
+    type: any;
+    payload?: number; // note the question mark
+  }
+
+  const reducer: any = (state: any, action: any) => {
+    switch (action.type) {
+      case "toggleLogtailVisibility":
+        return { ...state, logtailIsVisible: !state.logtailIsVisible };
+      case "toggleTemplateVisibility":
+        return { ...state, templateIsVisible: !state.templateIsVisible };
+      case "toggleWordCloudVisibility":
+        return { ...state, wordCloudIsVisible: !state.wordCloudIsVisible };
+      default:
+        return state;
+    }
+  };
+
+  const [{ logtailIsVisible, templateIsVisible, wordCloudIsVisible}, localDispatch]: any =
+    useReducer(reducer, {
+      logtailIsVisible: true,
+      templateIsVisible: true,
+      wordCloudIsVisible: true,
+      //do the rest....
+    });
+
   let yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date());
   let yesterdayStringified = yesterday.toISOString().split("T")[0];
-  // const [loading, setLoading] = useState(false);
+
   const [darkMode, setDarkMode] = useState(true);
-  const [logtailIsVisible, setLogtailIsVisible] = useState(true);
-  const [templateIsVisible, setTemplateIsVisible] = useState(true);
-  const [wordCloudIsVisible, setWordCloudIsVisible] = useState(true);
 
   const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
@@ -176,13 +205,13 @@ function App() {
   const showComponent = (nameOfComponents: any) => {
     switch (nameOfComponents) {
       case "logtailComponent":
-        setLogtailIsVisible(true);
+        localDispatch({ type: "toggleLogtailVisibility" });
         break;
       case "templateComponent":
-        setTemplateIsVisible(true);
+        localDispatch({ type: "toggleTemplateVisibility" });
         break;
       case "wordCloud":
-        setWordCloudIsVisible(true);
+        localDispatch({ type: "toggleWordCloudVisibility" });
         break;
       case "parsedSideInfoIsVisible":
         setParsedSideInfoIsVisible(true);
@@ -190,35 +219,12 @@ function App() {
     }
   };
 
-  // useMemo(() => {
-  //   setLoadingLogtail(true);
-  //   setError(false);
-  //   axios
-  //     .get(urlWithString)
-  //     .then((res) => {
-  //       setData(res.data);
-  //       setHasMore(res.data.length > 0);
-  //       setLoadingLogtail(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       if (URL === "OFFLINElogTail") {
-  //         setData(testLocalData);
-  //         setHasMore(testLocalData.length > 0);
-  //         setLoadingLogtail(false);
-  //       }
-  //       else {
-  //       setError(true)
-  //       }
-  //     });
-  // }, [urlWithString, URL]);
-
   const scrollToBottom = useCallback(() => {
     return setTimeout(function () {
       scrollToView();
     }, 500);
     // return scrollToView()
-  },[]);
+  }, []);
 
   const handleParsedDataRendering = useMemo(
     () => (checkedTemplateId: string, checkedTemplateVersion: string) => {
@@ -258,7 +264,6 @@ function App() {
       "parsedDataTable"
     );
     const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`; //change to totalTemplate amount
-    console.log("hey PARDES", CURRENT_ENVIRONMENT_TYPE);
     fetch(urlWithString)
       .then((res) => {
         if (!res.ok) {
@@ -459,7 +464,7 @@ function App() {
                 title={"Logtail"}
                 headerHeight="4vh"
                 onExit={() => {
-                  setLogtailIsVisible(false);
+                  localDispatch({ type: "toggleLogtailVisibility" });
                 }}
               >
                 <LogtailComponent
@@ -501,7 +506,7 @@ function App() {
                   goBackOnTailSearch();
                 }}
                 onExit={() => {
-                  setTemplateIsVisible(false);
+                  localDispatch({ type: "toggleTemplateVisibility" });
                 }}
               >
                 <TemplateTableComponent
@@ -524,7 +529,7 @@ function App() {
           <ComponentWindow
             darkMode={darkMode}
             onExit={() => {
-              setWordCloudIsVisible(false);
+              localDispatch({ type: "toggleWordCloudVisibility" });
             }}
             headerHeight="20px"
           >
@@ -610,6 +615,7 @@ type StyledAppType = {
 
 export interface TestProps {
   darkMode: boolean;
+  ActionType: any;
 }
 
 export default App;
