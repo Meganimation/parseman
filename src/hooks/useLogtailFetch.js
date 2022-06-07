@@ -41,7 +41,7 @@ export default function useLogtailFetch(
         setError(true)
         }
       });
-  }, [urlWithString]);
+  }, [urlWithString, URL]);
   return {
     loadingLogtail,
     logtailData: data,

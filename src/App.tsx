@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import "./App.css";
 import styled from "styled-components";
 import { ComponentWindow } from "stories/ComponentWindow";
@@ -53,7 +53,7 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   > nav {
-    background-color: #1251A2;
+    background-color: #1251a2;
   }
 `;
 
@@ -73,7 +73,7 @@ const OfflineAlert = styled.div<StyledAppType>`
   align-items: center;
 
   background-color: rgba(0, 0, 0, 0.3);
-`
+`;
 
 const SliderWrapper = styled.section`
   display: flex;
@@ -92,8 +92,8 @@ const SavedParsedDataModal = styled.div`
 `;
 
 function App() {
-  let yesterday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date());
-  let yesterdayStringified = yesterday.toISOString().split('T')[0];
+  let yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date());
+  let yesterdayStringified = yesterday.toISOString().split("T")[0];
   // const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [logtailIsVisible, setLogtailIsVisible] = useState(true);
@@ -104,7 +104,7 @@ function App() {
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
   const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
-  const [tailSearch, setTailSearch] = useState("");
+  const [tailSearch, setTailSearch] = useState("test");
   const [previousTailSearch, setPreviousTailSearch] = useState("");
 
   const [checkedTemplateId, setCheckedTemplateId] = useState("");
@@ -131,7 +131,6 @@ function App() {
   const savedParsedData: any = useSelector(
     (state: RootState) => state.returnedData.savedParsedData
   );
-
 
   const scrollToView = () =>
     //@ts-ignore
@@ -191,35 +190,58 @@ function App() {
     }
   };
 
-  const handleParsedDataRendering = (
-    checkedTemplateId: string,
-    checkedTemplateVersion: string
-  ) => {
-    fetchParsedData(
-      checkedTemplateId,
-      checkedTemplateVersion,
-      dispatch as any,
-      parsedDataPageAmount
-    );
-    setParsedDataIsVisible(true);
-    setSavedParsedDataModal(false);
-    scrollToBottom();
-  };
+  // useMemo(() => {
+  //   setLoadingLogtail(true);
+  //   setError(false);
+  //   axios
+  //     .get(urlWithString)
+  //     .then((res) => {
+  //       setData(res.data);
+  //       setHasMore(res.data.length > 0);
+  //       setLoadingLogtail(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       if (URL === "OFFLINElogTail") {
+  //         setData(testLocalData);
+  //         setHasMore(testLocalData.length > 0);
+  //         setLoadingLogtail(false);
+  //       }
+  //       else {
+  //       setError(true)
+  //       }
+  //     });
+  // }, [urlWithString, URL]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     return setTimeout(function () {
       scrollToView();
     }, 500);
     // return scrollToView()
-  };
+  },[]);
+
+  const handleParsedDataRendering = useMemo(
+    () => (checkedTemplateId: string, checkedTemplateVersion: string) => {
+      fetchParsedData(
+        checkedTemplateId,
+        checkedTemplateVersion,
+        dispatch as any,
+        parsedDataPageAmount
+      );
+      setParsedDataIsVisible(true);
+      setSavedParsedDataModal(false);
+      scrollToBottom();
+    },
+    [dispatch, parsedDataPageAmount, scrollToBottom]
+  );
 
   const handleTemplateVersionChange = (version: string) => {
     setTemplateVersion(version);
   };
 
-  const handlePagination = () => {
+  const handlePagination = useCallback(() => {
     setTemplatePageAmount(templatePageAmount + 20);
-  };
+  }, [templatePageAmount]);
 
   const handleLogtailPagination = () => {
     setLogtailPageAmount(logtailPageAmount + 50);
@@ -303,15 +325,14 @@ function App() {
     setTailSearch(previousTailSearch);
     if (previousTailSearch === tailSearch) {
       setTailSearch("");
-      setCheckedTemplateId("")
+      setCheckedTemplateId("");
     }
     if (previousTailSearch.includes("AND TemplateId=")) {
       let splitPreviousTailSearch = previousTailSearch.split("=");
-      setCheckedTemplateId(splitPreviousTailSearch[1])
-    }
-    else {
+      setCheckedTemplateId(splitPreviousTailSearch[1]);
+    } else {
       setCheckedTemplateId("");
-    };
+    }
   };
 
   const postNewHeaderName = (
@@ -423,7 +444,10 @@ function App() {
       />
 
       {CURRENT_ENVIRONMENT_TYPE === "OFFLINE" && (
-        <OfflineAlert darkMode={darkMode}> If you are seeing this: OFFLINE DEV MODE IS CURRENTLY ON.</OfflineAlert>
+        <OfflineAlert darkMode={darkMode}>
+          {" "}
+          If you are seeing this: OFFLINE DEV MODE IS CURRENTLY ON.
+        </OfflineAlert>
       )}
 
       <Content darkMode={darkMode}>
