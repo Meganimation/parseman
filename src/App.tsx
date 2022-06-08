@@ -32,6 +32,7 @@ import useLogtailFetch from "./hooks/useLogtailFetch";
 import useWordCloudFetch from "./hooks/useWordCloudFetch";
 import { Button } from "stories/Button";
 import { testLocalData } from "utils/offlineData/parsedData";
+import { Action } from "@reduxjs/toolkit";
 
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
@@ -98,12 +99,12 @@ const SavedParsedDataModal = styled.div`
 `;
 
 function App() {
-  interface action {
-    type: any;
-    payload?: number; // note the question mark
-  }
 
-  const reducer: any = (state: any, action: any) => {
+  let yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date());
+  let yesterdayStringified = yesterday.toISOString().split("T")[0];
+
+
+  const componentIsVisibleReducer: any = (state: any, action: any) => {
     switch (action.type) {
       case "toggleLogtailVisibility":
         return { ...state, logtailIsVisible: !state.logtailIsVisible };
@@ -111,47 +112,143 @@ function App() {
         return { ...state, templateIsVisible: !state.templateIsVisible };
       case "toggleWordCloudVisibility":
         return { ...state, wordCloudIsVisible: !state.wordCloudIsVisible };
+      case "toggleParsedDataTableSideVisibility":
+        return {
+          ...state,
+          parsedSideInfoIsVisible: !state.parsedSideInfoIsVisible,
+        };
       default:
         return state;
     }
   };
 
-  const [{ logtailIsVisible, templateIsVisible, wordCloudIsVisible}, localDispatch]: any =
-    useReducer(reducer, {
-      logtailIsVisible: true,
-      templateIsVisible: true,
-      wordCloudIsVisible: true,
-      //do the rest....
-    });
+  const [
+    {
+      logtailIsVisible,
+      templateIsVisible,
+      wordCloudIsVisible,
+      parsedSideInfoIsVisible,
+    },
+    setVisibility,
+  ]: any = useReducer(componentIsVisibleReducer, {
+    logtailIsVisible: true,
+    templateIsVisible: true,
+    wordCloudIsVisible: true,
+    parsedSideInfoIsVisible: true,
+  });
 
-  let yesterday = ((d) => new Date(d.setDate(d.getDate() - 1)))(new Date());
-  let yesterdayStringified = yesterday.toISOString().split("T")[0];
+  const infoFromCheckedTemplateListReducer: any = (state: any, action: any) => {
+    switch (action.type) {
+      case "clearAll":
+        return { previousCheckedTemplateId: state.checkedTemplateId,
+          previousCheckedTemplateVersion: state.checkedTemplateVersion, 
+          previousCheckedTemplateLiteral: state.checkedTemplateLiteral,
+          previousTemplateTotalAmount: state.checkedTemplateTotalAmount,
+          checkedTemplateId: "",
+          checkedTemplateVersion: "",
+          checkedTemplateLiteral: "",
+          checkedTemplateTotalAmount: "",
+        };
+      case "setAll":
+        console.log(action)
+        return {
+          previousCheckedTemplateId: state.checkedTemplateId,
+          previousCheckedTemplateVersion: state.checkedTemplateVersion, 
+          previousCheckedTemplateLiteral: state.checkedTemplateLiteral,
+          previousTemplateTotalAmount: state.checkedTemplateTotalAmount,
+          checkedTemplateId: action.templateIdValue,
+          checkedTemplateVersion: action.templateVersionValue,
+          checkedTemplateLiteral: action.templateLiteralValue,
+          checkedTemplateTotalAmount: action.templateTotalAmount,
+        };
+      default:
+        return state;
+    }
+  };
 
-  const [darkMode, setDarkMode] = useState(true);
+  const [
+    {
+      previousCheckedTemplateId,
+      previousCheckedTemplateVersion,
+      previousCheckedTemplateLiteral,
+      previousTemplateTotalAmount,
+      checkedTemplateId,
+      checkedTemplateVersion,
+      checkedTemplateLiteral,
+      checkedTemplateTotalAmount,
+    },
+    setInfoFromCheckedTemplateList,
+  ]: any = useReducer(infoFromCheckedTemplateListReducer, {
+    checkedTemplateId: "",
+    checkedTemplateVersion: "",
+    checkedTemplateLiteral: "",
+    checkedTemplateTotalAmount: "",
+  });
+
+  const navBarValuesReducer: any = (state: any, action: any) => {
+    switch (action.type) {
+      case "setTailSearch":
+        return { ...state, 
+          previousTailSearch: state.tailSearch,
+          tailSearch: action.value, 
+        };
+      case "setDateAndTime":
+        return {
+          ...state,
+          selectedStartDateAndTime: action.startDateAndTime,
+          selectedEndDateAndTime: action.endDateAndTime,
+        };
+        case "setTemplatePageAmount":
+        return {
+          ...state, templatePageAmount: state.templatePageAmount = state.templatePageAmount + 10 //FIX THIS SHIT
+        }
+        case "setTemplateVersion":
+          return {...state, templateVersion: action.templateVersion}
+      default:
+        return state;
+    }
+  };
+
+  const [
+    {
+      tailSearch,
+      previousTailSearch,
+      templateVersion,
+      templatePageAmount,
+      selectedStartDateAndTime,
+      selectedEndDateAndTime,
+    },
+    setNavbarValues,
+  ]: any = useReducer(navBarValuesReducer, {
+    tailSearch: "test",
+    previousTailSearch: "",
+    templateVersion: "1",
+    templatePageAmount: "20",
+    selectedStartDateAndTime: [yesterdayStringified, "05:00:00"],
+    selectedEndDateAndTime: [new Date().toISOString().slice(0, 10),"00:00:00"]
+  });
+
+
+
+  const [darkMode, setDarkMode] = useState(true); //How can we make this global?
 
   const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
-  const [parsedSideInfoIsVisible, setParsedSideInfoIsVisible] = useState(true);
 
-  const [tailSearch, setTailSearch] = useState("test");
-  const [previousTailSearch, setPreviousTailSearch] = useState("");
-
-  const [checkedTemplateId, setCheckedTemplateId] = useState("");
-  const [checkedTemplateVersion, setCheckedTemplateVersion] = useState("");
-  const [checkedTemplateLiteral, setCheckedTemplateLiteral] = useState("");
-  const [checkedTemplateTotalAmount, setCheckedTemplateTotalAmount] =
-    useState("");
-  const [templateVersion, setTemplateVersion] = useState("1");
-  const [templatePageAmount, setTemplatePageAmount] = useState(20);
+  // const [tailSearch, setTailSearch] = useState("test"); 
+  // const [previousTailSearch, setPreviousTailSearch] = useState(""); 
+  // const [templateVersion, setTemplateVersion] = useState("1");
+  // const [templatePageAmount, setTemplatePageAmount] = useState(20);
+  // const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
+  // React.useState([yesterdayStringified, "05:00:00"]);
+  // const [selectedEndDateAndTime, setSelectedEndDateAndTime] = React.useState([
+  //   new Date().toISOString().slice(0, 10),
+  //   "00:00:00",
+  // ]);
   const [savedParsedDataModal, setSavedParsedDataModal] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
-    React.useState([yesterdayStringified, "05:00:00"]);
-  const [selectedEndDateAndTime, setSelectedEndDateAndTime] = React.useState([
-    new Date().toISOString().slice(0, 10),
-    "00:00:00",
-  ]);
+
 
   const returnedData: any = useSelector(
     (state: RootState) => state.returnedData.parsedDataSidebarInfo
@@ -205,16 +302,16 @@ function App() {
   const showComponent = (nameOfComponents: any) => {
     switch (nameOfComponents) {
       case "logtailComponent":
-        localDispatch({ type: "toggleLogtailVisibility" });
+        setVisibility({ type: "toggleLogtailVisibility" });
         break;
       case "templateComponent":
-        localDispatch({ type: "toggleTemplateVisibility" });
+        setVisibility({ type: "toggleTemplateVisibility" });
         break;
       case "wordCloud":
-        localDispatch({ type: "toggleWordCloudVisibility" });
+        setVisibility({ type: "toggleWordCloudVisibility" });
         break;
       case "parsedSideInfoIsVisible":
-        setParsedSideInfoIsVisible(true);
+        setVisibility({ type: "toggleParsedDataTableSideVisibility" });
         break;
     }
   };
@@ -223,7 +320,6 @@ function App() {
     return setTimeout(function () {
       scrollToView();
     }, 500);
-    // return scrollToView()
   }, []);
 
   const handleParsedDataRendering = useMemo(
@@ -242,12 +338,15 @@ function App() {
   );
 
   const handleTemplateVersionChange = (version: string) => {
-    setTemplateVersion(version);
+    // setTemplateVersion(version);
+    setNavbarValues({ type: "setTemplateVersion",  templateVersion: version});
   };
 
   const handlePagination = useCallback(() => {
-    setTemplatePageAmount(templatePageAmount + 20);
-  }, [templatePageAmount]);
+    // setTemplatePageAmount(templatePageAmount + 20);
+    setNavbarValues({ type: "setTemplatePageAmount",  amountToAdd: 20});
+    
+  }, []);
 
   const handleLogtailPagination = () => {
     setLogtailPageAmount(logtailPageAmount + 50);
@@ -285,12 +384,13 @@ function App() {
   };
 
   const updateTailSearchResultsHandler = (value: string) => {
-    setPreviousTailSearch(tailSearch);
-    setTailSearch(value);
+    // setPreviousTailSearch(tailSearch);
+    // setTailSearch(value);
+    setNavbarValues({ type: "setTailSearch",  value});
   };
 
   const handleExit = () => {
-    setParsedSideInfoIsVisible(false);
+    setVisibility({ type: "toggleParsedDataTableSideVisibility" });
   };
 
   const handleCheckedRadio = (
@@ -299,10 +399,13 @@ function App() {
     templateLiteralValue: string,
     templateTotalAmount: string
   ) => {
-    setCheckedTemplateId(templateIdValue);
-    setCheckedTemplateVersion(templateVersionValue);
-    setCheckedTemplateLiteral(templateLiteralValue);
-    setCheckedTemplateTotalAmount(templateTotalAmount);
+    setInfoFromCheckedTemplateList({
+      type: "setAll",
+      templateIdValue,
+      templateVersionValue,
+      templateLiteralValue,
+      templateTotalAmount,
+    });
   };
 
   const handleStartDateChange = (date: any) => {
@@ -310,7 +413,7 @@ function App() {
     const formattedDate = (date as Date).toISOString().slice(0, 19);
     const selectedDate = formattedDate.split("T")[0];
     let splitRawDate = rawDate.split(" ");
-    setSelectedStartDateAndTime([selectedDate, splitRawDate[4]]);
+    setNavbarValues({ type: "setDateAndTime",  startDateAndTime: [selectedDate, splitRawDate[4]], endDateAndTime: selectedEndDateAndTime});
   };
 
   const handleEndDateChange = (date: any) => {
@@ -318,25 +421,34 @@ function App() {
     const formattedDate = (date as Date).toISOString().slice(0, 19);
     const selectedEndDate = formattedDate.split("T")[0];
     let splitRawDate = rawDate.split(" ");
-    setSelectedEndDateAndTime([selectedEndDate, splitRawDate[4]]);
+    setNavbarValues({ type: "setDateAndTime",  startDateAndTime: selectedStartDateAndTime, endDateAndTime: [selectedEndDate, splitRawDate[4]]});
   };
 
   const addWordToInput = (word: string) => {
     let value = `${tailSearch} AND ${word}`;
-    setTailSearch(value);
+    // setTailSearch(value);
+    setNavbarValues({ type: "setTailSearch",  value});
   };
 
   const goBackOnTailSearch = () => {
-    setTailSearch(previousTailSearch);
+    
+    // setTailSearch(previousTailSearch);
+    setNavbarValues({ type: "setTailSearch",  value:previousTailSearch});
     if (previousTailSearch === tailSearch) {
-      setTailSearch("");
-      setCheckedTemplateId("");
+      setNavbarValues({ type: "setTailSearch",  value: ""});
+      setInfoFromCheckedTemplateList({type: "clearAll"})
     }
-    if (previousTailSearch.includes("AND TemplateId=")) {
-      let splitPreviousTailSearch = previousTailSearch.split("=");
-      setCheckedTemplateId(splitPreviousTailSearch[1]);
+    if (previousTailSearch.includes(" AND TemplateId=")) {
+      let splitPreviousTailSearch = previousTailSearch.split("=")[1];
+      console.log(
+        "the previous tail search includes this data!",
+        splitPreviousTailSearch
+      );
+      setInfoFromCheckedTemplateList({type: "clearAll"})
+      setNavbarValues({ type: "setTailSearch",  value: `AND TemplateId=${splitPreviousTailSearch}`});
     } else {
-      setCheckedTemplateId("");
+      setNavbarValues({ type: "setTailSearch",  value: ""});
+      setInfoFromCheckedTemplateList({type: "clearAll"})
     }
   };
 
@@ -393,7 +505,7 @@ function App() {
   };
 
   const updateTemplateLiteral = (newTemplateLiteral: any) => {
-    setCheckedTemplateLiteral(newTemplateLiteral);
+    // setCheckedTemplateLiteral(newTemplateLiteral);
   };
 
   const bringMoreData = (e: any) => {
@@ -418,7 +530,7 @@ function App() {
   };
 
   const fetchSavedParsedData = (data: string) => {
-    setCheckedTemplateId(data);
+    // setCheckedTemplateId(data);
     //TODO: also save templateVersion to redux and fetch that
     //ALSO: Make this async
     handleParsedDataRendering(data, "1");
@@ -464,7 +576,7 @@ function App() {
                 title={"Logtail"}
                 headerHeight="4vh"
                 onExit={() => {
-                  localDispatch({ type: "toggleLogtailVisibility" });
+                  setVisibility({ type: "toggleLogtailVisibility" });
                 }}
               >
                 <LogtailComponent
@@ -506,7 +618,7 @@ function App() {
                   goBackOnTailSearch();
                 }}
                 onExit={() => {
-                  localDispatch({ type: "toggleTemplateVisibility" });
+                  setVisibility({ type: "toggleTemplateVisibility" });
                 }}
               >
                 <TemplateTableComponent
@@ -529,7 +641,7 @@ function App() {
           <ComponentWindow
             darkMode={darkMode}
             onExit={() => {
-              localDispatch({ type: "toggleWordCloudVisibility" });
+              setVisibility({ type: "toggleWordCloudVisibility" });
             }}
             headerHeight="20px"
           >
@@ -586,7 +698,7 @@ function App() {
         <Modal
           darkMode={darkMode}
           onExit={() => {
-            setSavedParsedDataModal(false);
+            setVisibility({ type: "toggleParsedDataTableSideVisibility" });
           }}
         >
           <SavedParsedDataModal>

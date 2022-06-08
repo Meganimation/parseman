@@ -48,8 +48,8 @@ export const CurrentDataSlice = createSlice({
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
         const tempSortArr: any = [];
-        const arrayOfLines = action.payload.lines[i].itemBody;
-        for (let i = 0; i < arrayOfLines.length; i++) {
+        const arrayOfLines = action.payload.lines[i]?.itemBody;
+        for (let i = 0; i < arrayOfLines?.length; i++) {
           if (!tempHash[arrayOfLines[i].bodyHeader]) {
             tempHash[arrayOfLines[i].bodyHeader] = [];
           }
