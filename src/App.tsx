@@ -198,9 +198,9 @@ function App() {
           selectedStartDateAndTime: action.startDateAndTime,
           selectedEndDateAndTime: action.endDateAndTime,
         };
-        case "setTemplatePageAmount":
+        case "setTemplatePageAmount": //DO THIS FOR THE OTHER PAGES
         return {
-          ...state, templatePageAmount: state.templatePageAmount = state.templatePageAmount + 10 //FIX THIS SHIT
+          ...state, templatePageAmount: state.templatePageAmount = state.templatePageAmount + 10
         }
         case "setTemplateVersion":
           return {...state, templateVersion: action.templateVersion}
@@ -223,7 +223,7 @@ function App() {
     tailSearch: "test",
     previousTailSearch: "",
     templateVersion: "1",
-    templatePageAmount: "20",
+    templatePageAmount: 20,
     selectedStartDateAndTime: [yesterdayStringified, "05:00:00"],
     selectedEndDateAndTime: [new Date().toISOString().slice(0, 10),"00:00:00"]
   });
@@ -234,17 +234,6 @@ function App() {
 
   const [modal, setModal] = useState(false);
   const [parsedDataIsVisible, setParsedDataIsVisible] = useState(false);
-
-  // const [tailSearch, setTailSearch] = useState("test"); 
-  // const [previousTailSearch, setPreviousTailSearch] = useState(""); 
-  // const [templateVersion, setTemplateVersion] = useState("1");
-  // const [templatePageAmount, setTemplatePageAmount] = useState(20);
-  // const [selectedStartDateAndTime, setSelectedStartDateAndTime] =
-  // React.useState([yesterdayStringified, "05:00:00"]);
-  // const [selectedEndDateAndTime, setSelectedEndDateAndTime] = React.useState([
-  //   new Date().toISOString().slice(0, 10),
-  //   "00:00:00",
-  // ]);
   const [savedParsedDataModal, setSavedParsedDataModal] = useState(false);
   const messagesEndRef = useRef(null);
 
