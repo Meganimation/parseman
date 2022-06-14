@@ -1,7 +1,7 @@
-import React, { useState, useRef} from "react";
+import React, { useState} from "react";
 import styled from "styled-components";
 import Tooltip from "stories/Tooltip/Tooltip";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
 import { Modal } from "stories/Modal";

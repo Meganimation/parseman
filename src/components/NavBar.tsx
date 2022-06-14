@@ -207,7 +207,7 @@ export default function NavBar(props: INavBarProps) {
               {!props.logtailIsVisible && (
                 <div
                   onClick={() => {
-                    props.showComponent("logtailComponent");
+                    props.unhideComponent("logtailComponent");
                   }}
                 >
                   <UnhideComponentItem>
@@ -220,7 +220,7 @@ export default function NavBar(props: INavBarProps) {
               {!props.templateIsVisible && (
                 <div
                   onClick={() => {
-                    props.showComponent("templateComponent");
+                    props.unhideComponent("templateComponent");
                   }}
                 >
                   <UnhideComponentItem>
@@ -233,7 +233,7 @@ export default function NavBar(props: INavBarProps) {
               {!props.wordCloudIsVisible && (
                 <div
                   onClick={() => {
-                    props.showComponent("wordCloud");
+                    props.unhideComponent("wordCloud");
                   }}
                 >
                   <UnhideComponentItem>
@@ -246,7 +246,7 @@ export default function NavBar(props: INavBarProps) {
               {!props.parsedSideInfoIsVisible && (
                 <div
                   onClick={() => {
-                    props.showComponent("parsedSideInfoIsVisible");
+                    props.unhideComponent("parsedSideInfoIsVisible");
                   }}
                 >
                   <UnhideComponentItem>
@@ -286,7 +286,7 @@ type StyledNavType = {
 };
 
 interface INavBarProps {
-  showComponent: (nameOfComponents: string) => void;
+  unhideComponent: (nameOfComponents: string) => void;
   logtailIsVisible?: any;
   templateIsVisible: boolean;
   wordCloudIsVisible: boolean;

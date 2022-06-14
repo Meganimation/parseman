@@ -20,9 +20,7 @@ color: ${(props) => (props.iconColor ? props.iconColor : props.darkMode ? "white
 
 function Exit(props: IExitProps) {
     return (
-        <div>
              <ExitWrapper><StyledClearIcon iconColor={props.iconColor} darkMode={props.darkMode} onClick={props.onExit} /> </ExitWrapper>
-        </div>
     )
 }
 

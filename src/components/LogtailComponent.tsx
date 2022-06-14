@@ -2,17 +2,17 @@ import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
-z-index: 999999;
-position: absolute;
-top: 30%;
-left: 10%;
-height: 100px;
-width: 300px;
-background: red;
-background-color: rgba(0, 0, 0, 0.5);
-display: flex;
-justify-content: center;
-align-items: center;
+  z-index: 999999;
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  height: 100px;
+  width: 300px;
+  background: red;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ErrorWrapper = styled.div`
@@ -85,19 +85,10 @@ export default function LogtailComponent(props: LogtailComponentProps) {
     logtailData,
     logtailError,
     handleLogtailPagination,
-    // templateVersion
   } = props;
 
   const observer = useRef<any>();
 
-  // const templateVersionString =
-  //   templateVersion === "1"
-  //     ? " a Template"
-  //     : templateVersion === "2"
-  //     ? "Variable"
-  //     : "Both a template and a variable";
-
-  //@ts-ignore
   const lastElementRef = useCallback(
     (node) => {
       if (loadingLogtail) return;
@@ -121,18 +112,18 @@ export default function LogtailComponent(props: LogtailComponentProps) {
     ]
   );
 
-  const mapData = (data: any) => {
-    return data.map((item: any, index: number) => {
+  const mapLogtailData = (logtailData: any) => {
+    return logtailData.map((logtailItem: any, index: number) => {
       if (logtailData.length === index + 1) {
         return (
           <LogtailItem id={index} darkMode={darkMode} ref={lastElementRef}>
-            <code>{item.logTail}</code>
+            <code>{logtailItem.logTail}</code>
           </LogtailItem>
         );
       } else
         return (
           <LogtailItem id={index} darkMode={darkMode} ref={lastElementRef}>
-            <code>{item.logTail}</code>
+            <code>{logtailItem.logTail}</code>
           </LogtailItem>
         );
     });
@@ -145,7 +136,6 @@ export default function LogtailComponent(props: LogtailComponentProps) {
         wordCloudIsVisible={wordCloudIsVisible}
         darkMode={darkMode}
       >
-        
         <LoadingWrapper>No results.</LoadingWrapper>
         <div style={{ visibility: "hidden", fontSize: "2rem" }}>
           {jankyString}
@@ -159,7 +149,7 @@ export default function LogtailComponent(props: LogtailComponentProps) {
       wordCloudIsVisible={wordCloudIsVisible}
       darkMode={darkMode}
     >
-      {mapData(logtailData)}
+      {mapLogtailData(logtailData)}
       {loadingLogtail && !logtailError && (
         <LoadingWrapper>Loading...</LoadingWrapper>
       )}

@@ -95,7 +95,7 @@ const RadioButtonWrapper = styled.div`
   }
 `;
 
-const PopoutLoader = styled.div`
+const PopoutLoader = styled.div` 
   z-index: 999999;
   position: absolute;
   top: 30%;
@@ -129,9 +129,7 @@ export default function TemplateTableComponent(
   } = props;
 
   const observer = useRef<any>();
-
-  // const templateVersionString = templateVersion === "1" ? " a Template" : templateVersion === "2" ? "Variable" : "Both a template and a variable";
-
+  
   //@ts-ignore
   const lastElementRef = useCallback(
     (node) => {
@@ -153,7 +151,7 @@ export default function TemplateTableComponent(
 
   if (templateListData.length === 0 && !loadingTemplateData)
     return <TemplateTableComponentWrapper darkMode={darkMode} wordCloudIsVisible={wordCloudIsVisible}> <PopoutLoader>No results.</PopoutLoader>  <div style={{ visibility: "hidden", fontSize: '3rem' }}>{jankyString}</div> </TemplateTableComponentWrapper>;
-
+    if (error) return <><ErrorWrapper>Error </ErrorWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
   return (
     <>
       <TemplateTableComponentWrapper
@@ -232,7 +230,6 @@ export default function TemplateTableComponent(
           {loadingTemplateData && !error && templateListData.length < 1 && (
           <><PopoutLoader>Loading...</PopoutLoader><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>
         )}
-        {error && <><ErrorWrapper>Error </ErrorWrapper><div style={{opacity: '0', fontSize: '3rem'}}>{jankyString}</div></>} 
       </TemplateTableComponentWrapper>
     </>
   );

@@ -370,25 +370,25 @@ export default function ParsedDataComponent({
 
 
       //this is for when you hover on the header
-      let newString2 = props.checkedTemplateLiteral.replace(
+      let highlightValueInTemplateLiteral = props.checkedTemplateLiteral.replace(
         `<<<${targetedHeaderString}>>>`,
         `>>>${targetedHeaderString}<<<`
       );
 
-      props.updateTemplateLiteral(newString2);
+      props.updateTemplateLiteral(highlightValueInTemplateLiteral);
     }
     if (!mouseOver) {
       const targetedHeaderString = state.headers[headerIndex][0];
       //this is for when you hover on the header
-      let newString2 = props.checkedTemplateLiteral.replace(
+      let highlightValueInTemplateLiteral = props.checkedTemplateLiteral.replace(
         `>>>${targetedHeaderString}<<<`,
         `<<<${targetedHeaderString}>>>`
       );
 
-      props.updateTemplateLiteral(newString2);
+      props.updateTemplateLiteral(highlightValueInTemplateLiteral);
     }
   };
-
+  
   return (
     <ParsedDataComponentWrapper>
       {parsedSideInfoIsVisible && (
@@ -397,7 +397,7 @@ export default function ParsedDataComponent({
           <InfoBar darkMode={darkMode}>
             <>
               totalTemplates: (enter total templates here) showing
-              <select name="cars" id="cars" onChange={(e)=>{props.bringMoreData(e)}}>
+              <select name="cars" id="cars" onChange={(e)=>{props.changeParsedDataPageAmount(e)}}>
                 <option value="50">50</option>
                 <option value="100">100</option>
                 <option value="150">150</option>
@@ -491,6 +491,6 @@ interface IParsedDataComponentProps {
   postNewTemplateId: any;
   updateTemplateLiteral: any;
   postNewHeaderName: any;
-  bringMoreData: any;
+  changeParsedDataPageAmount: any;
   parsedDataPageAmount: number;
 }

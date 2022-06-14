@@ -9,6 +9,7 @@ export interface CurrentDataSliceState {
   HASHED_DATA: any;
   parsedDataIsLoading: boolean;
   savedParsedData: any;
+  error: boolean;
 }
 
 const initialState: CurrentDataSliceState = {
@@ -19,6 +20,7 @@ const initialState: CurrentDataSliceState = {
   hashedParsedData: {},
   parsedDataIsLoading: false, 
   HASHED_DATA: [],
+  error: false,
   savedParsedData: ['781636836_a8f223'],
 };
 
@@ -44,21 +46,30 @@ export const CurrentDataSlice = createSlice({
       let arrOfSortBool: any[] = [];
       const tempHash: any = {};
       state.parsedDataIsLoading = true;
-      for (let i = 0; i <= pageAmount; i++) {
+      console.log('found the bug', pageAmount, action.payload.lines.length)
+      let amountToIterateThrough = Math.min(pageAmount, action.payload.lines.length - 1)
+      console.log('amount to iterate', amountToIterateThrough)
+      for (let i = 0; (i <= amountToIterateThrough); i++) {
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
         const tempSortArr: any = [];
-        const arrayOfLines = action.payload.lines[i]?.itemBody;
-        for (let i = 0; i < arrayOfLines?.length; i++) {
-          if (!tempHash[arrayOfLines[i].bodyHeader]) {
-            tempHash[arrayOfLines[i].bodyHeader] = [];
+  
+        if (action.payload.lines[i].itemBody === undefined) {
+          console.log('item body doesnt exist, somehow an error occurred')
+          state.error = true;
+          break}
+
+        const arrayOfLines = action.payload.lines[i].itemBody;
+        for (let j = 0; j < arrayOfLines.length; j++) {
+          if (!tempHash[arrayOfLines[j].bodyHeader]) {
+            tempHash[arrayOfLines[j].bodyHeader] = [];
           }
-          tempHash[arrayOfLines[i].bodyHeader] = tempHash[
-            arrayOfLines[i].bodyHeader
-          ].concat(arrayOfLines[i].bodyValue);
+          tempHash[arrayOfLines[j].bodyHeader] = tempHash[
+            arrayOfLines[j].bodyHeader
+          ].concat(arrayOfLines[j].bodyValue);
           tempSortArr.push("descending");
-          tempArr.push(arrayOfLines[i].bodyValue);
-          tempArrOfHeaders.push([arrayOfLines[i].bodyHeader]);
+          tempArr.push(arrayOfLines[j].bodyValue);
+          tempArrOfHeaders.push([arrayOfLines[j].bodyHeader]);
         }
 
         arrOfRows = [...arrOfRows, tempArr];
@@ -95,6 +106,6 @@ export const CurrentDataSlice = createSlice({
   }},
 });
 
-export const { convertToParsed, hashedData, saveToParsedData } = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData, saveToParsedData} = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;
