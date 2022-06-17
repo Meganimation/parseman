@@ -446,7 +446,7 @@ export default function ParsedDataComponent({
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
-              <p className="templateLiteral">{props.checkedTemplateLiteral}</p>
+              <p className="templateLiteral">{props.currentParsedDataTemplateLiteral}</p>
             </InfoItem>
           </InfoBar>
         </>
@@ -493,4 +493,5 @@ interface IParsedDataComponentProps {
   postNewHeaderName: any;
   changeParsedDataPageAmount: any;
   parsedDataPageAmount: number;
+  currentParsedDataTemplateLiteral: string;
 }

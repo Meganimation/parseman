@@ -169,6 +169,10 @@ function App() {
   });
 
   const [darkMode, setDarkMode] = useState(true); //How can we make this global?
+  const [
+    currentParsedDataTemplateLiteral,
+    setCurrentParsedDataTemplateLiteral,
+  ] = useState("");
 
   const scrollToViewRef = useRef(null);
 
@@ -252,11 +256,12 @@ function App() {
         dispatch as any,
         parsedDataPageAmount
       );
+      setCurrentParsedDataTemplateLiteral(checkedTemplateLiteral);
       setVisibility({ type: "toggleParsedDataTableVisibility", visible: true });
       setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
       scrollToBottom();
     },
-    [dispatch, parsedDataPageAmount, scrollToBottom]
+    [dispatch, parsedDataPageAmount, scrollToBottom, checkedTemplateLiteral]
   );
 
   const handleTemplateVersionChange = (version: string) => {
@@ -353,7 +358,6 @@ function App() {
   };
 
   const addWordToInput = (wordValueFromWordCloud: string) => {
-    console.log('add thus', wordValueFromWordCloud)
     const combinedString = `${tailSearch} AND ${wordValueFromWordCloud}`;
     setNavbarValues({ type: "setTailSearch", value: combinedString });
   };
@@ -364,7 +368,8 @@ function App() {
       setNavbarValues({ type: "setTailSearch", value: "" });
       setInfoFromCheckedTemplateList({ type: "clearAll" });
     }
-    if (tailSearch.includes(" AND TemplateId=")) { //maybe do something different with this if a bug occurrs
+    if (tailSearch.includes(" AND TemplateId=")) {
+      //maybe do something different with this if a bug occurrs
       setNavbarValues({
         type: "setTailSearch",
         value: previousTailSearch,
@@ -452,21 +457,33 @@ function App() {
   };
 
   const saveParsedInfo = () => {
-    if (savedParsedData.includes(returnedData.templateId))
-      return alert("It's already saved");
-    setVisibility({ type: "toggleModalVisibility", visible: true });
-    dispatch(saveToParsedData(returnedData.templateId));
+    let breakOut = "false";
+    savedParsedData.map((data: any) => {
+      if (data.savedTemplateId === returnedData.templateId) {
+        breakOut = "true";
+        return alert("It's already saved");
+      }
+    });
+    if (breakOut === "true") return null;
+    else {
+      setVisibility({ type: "toggleModalVisibility", visible: true });
+      dispatch(
+        saveToParsedData({
+          savedTemplateId: returnedData.templateId,
+          savedTemplateVersion: returnedData.version,
+          savedTemplateLiteral: currentParsedDataTemplateLiteral,
+        })
+      );
+    }
   };
 
   const handleSavedParsedDataModal = () => {
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: true });
   };
 
-  const fetchSavedParsedData = (data: string) => {
-    // setCheckedTemplateId(data);
-    //TODO: also save templateVersion to redux and fetch that
-    //ALSO: Make this async
-    handleParsedDataRendering(data, "1");
+  const fetchSavedParsedData = (data: any) => {
+    handleParsedDataRendering(data.savedTemplateId, data.savedTemplateVersion);
+    setCurrentParsedDataTemplateLiteral(data.savedTemplateLiteral);
 
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
   };
@@ -605,7 +622,7 @@ function App() {
           darkMode={darkMode}
           title={"Parsed Data Table"}
           buttonOne
-          buttonOneText="Favorite"
+          buttonOneText="Favorite" //maybe hide this button if the checkedTemplateVersion is different to the returnedData.template ORRRR have parse data render automatically when user selects something in templateTable
           onButtonOneClick={() => {
             saveParsedInfo();
           }}
@@ -621,6 +638,9 @@ function App() {
               postNewHeaderName={postNewHeaderName}
               changeParsedDataPageAmount={changeParsedDataPageAmount}
               parsedDataPageAmount={parsedDataPageAmount}
+              currentParsedDataTemplateLiteral={
+                currentParsedDataTemplateLiteral
+              }
             />
           </div>
         </ComponentWindow>
@@ -650,10 +670,10 @@ function App() {
         >
           <SavedParsedDataModal>
             <h1> Previously Saved Data </h1>
-            {savedParsedData.map((data: string) => (
+            {savedParsedData.map((data: any) => (
               <div>
                 <Button
-                  label={data}
+                  label={data.savedTemplateId}
                   onClick={() => {
                     fetchSavedParsedData(data);
                   }}

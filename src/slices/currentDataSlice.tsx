@@ -21,7 +21,7 @@ const initialState: CurrentDataSliceState = {
   parsedDataIsLoading: false, 
   HASHED_DATA: [],
   error: false,
-  savedParsedData: ['781636836_a8f223'],
+  savedParsedData: [],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -46,9 +46,7 @@ export const CurrentDataSlice = createSlice({
       let arrOfSortBool: any[] = [];
       const tempHash: any = {};
       state.parsedDataIsLoading = true;
-      console.log('found the bug', pageAmount, action.payload.lines.length)
       let amountToIterateThrough = Math.min(pageAmount, action.payload.lines.length - 1)
-      console.log('amount to iterate', amountToIterateThrough)
       for (let i = 0; (i <= amountToIterateThrough); i++) {
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
