@@ -7,7 +7,11 @@ import React, {
 } from "react";
 import "./App.css";
 import styled from "styled-components";
-import {componentIsVisibleReducer, infoFromCheckedTemplateListReducer, navBarValuesReducer} from './reducers'
+import {
+  componentIsVisibleReducer,
+  infoFromCheckedTemplateListReducer,
+  navBarValuesReducer,
+} from "./reducers";
 import { ComponentWindow } from "stories/ComponentWindow";
 import { Modal } from "stories/Modal";
 import {
@@ -122,7 +126,6 @@ function App() {
     modal: false,
   });
 
-
   const [
     {
       previousCheckedTemplateId,
@@ -227,7 +230,10 @@ function App() {
         setVisibility({ type: "toggleWordCloudVisibility", visible: true });
         break;
       case "parsedSideInfoIsVisible":
-        setVisibility({ type: "toggleParsedDataTableSideVisibility", visible: true });
+        setVisibility({
+          type: "toggleParsedDataTableSideVisibility",
+          visible: true,
+        });
         break;
     }
   };
@@ -246,12 +252,8 @@ function App() {
         dispatch as any,
         parsedDataPageAmount
       );
-      setVisibility(
-        { type: "toggleParsedDataTableVisibility", visible: true},
-      );
-      setVisibility(
-        { type: "toggleParsedDataModalVisbility", visible: false },
-      );
+      setVisibility({ type: "toggleParsedDataTableVisibility", visible: true });
+      setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
       scrollToBottom();
     },
     [dispatch, parsedDataPageAmount, scrollToBottom]
@@ -271,7 +273,7 @@ function App() {
 
   const fetchParsedData = (
     checkedTemplateId: string,
-    templateVersion: string, //this needs to be the parsed templateversion
+    checkedTemplateVersion: string,
     dispatch: any,
     parsedDataPageAmount: number
   ) => {
@@ -279,7 +281,7 @@ function App() {
       CURRENT_ENVIRONMENT_TYPE,
       "parsedDataTable"
     );
-    const urlWithString = `${URL}/${checkedTemplateId}/${templateVersion}/?limit=500`; //change to totalTemplate amount
+    const urlWithString = `${URL}/${checkedTemplateId}/${checkedTemplateVersion}/?limit=500`;
     fetch(urlWithString)
       .then((res) => {
         if (!res.ok) {
@@ -305,7 +307,10 @@ function App() {
   };
 
   const handleExit = () => {
-    setVisibility({ type: "toggleParsedDataTableSideVisibility", visible: false });
+    setVisibility({
+      type: "toggleParsedDataTableSideVisibility",
+      visible: false,
+    });
   };
 
   const handleCheckedRadio = (
@@ -324,10 +329,10 @@ function App() {
   };
 
   const handleStartDateChange = (date: any) => {
-    let rawDate = date.toString();
+    const rawDate = date.toString();
     const formattedDate = (date as Date).toISOString().slice(0, 19);
     const selectedDate = formattedDate.split("T")[0];
-    let splitRawDate = rawDate.split(" ");
+    const splitRawDate = rawDate.split(" ");
     setNavbarValues({
       type: "setDateAndTime",
       startDateAndTime: [selectedDate, splitRawDate[4]],
@@ -336,10 +341,10 @@ function App() {
   };
 
   const handleEndDateChange = (date: any) => {
-    let rawDate = date.toString();
+    const rawDate = date.toString();
     const formattedDate = (date as Date).toISOString().slice(0, 19);
     const selectedEndDate = formattedDate.split("T")[0];
-    let splitRawDate = rawDate.split(" ");
+    const splitRawDate = rawDate.split(" ");
     setNavbarValues({
       type: "setDateAndTime",
       startDateAndTime: selectedStartDateAndTime,
@@ -347,9 +352,10 @@ function App() {
     });
   };
 
-  const addWordToInput = (word: string) => {
-    let value = `${tailSearch} AND ${word}`;
-    setNavbarValues({ type: "setTailSearch", value });
+  const addWordToInput = (wordValueFromWordCloud: string) => {
+    console.log('add thus', wordValueFromWordCloud)
+    const combinedString = `${tailSearch} AND ${wordValueFromWordCloud}`;
+    setNavbarValues({ type: "setTailSearch", value: combinedString });
   };
 
   const goBackOnTailSearch = () => {
@@ -358,15 +364,14 @@ function App() {
       setNavbarValues({ type: "setTailSearch", value: "" });
       setInfoFromCheckedTemplateList({ type: "clearAll" });
     }
-    if (previousTailSearch.includes(" AND TemplateId=")) {
-      let splitPreviousTailSearch = previousTailSearch.split("=")[1];
-      setInfoFromCheckedTemplateList({ type: "clearAll" });
+    if (tailSearch.includes(" AND TemplateId=")) { //maybe do something different with this if a bug occurrs
       setNavbarValues({
         type: "setTailSearch",
-        value: `AND TemplateId=${splitPreviousTailSearch}`,
+        value: previousTailSearch,
       });
+      setInfoFromCheckedTemplateList({ type: "clearAll" });
     } else {
-      setNavbarValues({ type: "setTailSearch", value: "" });
+      setNavbarValues({ type: "setTailSearch", value: previousTailSearch });
       setInfoFromCheckedTemplateList({ type: "clearAll" });
     }
   };
@@ -454,9 +459,7 @@ function App() {
   };
 
   const handleSavedParsedDataModal = () => {
-    setVisibility(
-      { type: "toggleParsedDataModalVisbility", visible: true }
-    );
+    setVisibility({ type: "toggleParsedDataModalVisbility", visible: true });
   };
 
   const fetchSavedParsedData = (data: string) => {
@@ -465,18 +468,12 @@ function App() {
     //ALSO: Make this async
     handleParsedDataRendering(data, "1");
 
-    setVisibility(
-      { type: "toggleParsedDataModalVisbility", visible: false },
-    );
+    setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
   };
 
   const switchModals = () => {
-    setVisibility(
-      { type: "toggleParsedDataModalVisbility", visible: true },
-    );
-    setVisibility(
-      { type: "toggleModalVisibility", visible: false },
-    );
+    setVisibility({ type: "toggleParsedDataModalVisbility", visible: true });
+    setVisibility({ type: "toggleModalVisibility", visible: false });
   };
 
   return (
@@ -514,7 +511,10 @@ function App() {
                 title={"Logtail"}
                 headerHeight="4vh"
                 onExit={() => {
-                  setVisibility({ type: "toggleLogtailVisibility", visible: false });
+                  setVisibility({
+                    type: "toggleLogtailVisibility",
+                    visible: false,
+                  });
                 }}
               >
                 <LogtailComponent
@@ -556,7 +556,10 @@ function App() {
                   goBackOnTailSearch();
                 }}
                 onExit={() => {
-                  setVisibility({ type: "toggleTemplateVisibility", visible: false });
+                  setVisibility({
+                    type: "toggleTemplateVisibility",
+                    visible: false,
+                  });
                 }}
               >
                 <TemplateTableComponent
@@ -579,7 +582,10 @@ function App() {
           <ComponentWindow
             darkMode={darkMode}
             onExit={() => {
-              setVisibility({ type: "toggleWordCloudVisibility", visible: false });
+              setVisibility({
+                type: "toggleWordCloudVisibility",
+                visible: false,
+              });
             }}
             headerHeight="20px"
           >
@@ -623,10 +629,7 @@ function App() {
       {modal && (
         <Modal
           onExit={() => {
-            setVisibility(
-              { type: "toggleModalVisibility", visible: false },
-            );
-
+            setVisibility({ type: "toggleModalVisibility", visible: false });
           }}
           title="Saved!"
           darkMode={darkMode}
@@ -639,7 +642,10 @@ function App() {
         <Modal
           darkMode={darkMode}
           onExit={() => {
-            setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
+            setVisibility({
+              type: "toggleParsedDataModalVisbility",
+              visible: false,
+            });
           }}
         >
           <SavedParsedDataModal>
