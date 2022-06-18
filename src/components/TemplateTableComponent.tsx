@@ -2,15 +2,6 @@ import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 import { RadioButton } from "stories/RadioButton";
 
-const LoadingWrapper = styled.div`
-  width: 100%;
-  font-size: 3.5em;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const ErrorWrapper = styled.div`
   width: 100%;
   font-size: 2.5em;
