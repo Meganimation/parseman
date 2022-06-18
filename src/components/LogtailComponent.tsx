@@ -2,13 +2,11 @@ import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
-  z-index: 999999;
   position: absolute;
   top: 30%;
   left: 10%;
   height: 100px;
   width: 300px;
-  background: red;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -136,7 +134,7 @@ export default function LogtailComponent(props: LogtailComponentProps) {
         wordCloudIsVisible={wordCloudIsVisible}
         darkMode={darkMode}
       >
-        <LoadingWrapper>No results.</LoadingWrapper>
+        <ErrorWrapper>No results.</ErrorWrapper>
         <div style={{ visibility: "hidden", fontSize: "2rem" }}>
           {jankyString}
         </div>
