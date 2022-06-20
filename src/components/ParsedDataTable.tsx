@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Tooltip from "stories/Tooltip/Tooltip";
 import { useSelector } from "react-redux";
@@ -49,6 +49,7 @@ const loopThroughRows = (props: any, hashedData: any) => {
   return arr;
 };
 
+
 const showItems = (content: any, props: any, hashedData: any) => {
   const totalQtyOfItemValue = (value: string, index: any) => {
     let totalQtyOfItem = 0;
@@ -86,6 +87,8 @@ const showItems = (content: any, props: any, hashedData: any) => {
     return arr;
   }
 };
+
+
 
 const displayCorrectSortButton = (index: number, props: any) => {
   let areAllSameValues = props.content.every(
@@ -165,9 +168,29 @@ const displayCorrectSortButton = (index: number, props: any) => {
 function ParsedDataTable(props: IParsedDataComponentProps) {
   const [editInput, setEditInput] = useState([0, 0, 0]);
   const [inputValue, setInputValue] = useState("");
+  const [nicknamedHeaders, setNicknamedHeaders] = useState(props.headers);
   const hashedData: any = useSelector(
     (state: RootState) => state.returnedData.HASHED_DATA
   );
+
+  const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
+    console.log(props.headers, "state", [headerToReplace]);
+    let newArr: any = [];
+    nicknamedHeaders.map((header: any) => {
+      console.log('header', header[0], headerToReplace)
+      if (header[0] == headerToReplace) {
+        console.log('it does!')
+        return newArr.push([inputValue]);
+      }
+      return newArr.push(header);
+    });
+
+    setNicknamedHeaders(newArr)
+  };
+
+  useEffect(() => {
+    setNicknamedHeaders(props.headers); //this is a really cheap fix, best thing to do would be to fix up the headers in redux (right now its got an extra [0] on it) and add the replacement there
+  }, [props.headers]);
 
   const parsedDataIsLoading = useSelector(
     (state: RootState) => state.returnedData.parsedDataIsLoading
@@ -175,25 +198,36 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
 
   const handleEditSubmit = () => {
     setEditInput([0, 0, 0]);
-    return props.postNewHeaderName(inputValue, editInput[2], props.templateId, props.templateVersion)
-  }
+    handleEditHeaders(inputValue, editInput[2]);
+    return props.postNewHeaderName(
+      inputValue,
+      editInput[2],
+      props.templateId,
+      props.templateVersion
+    );
+  };
 
   const loopThroughHeaders = (props: any) => {
     let arr = [];
-    for (let i = 0; i < props.headers.length; i++) {
+    for (let i = 0; i < nicknamedHeaders.length; i++) {
       arr.push(
         <>
-          <GridItem >
-            <span 
-            onMouseOver={() => {
-              props.highlightOnTemplateLiteral(i, true);
-            }}
-            onMouseOut={() => {
-              props.highlightOnTemplateLiteral(i, false);
-            }}
+          <GridItem>
+            <span
+              onMouseOver={() => {
+                props.highlightOnTemplateLiteral(i, true);
+              }}
+              onMouseOut={() => {
+                props.highlightOnTemplateLiteral(i, false);
+              }}
             >
-              {props.headers[i][0]}
-              <StyledEditIcon style={{ transform: "scale(0.6)" }} onClick={(e)=>setEditInput([e.pageY, e.clientX, props.headers[i][0]])} />
+              {nicknamedHeaders[i][0] ? nicknamedHeaders[i][0] : props.headers[i][0]}
+              <StyledEditIcon
+                style={{ transform: "scale(0.6)" }}
+                onClick={(e) =>
+                  setEditInput([e.pageY, e.clientX, props.headers[i][0]])
+                }
+              />
             </span>
             {displayCorrectSortButton(i, props)}
           </GridItem>
@@ -209,26 +243,26 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
         <p>Loading...</p>
       ) : (
         <ParsedTableResultsWrapper>
-                {(editInput[0] !== 0 && editInput[1] !== 0) && (
-              <Modal
-                top={editInput[0]}
-                left={editInput[1]}
-                onExit={() => {
-                  setEditInput([0, 0]);
-                }}
-                editMode
-                darkMode={props.darkMode}
-                hasBackground={false}
-                placeholder={`${editInput[2]}`}
-                onEditSubmit={()=>{handleEditSubmit()}}
-                inputValue={inputValue}
-                onInputChange={(e: any) => setInputValue(e.target.value)}
-              >
-              </Modal>
-          ) }
+          {editInput[0] !== 0 && editInput[1] !== 0 && (
+            <Modal
+              top={editInput[0]}
+              left={editInput[1]}
+              onExit={() => {
+                setEditInput([0, 0]);
+              }}
+              editMode
+              darkMode={props.darkMode}
+              hasBackground={false}
+              placeholder={`${editInput[2]}`}
+              onEditSubmit={() => {
+                handleEditSubmit();
+              }}
+              inputValue={inputValue}
+              onInputChange={(e: any) => setInputValue(e.target.value)}
+            ></Modal>
+          )}
           <GridContainer>{loopThroughHeaders(props)}</GridContainer>
           {loopThroughRows(props, hashedData)}
-     
         </ParsedTableResultsWrapper>
       )}
     </ParsedTableWrapper>
