@@ -2,6 +2,7 @@ import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
+  z-index: 99999;
   position: absolute;
   top: 30%;
   left: 10%;
