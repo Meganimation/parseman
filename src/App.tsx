@@ -158,7 +158,7 @@ function App() {
     },
     setNavbarValues,
   ]: any = useReducer(navBarValuesReducer, {
-    tailSearch: "test",
+    tailSearch: "",
     previousTailSearch: "",
     templateVersion: "1",
     templatePageAmount: 20,
