@@ -38,6 +38,8 @@ import useWordCloudFetch from "./hooks/useWordCloudFetch";
 import { Button } from "stories/Button";
 import { testLocalData } from "utils/offlineData/parsedData";
 
+import {colors} from "utils/theme/colors";
+
 const StyledApp = styled.div<StyledAppType>`
   background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
   max-width: 100vw;
@@ -53,12 +55,12 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   &::-webkit-scrollbar-track {
-    background: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+    background: ${(props) => (props.darkMode ? "#1C2937" : "white")};
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${(props) => (props.darkMode ? "#233246; " : "#9C9C9C; ")};
+    background: ${(props) => (props.darkMode ? "#233246" : "#9C9C9C")};
     opacity: 0.5;
     border-radius: 10px;
   }

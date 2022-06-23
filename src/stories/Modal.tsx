@@ -91,7 +91,7 @@ const StyledInput = styled.input`
   border-bottom: 1px solid
     ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
   background-color: ${(props: ModalProps) =>
-    props.darkMode ? "#26374C" : "white"};
+    props.darkMode ? "#233246" : "white"};
   color: ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
   font-size: 1.2em;
   font-family: "IBM Plex Mono", sans-serif;

@@ -58,7 +58,7 @@ const TableWrapper = styled.div<StyledTemplateType>`
   overflow-wrap: break-word;
   word-break: break-all;
   grid-column-gap: 20px;
-  border-bottom: 1px solid #c1c1c1;
+  border-bottom: 1px solid #c5c7cb;
 
   &:hover {
     background-color: ${(props) => (props.darkMode ? "#28313B" : "lightgrey")};
