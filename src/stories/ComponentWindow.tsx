@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "stories/Button";
 import Exit from "./Exit";
+import {colors} from "utils/theme/colors"
 
 interface ComponentWindowProps {
   onClick?: () => void;
@@ -24,15 +25,15 @@ interface ComponentWindowProps {
 
 const ComponentWindowWrapper = styled.section`
   background-color: ${(props: ComponentWindowProps) =>
-    props.darkMode ? "#26374C" : "white"};
+    props.darkMode ? colors.lighterBlue : colors.white};
   color: ${(props: ComponentWindowProps) =>
-    props.darkMode ? "white" : "black"};
+    props.darkMode ? colors.white : colors.black};
   min-width: ${(props: ComponentWindowProps) =>
     props.width ? props.width : "auto"};
   margin: 2px;
   border-radius: 10px;
   border: ${(props: ComponentWindowProps) =>
-    props.darkMode ? "5px #26374B solid" : "5px white solid"};
+    props.darkMode ? `5px ${colors.lighterBlue} solid` : "5px white solid"};
 
   padding: 5px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
@@ -40,7 +41,7 @@ const ComponentWindowWrapper = styled.section`
 
 const HeaderContent = styled.div`
   background-color: ${(props: ComponentWindowProps) =>
-    props.darkMode ? "#26374B" : "white"};
+    props.darkMode ? colors.lighterBlue : colors.white};
   display: flex;
   justify-content: space-between;
   height: ${(props: ComponentWindowProps) =>
@@ -51,7 +52,7 @@ const Title = styled.h1`
   font-size: 0.3em;
   font-family: arial;
   color: ${(props: ComponentWindowProps) =>
-    props.darkMode ? "white" : "#26374B"};
+    props.darkMode ? colors.white : colors.lighterBlue};
 `;
 
 const ExitWrapper = styled.span`
@@ -66,7 +67,7 @@ const ExitWrapper = styled.span`
 `;
 
 const FakeDiv = styled.div`
-  color: #26374B;
+  color: ${colors.lighterBlue};
   font-size: 1px;
 `;
 

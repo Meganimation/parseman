@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ClearIcon from "@material-ui/icons/Clear";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import {colors} from "utils/theme/colors"
 
 interface ModalProps {
   onClick?: () => void;
@@ -24,8 +25,8 @@ interface ModalProps {
 
 const StyledModal = styled.section`
   background-color: ${(props: ModalProps) =>
-    props.darkMode ? "#182331" : "white"};
-  color: ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
+    props.darkMode ? colors.darkerBlue : colors.white};
+  color: ${(props: ModalProps) => (props.darkMode ? colors.white : colors.black)};
   width: ${(props: ModalProps) => (props.width ? props.width : "70vw")};
   min-height: ${(props: ModalProps) => (props.height ? props.height : "70vh")};
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
@@ -89,10 +90,10 @@ const StyledInput = styled.input`
   padding: 10px;
   border: none;
   border-bottom: 1px solid
-    ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
+    ${(props: ModalProps) => (props.darkMode ? colors.white : colors.black)};
   background-color: ${(props: ModalProps) =>
-    props.darkMode ? "#233246" : "white"};
-  color: ${(props: ModalProps) => (props.darkMode ? "white" : "black")};
+    props.darkMode ? colors.blue : colors.white};
+  color: ${(props: ModalProps) => (props.darkMode ? colors.white : colors.black)};
   font-size: 1.2em;
   font-family: "IBM Plex Mono", sans-serif;
   &:focus {
@@ -109,7 +110,7 @@ const Title = styled.h1`
   font-size: ${(props: ModalProps) =>
     props.titleFontSize ? props.titleFontSize : "2ren"};
   font-family: arial;
-  color: ${(props: ModalProps) => (props.darkMode ? "white" : "#172B4D")};
+  color: ${(props: ModalProps) => (props.darkMode ? colors.white : colors.darkVividBlue)};
 `;
 
 export const Modal = ({

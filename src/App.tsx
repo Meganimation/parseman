@@ -41,9 +41,9 @@ import { testLocalData } from "utils/offlineData/parsedData";
 import {colors} from "utils/theme/colors";
 
 const StyledApp = styled.div<StyledAppType>`
-  background-color: ${(props) => (props.darkMode ? "#182331" : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.darkerBlue : colors.white)};
   max-width: 100vw;
-  color: ${(props) => (props.darkMode ? "white" : "black")};
+  color: ${(props) => (props.darkMode ? colors.white : colors.black)};
   font-family: "IBM Plex Mono", sans-serif;
   height: 100vh;
 
@@ -55,24 +55,24 @@ const StyledApp = styled.div<StyledAppType>`
   }
 
   &::-webkit-scrollbar-track {
-    background: ${(props) => (props.darkMode ? "#1C2937" : "white")};
+    background: ${(props) => (props.darkMode ? colors.darkBlue : colors.white)};
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${(props) => (props.darkMode ? "#233246" : "#9C9C9C")};
+    background: ${(props) => (props.darkMode ? colors.blue : colors.gray)};
     opacity: 0.5;
     border-radius: 10px;
   }
 
   > nav {
-    background-color: #1251a2;
+    background-color: ${colors.vividBlue};
   }
 `;
 
 const Content = styled.main<StyledAppType>`
   padding-top: 8rem;
-  background: ${(props) => (props.darkMode ? "#26374B" : "white")};
+  background: ${(props) => (props.darkMode ? colors.lighterBlue : colors.white)};
 `;
 
 const OfflineAlert = styled.div<StyledAppType>`
@@ -93,7 +93,7 @@ const SliderWrapper = styled.section`
 `;
 
 const Slider = styled.section<StyledAppType>`
-  background: ${(props) => (props.darkMode ? "#26374B" : "white")};
+  background: ${(props) => (props.darkMode ? colors.lighterBlue : colors.white)};
 `;
 
 const SavedParsedDataModal = styled.div`

@@ -5,6 +5,7 @@ import Menu from "./Menu";
 import TimeSelectorPicker from "./TimeSelectorPicker";
 import { RadioButton } from "stories/RadioButton";
 import EyeClosedIcon from "@material-ui/icons/VisibilityOff";
+import {colors} from "utils/theme/colors"
 
 const StyledNavWrapper = styled.nav`
   display: flex;
@@ -57,26 +58,26 @@ const StyledInput = styled.input`
   top: -5px;
 
   &:focus {
-    outline: solid 3px #56256a;
+    outline: solid 3px ${colors.purple};
   }
 `;
 
 const MenuButtonWrapper = styled.button<StyledNavType>`
   width: 8rem;
   height: 8rem;
-  background: #1251A2;
-  color: white;
+  background: ${colors.vividBlue};
+  color: ${colors.white};
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: #567FB4;
+    background: ${colors.lightGrayBlue};
   }
 `;
 
 const RadioButtonGroup = styled.div`
   display: flex;
-  color: white;
+  color: ${colors.white};
 
   > div {
     margin-left: 0.3rem;
@@ -107,7 +108,7 @@ const ShowingResultsWrapper = styled.div`
   position: absolute;
   bottom: 0;
   right: 8%;
-  color: white;
+  color: ${colors.white};
 `;
 
 const TimeSelectorPickerWrapper = styled.div`
@@ -117,7 +118,7 @@ const TimeSelectorPickerWrapper = styled.div`
 const StyledEyeIcon = styled(EyeClosedIcon)`
   vertical-align: middle;
   padding-bottom: 3px;
-  color: white;
+  color: ${colors.white};
 `;
 
 export default function NavBar(props: INavBarProps) {

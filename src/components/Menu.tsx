@@ -3,9 +3,10 @@ import styled from "styled-components";
 import Exit from "stories/Exit";
 import { Button } from "stories/Button";
 import {Modal} from "stories/Modal"
+import {colors} from "utils/theme/colors"
 
 const MenuWrapper = styled.div<StyledMenuType>`
-  background: #131b25;
+  background: ${colors.darkestBlue};
   position: relative;
   width: 20vw;
   height: 100vh;
@@ -20,7 +21,7 @@ const MenuWrapper = styled.div<StyledMenuType>`
 `;
 
 const StyledButton = styled(Button)`
-  background-color: #4b0c5e;
+  background-color: ${colors.darkPurple};
   border-radius: 0px;
   border: none;
   font-size: 0.8rem;

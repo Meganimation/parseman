@@ -1,6 +1,7 @@
 import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 import { RadioButton } from "stories/RadioButton";
+import {colors} from "utils/theme/colors"
 
 const ErrorWrapper = styled.div`
   width: 100%;
@@ -13,9 +14,10 @@ const ErrorWrapper = styled.div`
 `;
 
 const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
-  background-color: ${(props) => (props.darkMode ? "#1C2937 " : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.darkBlue : colors.white)};
   border-radius: 10px;
   overflow: auto;
+  color: ${(props) => (props.darkMode ? colors.offWhite : colors.black)};
   height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
   max-height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
   font-size: 12px;
@@ -26,12 +28,12 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
   }
 
   &::-webkit-scrollbar-track {
-    background: #1c2937;
+    background: ${colors.darkBlue};
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #233246;
+    background: ${colors.blue};
     opacity: 0.5;
     border-radius: 10px;
   }
@@ -40,7 +42,7 @@ const TemplateTableComponentWrapper = styled.section<StyledTemplateType>`
 const TableHeaderWrapper = styled.div<StyledTemplateType>`
   display: grid;
   grid-template-columns: 1.5fr 4fr 0.5fr;
-  background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.darkBlue : colors.white)};
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -50,7 +52,7 @@ const TableHeaderWrapper = styled.div<StyledTemplateType>`
 const TableWrapper = styled.div<StyledTemplateType>`
   display: grid;
   grid-template-columns: 1.5fr 4fr 0.5fr;
-  background-color: ${(props) => (props.darkMode ? "#34404E" : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.grayBlue : colors.white)};
   cursor: pointer;
   margin: 0;
   border: 0;
@@ -58,17 +60,17 @@ const TableWrapper = styled.div<StyledTemplateType>`
   overflow-wrap: break-word;
   word-break: break-all;
   grid-column-gap: 20px;
-  border-bottom: 1px solid #c5c7cb;
+  border-bottom: 1px solid ${colors.lightGray};
 
   &:hover {
-    background-color: ${(props) => (props.darkMode ? "#28313B" : "lightgrey")};
+    background-color: ${(props) => (props.darkMode ? colors.darkestGrayBlue : "lightgrey")};
   }
 `;
 
 const TableHeader = styled.div<StyledTemplateType>`
   padding-left: 10px;
   font-size: 0.75em;
-  background-color: ${(props) => (props.darkMode ? "#2d4460 " : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.lightestBlue : colors.white)};
   align-items: center;
   height: 2rem;
 

@@ -7,6 +7,7 @@ import { Modal } from "stories/Modal";
 import { Button } from "stories/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import ParsedDataTable from "./ParsedDataTable";
+import {colors} from "utils/theme/colors"
 
 const ParsedDataComponentWrapper = styled.section`
   padding-top: 1rem;
@@ -15,7 +16,7 @@ const ParsedDataComponentWrapper = styled.section`
 `;
 
 const InfoBar = styled.aside<StyledParsedTableType>`
-  background-color: ${(props) => (props.darkMode ? "#26374B" : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.lightGrayBlue : colors.white )};
   margin: 10px;
   width: 25vw;
   overflow-y: auto;
@@ -49,8 +50,8 @@ const StyledModalInput = styled.input`
       height: 2rem;
       width 50%;
       border-radius: 20px;
-      shadow: 0px 0px 10px #000000;
-      box-shadow: 0px 0px 10px #000000;
+      shadow: 0px 0px 10px ${colors.black};
+      box-shadow: 0px 0px 10px ${colors.black};
       position: relative;
       top: -2rem;
 

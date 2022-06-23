@@ -1,6 +1,7 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 import styled from "styled-components";
+import {colors} from "utils/theme/colors"
 
 const StyledDateTimePickerWrapper = styled.div`
   align-items: center;
@@ -14,17 +15,17 @@ const StyledDateTimePickerWrapper = styled.div`
 const StyledDateTimePicker = styled(DateTimePicker)`
    
     border-radius: 10px;
-    background: #1251A2;
+    background: ${colors.vividBlue};
     align-items: center;
     display: flex;
     height: 3em;
     &:hover {
-      background: #9B6BA9;
+      background: ${colors.pinkPurple};
  
     }
 
      * {
-      color: white !important;
+      color: ${colors.white} !important;
 
       width: 10rem;
       height: 1.5rem;
@@ -34,7 +35,7 @@ const StyledDateTimePicker = styled(DateTimePicker)`
   `;
 
 const CalendarWrapper = styled.div`
-  background: #1251A2;
+  background: ${colors.vividBlue};
   padding: 10px;
   position: relative;
   top: -12px;
@@ -42,7 +43,7 @@ const CalendarWrapper = styled.div`
   margin-left: 30px;
 
   &:hover {
-    background: #9b6ba9;
+    background: ${colors.pinkPurple};
   }
 `;
 

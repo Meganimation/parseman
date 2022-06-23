@@ -1,5 +1,6 @@
 import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
+import {colors} from "../utils/theme/colors"
 
 const LoadingWrapper = styled.div`
   z-index: 99999;
@@ -31,7 +32,7 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
   height: ${(props) => (props.wordCloudIsVisible ? "60vh" : "75vh")};
   width: ${(props) => (props.templateIsVisible ? "40vw" : "90vw")};
   overflow: auto;
-  background-color: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+  background-color: ${(props) => (props.darkMode ? colors.darkBlue : colors.white)};
   border-radius: 10px;
 
   &::-webkit-scrollbar {
@@ -39,12 +40,12 @@ const LogtailComponentWrapper = styled.section<StyledLogtailType>`
   }
 
   &::-webkit-scrollbar-track {
-    background: ${(props) => (props.darkMode ? "#1C2937; " : "white")};
+    background: ${(props) => (props.darkMode ? colors.darkBlue : colors.white)};
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${(props) => (props.darkMode ? "#233246; " : "#9C9C9C; ")};
+    background: ${(props) => (props.darkMode ? colors.blue : colors.gray)};
     opacity: 0.5;
     border-radius: 10px;
   }
@@ -54,20 +55,20 @@ const LogtailItem = styled.div<StyledLogtailType>`
   background: ${(props) =>
     props.id % 2 === 0
       ? props.darkMode
-        ? "#34404E"
-        : "white"
+        ? colors.grayBlue
+        : colors.white
       : props.darkMode
-      ? "#2B3543"
-      : "#F5F5F5"};
+      ? colors.darkGrayBlue
+      : colors.offWhite};
   font-size: 12px;
-  color: #c5c7cb;
+  color: red;
   overflow-wrap: break-word;
   word-break: break-all;
   padding-top: 10px;
   padding-bottom: 10px;
 
   code {
-    color: ${(props) => (props.darkMode ? "#c5c7cb" : "#1C2937")};
+    color: ${(props) => (props.darkMode ? colors.lightGray : colors.darkBlue)};
   }
 `;
 

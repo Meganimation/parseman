@@ -1,6 +1,7 @@
 import React from 'react'
 import ClearIcon from '@material-ui/icons/Clear'
 import styled from 'styled-components'
+import {colors} from "utils/theme/colors"
 
 
 const ExitWrapper = styled.span`
@@ -15,7 +16,7 @@ cursor: pointer;
 `
 
 const StyledClearIcon = styled(ClearIcon)<StyledExitType>`
-color: ${(props) => (props.iconColor ? props.iconColor : props.darkMode ? "white" : "#5D266F")};
+color: ${(props) => (props.iconColor ? props.iconColor : props.darkMode ? colors.white : colors.lightPurple)};
 `
 
 function Exit(props: IExitProps) {

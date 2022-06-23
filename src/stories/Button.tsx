@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {colors} from "utils/theme/colors"
 
 interface ButtonProps {
   height?: string;
@@ -13,26 +14,26 @@ interface ButtonProps {
 
 
 const StyledButton = styled.button`
-  background-color: ${(props: ButtonProps) => props.darkMode ? '#753886' : '#753881'};
+  background-color: ${(props: ButtonProps) => props.darkMode ? colors.lightestPurple : colors.lighterPurple};
   min-width: ${(props: ButtonProps) => props.width ? props.width : '6em'};
   height: ${(props: ButtonProps) => props.height ? props.height : '3em'};
   border-radius: 5px;
   font-size: ${(props: ButtonProps) => props.fontSize ? props.fontSize : '20px'};
   font-family: "IBM Plex Mono", sans-serif;
   border: 0px;
-  color: white;
-  border-bottom: 2px solid #753881;
+  color: ${colors.white};
+  border-bottom: 2px solid ${colors.lighterPurple};
   box-shadow: 0px 3px 6px #00000029;
   cursor: pointer;
 
   &:hover {
-    background-color: #3B1C44;
+    background-color: ${colors.darkerPurple};
   }
 
   &:active {
     box-shadow: 0;
     transform: translateY(3px);
-    background-color: #3B1C54;
+    background-color: ${colors.darkestPurple};
   }
 `
 

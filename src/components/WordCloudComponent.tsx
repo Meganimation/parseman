@@ -5,11 +5,12 @@ import SelectorsHelper, {
 } from "utils/SelectorsHelper";
 import { RootState } from "slices/store";
 import { useSelector, useDispatch } from "react-redux";
+import {colors} from "utils/theme/colors"
 
 const WordCloudComponentWrapper = styled.section<StyledWordCloudType>`
-  background: ${(props) => (props.darkMode ? "#26374b" : "white")};
+  background: ${(props) => (props.darkMode ? colors.lighterBlue : colors.white)};
   margin: 10px;
-  color: ${(props) => (props.darkMode ? "white" : "#26374b")};
+  color: ${(props) => (props.darkMode ? colors.white : colors.lighterBlue)};
   overflow: hidden;
   max-width: 100vw;
   min-height: 50px;
