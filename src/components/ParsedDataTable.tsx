@@ -91,21 +91,24 @@ const showItems = (content: any, props: any, hashedData: any) => {
 
 
 const displayCorrectSortButton = (index: number, props: any) => {
-
+ if (props.content[0][index] === undefined) return console.log('error!') //for now, maybe render a modal that say:
+ //"there was an error trying to render the data, try again <button> or something like that" 
   let areAllSameValues = props.content.every(
     (item: any) => item[index] === props.content[0][index]
   );
-  let onlyContainsNumbers = props.content[0][index]?.match(/[^0-9]/g);
-  let containsLetters = props.content[0][index]?.match(/[a-zA-Z]/g);
-
+  //NOTE Added optional chaining below as an app breaking bug occurs 
+  //If the user parsed a table, saves, then immeadiate goes to templateList, clicks back
+  //and tries to parse a new table, the error will occur
+  let onlyContainsNumbers = props.content[0][index].match(/[^0-9]/g);
+  let containsLetters = props.content[0][index].match(/[a-zA-Z]/g);
   //set a variable where props.content[0] only contains letters from the alphabet and not numbers
-  let onlyContainsLetters = props.content[0][index]?.match(/[^a-zA-Z]/g);
+  let onlyContainsLetters = props.content[0][index].match(/[^a-zA-Z]/g);
 
   //set a variable that checks if props.content[0] contains ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-  let containsMonths = props.content?.every((item: any) =>
+  let containsMonths = props.content.every((item: any) =>
     item[index]
-      ?.toLowerCase()
-      ?.match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g)
+      .toLowerCase()
+      .match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g)
   );
 
   if (areAllSameValues) return <p> Duplicates Only</p>;
@@ -213,7 +216,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     for (let i = 0; i < nicknamedHeaders.length; i++) {
       arr.push(
         <>
-          <GridItem>
+          <GridItem key={i}>
             <span
               onMouseOver={() => {
                 props.highlightOnTemplateLiteral(i, true);
