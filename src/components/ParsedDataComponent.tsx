@@ -16,9 +16,11 @@ const ParsedDataComponentWrapper = styled.section`
 `;
 
 const InfoBar = styled.aside<StyledParsedTableType>`
-  background-color: ${(props) => (props.darkMode ? colors.lightGrayBlue : colors.white )};
+  background-color: ${(props) => (props.darkMode ? colors.lightestBlue : colors.white )};
   margin: 10px;
   width: 25vw;
+  border-radius: 20px;
+  padding: 20px;
   overflow-y: auto;
 `;
 
@@ -122,6 +124,7 @@ export default function ParsedDataComponent({
   }, [returnedData, parsedDataRows, parsedDataHeaders, parsedSortBool]);
 
   const handleEditTemplateId = () => {
+    if (!inputTemplateId) return alert('there is no templateId')
     //check if input is empty
     if (inputTemplateId === "") return alert("Please enter a template id");
     // if input contains spaces
