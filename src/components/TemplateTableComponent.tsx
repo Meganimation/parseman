@@ -95,7 +95,7 @@ const PopoutLoader = styled.div`
   right: 20%;
   height: 100px;
   width: 300px;
-  background: red;
+  background: ${colors.lightGrayBlue};
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;

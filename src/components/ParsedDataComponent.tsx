@@ -64,8 +64,17 @@ const StyledModalInput = styled.input`
       }
   `;
 
-  const TemplateLiteralWrapper = styled.div<StyledParsedTableType>`
+  const TemplateLiteralWrapper = styled.b<StyledParsedTableType>`
   background: ${(props) => (props.background ? colors.darkBlue : colors.purple)};
+  width: fit-content;
+  `
+
+  const TemplateLiteralContent = styled.div<StyledParsedTableType>`
+ padding: 10px;
+ overflow-wrap: break-word;
+  word-break: break-all;
+  overflow-y: auto;
+  
   `
 
 export interface ISubmitState {
@@ -400,7 +409,7 @@ export default function ParsedDataComponent({
   const showTemplateLiteral=(templateLiteralArray:string[])=>{
     return(templateLiteralArray.map((templateLiteral: string,index: any)=>{
       return(
-        <TemplateLiteralWrapper key={index} className={templateLiteral} style={{background: isHeaderOnHover === templateLiteral ? 'red' : 'blue'}}>{templateLiteral}
+        <TemplateLiteralWrapper key={index} className={templateLiteral} style={{background: isHeaderOnHover === templateLiteral ?  colors.lightGrayBlue : 'none'}}>{templateLiteral}
         </TemplateLiteralWrapper>
       )
     }))
@@ -464,8 +473,7 @@ export default function ParsedDataComponent({
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
-              <p className="templateLiteral" >{showTemplateLiteral(props.currentParsedDataTemplateLiteralArray)}</p>
-              <button onClick={()=>{console.log(isHeaderOnHover)}}> Edit Template Literal </button> 
+              <TemplateLiteralContent >{showTemplateLiteral(props.currentParsedDataTemplateLiteralArray)}</TemplateLiteralContent>
             </InfoItem>
           </InfoBar>
         </>
