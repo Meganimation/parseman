@@ -377,7 +377,17 @@ function App() {
   };
 
   const addWordToInput = (wordValueFromWordCloud: string) => {
-    const combinedString = `${tailSearch} AND ${wordValueFromWordCloud}`;
+    let combinedString = `${wordValueFromWordCloud} AND ${tailSearch}`
+    let checkToSeeIfTailSearchStartsWithAnd = tailSearch.split(" ")
+
+      if (checkToSeeIfTailSearchStartsWithAnd[0] === "" && checkToSeeIfTailSearchStartsWithAnd.length === 1 ) {
+        combinedString = `${wordValueFromWordCloud}`
+     }
+      if (checkToSeeIfTailSearchStartsWithAnd[0] === "" && checkToSeeIfTailSearchStartsWithAnd[1] === "AND") {
+         combinedString = `${wordValueFromWordCloud}${tailSearch}`
+      }
+
+      console.log('checkToSeeIfTailSearchStartsWithAnd', checkToSeeIfTailSearchStartsWithAnd)
     setNavbarValues({ type: "setTailSearch", value: combinedString });
   };
 
