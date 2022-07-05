@@ -377,7 +377,7 @@ function App() {
   };
 
   const addWordToInput = (wordValueFromWordCloud: string) => {
-    let combinedString = `${wordValueFromWordCloud} AND ${tailSearch}`
+    let combinedString = `${wordValueFromWordCloud} OR ${tailSearch}`
     let checkToSeeIfTailSearchStartsWithAnd = tailSearch.split(" ")
 
       if (checkToSeeIfTailSearchStartsWithAnd[0] === "" && checkToSeeIfTailSearchStartsWithAnd.length === 1 ) {
@@ -387,6 +387,11 @@ function App() {
          combinedString = `${wordValueFromWordCloud}${tailSearch}`
       }
 
+      if (checkToSeeIfTailSearchStartsWithAnd[0] !== "" ) {
+        checkToSeeIfTailSearchStartsWithAnd[0] = wordValueFromWordCloud
+        combinedString = checkToSeeIfTailSearchStartsWithAnd.join(" ")
+        console.log(combinedString, 'COMBINED')
+     }
       console.log('checkToSeeIfTailSearchStartsWithAnd', checkToSeeIfTailSearchStartsWithAnd)
     setNavbarValues({ type: "setTailSearch", value: combinedString });
   };
