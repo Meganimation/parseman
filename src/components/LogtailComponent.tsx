@@ -61,7 +61,7 @@ const LogtailItem = styled.div<StyledLogtailType>`
       ? colors.darkGrayBlue
       : colors.offWhite};
   font-size: 12px;
-  color: red;
+  color: ${colors.lightGray};
   overflow-wrap: break-word;
   word-break: break-all;
   padding-top: 10px;

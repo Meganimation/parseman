@@ -176,6 +176,11 @@ function App() {
     setCurrentParsedDataTemplateLiteral,
   ] = useState("");
 
+  const [
+    currentParsedDataTemplateLiteralArray,
+    setCurrentParsedDataTemplateLiteralArray,
+  ] = useState([]);
+
   const scrollToViewRef = useRef(null);
 
   const returnedData: any = useSelector(
@@ -259,6 +264,18 @@ function App() {
         parsedDataPageAmount
       );
       setCurrentParsedDataTemplateLiteral(checkedTemplateLiteral);
+
+      let arr:any = []
+      let x = checkedTemplateLiteral.split("<<<")
+      arr.push(x[0].split(">>>")[0])
+      for (let i = 1; i < x.length; i++) {
+
+        arr.push(x[i].split(">>>")[0])
+        arr.push(x[i].split(">>>")[1])
+      }
+
+      setCurrentParsedDataTemplateLiteralArray(arr)
+      
       setVisibility({ type: "toggleParsedDataTableVisibility", visible: true });
       setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
       scrollToBottom();
@@ -474,6 +491,7 @@ function App() {
           savedTemplateId: returnedData.templateId,
           savedTemplateVersion: returnedData.version,
           savedTemplateLiteral: currentParsedDataTemplateLiteral,
+          savedTemplateLiteralArray: currentParsedDataTemplateLiteralArray,
         })
       );
     }
@@ -486,6 +504,7 @@ function App() {
   const fetchSavedParsedData = (data: any) => {
     handleParsedDataRendering(data.savedTemplateId, data.savedTemplateVersion);
     setCurrentParsedDataTemplateLiteral(data.savedTemplateLiteral);
+    setCurrentParsedDataTemplateLiteralArray(data.savedTemplateLiteralArray); //might have to split
 
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
   };
@@ -642,6 +661,9 @@ function App() {
               parsedDataPageAmount={parsedDataPageAmount}
               currentParsedDataTemplateLiteral={
                 currentParsedDataTemplateLiteral
+              }
+              currentParsedDataTemplateLiteralArray={
+                currentParsedDataTemplateLiteralArray
               }
             />
           </div>

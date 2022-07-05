@@ -451,6 +451,7 @@ export default function ParsedDataComponent({
             <InfoItem>
               <b>Template Literal:</b>
               <p className="templateLiteral">{props.currentParsedDataTemplateLiteral}</p>
+              <button onClick={()=>{console.log(props.currentParsedDataTemplateLiteralArray)}}> click me</button>
             </InfoItem>
           </InfoBar>
         </>
@@ -498,4 +499,5 @@ interface IParsedDataComponentProps {
   changeParsedDataPageAmount: any;
   parsedDataPageAmount: number;
   currentParsedDataTemplateLiteral: string;
+  currentParsedDataTemplateLiteralArray: string[];
 }
