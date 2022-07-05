@@ -216,14 +216,11 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     for (let i = 0; i < nicknamedHeaders.length; i++) {
       arr.push(
         <>
-          <GridItem key={i}>
+          <GridItem key={i}               onMouseEnter={()=>{props.setIsHeaderOnHover(props.headers[i][0])}}
+              onMouseLeave={()=>{props.setIsHeaderOnHover('')}}>
             <span
-              onMouseOver={() => {
-                props.highlightOnTemplateLiteral(i, true);
-              }}
-              onMouseOut={() => {
-                props.highlightOnTemplateLiteral(i, false);
-              }}
+    
+              className={props.headers[i][0]}
             >
               {nicknamedHeaders[i][0] ? nicknamedHeaders[i][0] : props.headers[i][0]}
               <StyledEditIcon
@@ -289,6 +286,7 @@ interface IParsedDataComponentProps {
   darkMode: boolean;
   templateId: string;
   templateVersion: string;
+  setIsHeaderOnHover: any;
 }
 
 export default ParsedDataTable;

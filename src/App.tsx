@@ -504,8 +504,7 @@ function App() {
   const fetchSavedParsedData = (data: any) => {
     handleParsedDataRendering(data.savedTemplateId, data.savedTemplateVersion);
     setCurrentParsedDataTemplateLiteral(data.savedTemplateLiteral);
-    setCurrentParsedDataTemplateLiteralArray(data.savedTemplateLiteralArray); //might have to split
-
+    setCurrentParsedDataTemplateLiteralArray(data.savedTemplateLiteralArray);
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
   };
 

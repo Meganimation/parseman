@@ -64,6 +64,10 @@ const StyledModalInput = styled.input`
       }
   `;
 
+  const TemplateLiteralWrapper = styled.div<StyledParsedTableType>`
+  background: ${(props) => (props.background ? colors.darkBlue : colors.purple)};
+  `
+
 export interface ISubmitState {
   headers: string[];
   content: string[];
@@ -96,7 +100,7 @@ export default function ParsedDataComponent({
   const parsedSortBool: any = useSelector(
     (state: RootState) => state.returnedData.parsedSortBool
   );
-
+  const [isHeaderOnHover, setIsHeaderOnHover] = useState('test');
   const [modal, setModal] = useState(false);
   const [inputTemplateId, setInputTemplateId] = useState("");
   const [localTemplateId, setLocalTemplateId] = useState(
@@ -392,6 +396,16 @@ export default function ParsedDataComponent({
       props.updateTemplateLiteral(highlightValueInTemplateLiteral);
     }
   };
+
+  const showTemplateLiteral=(templateLiteralArray:string[])=>{
+    return(templateLiteralArray.map((templateLiteral: string,index: any)=>{
+      return(
+        <TemplateLiteralWrapper key={index} className={templateLiteral} style={{background: isHeaderOnHover === templateLiteral ? 'red' : 'blue'}}>{templateLiteral}
+        </TemplateLiteralWrapper>
+      )
+    }))
+      
+  }
   
   return (
     <ParsedDataComponentWrapper>
@@ -450,8 +464,8 @@ export default function ParsedDataComponent({
             </InfoItem>
             <InfoItem>
               <b>Template Literal:</b>
-              <p className="templateLiteral">{props.currentParsedDataTemplateLiteral}</p>
-              <button onClick={()=>{console.log(props.currentParsedDataTemplateLiteralArray)}}> click me</button>
+              <p className="templateLiteral" >{showTemplateLiteral(props.currentParsedDataTemplateLiteralArray)}</p>
+              <button onClick={()=>{console.log(isHeaderOnHover)}}> Edit Template Literal </button> 
             </InfoItem>
           </InfoBar>
         </>
@@ -472,6 +486,7 @@ export default function ParsedDataComponent({
         highlightOnTemplateLiteral={highlightOnTemplateLiteral}
         darkMode={darkMode}
         postNewHeaderName={postNewHeaderName}
+        setIsHeaderOnHover={setIsHeaderOnHover}
       />
     </ParsedDataComponentWrapper>
   );
@@ -481,6 +496,7 @@ type StyledParsedTableType = {
   templateIsVisible?: boolean;
   wordCloudIsVisible?: boolean;
   darkMode?: boolean;
+  background?: any;
   parsedSideInfoIsVisible?: boolean;
 };
 
