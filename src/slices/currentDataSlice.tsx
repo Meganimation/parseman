@@ -18,10 +18,10 @@ const initialState: CurrentDataSliceState = {
   parsedDataHeaders: [],
   parsedSortBool: [],
   hashedParsedData: {},
-  parsedDataIsLoading: false,
+  parsedDataIsLoading: true,
   HASHED_DATA: [],
   error: false,
-  savedParsedData: ['872429730_c13415', '879435597_89b479'],
+  savedParsedData: [],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -72,11 +72,18 @@ export const CurrentDataSlice = createSlice({
         }
 
         arrOfRows = [...arrOfRows, tempArr];
-        arrOfHeaders = [tempArrOfHeaders];
+
         arrOfSortBool = tempSortArr;
+        let newArr = [];
+        for (let x of tempArrOfHeaders) {
+          newArr.push(x[0])
+        }
+        arrOfHeaders = newArr;
+
+        
 
         state.parsedDataRows = arrOfRows;
-        state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))[0];
+        state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))
         state.hashedParsedData = tempHash;
         state.parsedSortBool = arrOfSortBool;
         state.parsedDataIsLoading = false;
@@ -110,13 +117,17 @@ export const CurrentDataSlice = createSlice({
         state.parsedDataHeaders = [];
         state.parsedSortBool = [];
         state.hashedParsedData = {};
-        // state.parsedDataIsLoading = true;
+        state.parsedDataIsLoading = true;
         // state.HASHED_DATA = [];
         // state.error = false
+    },
+    setLoading: (state, action: PayloadAction<any>) => {
+      console.log('parsedDataShouldBeTrue', action)
+        state.parsedDataIsLoading = true;
     },
   },
 });
 
-export const { convertToParsed, hashedData, saveToParsedData, clearData } = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData, saveToParsedData, clearData, setLoading } = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;

@@ -106,6 +106,10 @@ export default function ParsedDataComponent({
     (state: RootState) => state.returnedData.parsedDataHeaders
   );
 
+  const parsedDataIsLoading: any = useSelector(
+    (state: RootState) => state.returnedData.parsedDataIsLoading
+  );
+
   const parsedSortBool: any = useSelector(
     (state: RootState) => state.returnedData.parsedSortBool
   );
@@ -135,6 +139,8 @@ export default function ParsedDataComponent({
       setLocalTemplateId(returnedData.templateId);
     }
   }, [returnedData, parsedDataRows, parsedDataHeaders, parsedSortBool]);
+
+  console.log("PARSEDDATAHEADERS", parsedDataHeaders);
 
   const handleEditTemplateId = () => {
     if (!inputTemplateId) return alert('there is no templateId')
@@ -484,6 +490,7 @@ export default function ParsedDataComponent({
         templateId={localTemplateId}
         templateVersion={returnedData.version}
         parsedDataHeaders={parsedDataHeaders}
+        parsedDataIsLoading={parsedDataIsLoading}
         headers={state.headers}
         content={state.content}
         arrOfSortBools={state.arrOfSortBools}

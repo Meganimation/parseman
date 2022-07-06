@@ -32,6 +32,7 @@ import {
   hashedData,
   saveToParsedData,
   clearData,
+  setLoading,
 } from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
@@ -269,10 +270,10 @@ function App() {
   }, []);
 
   const handleParsedDataRendering = useMemo(
-    () => (checkedTemplateId: string, checkedTemplateVersion: string) => {
+    () => (templateId: string, templateVersion: string) => {
       fetchParsedData(
-        checkedTemplateId,
-        checkedTemplateVersion,
+        templateId,
+        templateVersion,
         dispatch as any,
         parsedDataPageAmount
       );
@@ -533,6 +534,7 @@ function App() {
   };
 
   const handleSavedParsedDataModal = () => {
+    {dispatch(setLoading(true))}
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: true });
   };
 
@@ -541,7 +543,6 @@ function App() {
     setCurrentParsedDataTemplateLiteral(data.savedTemplateLiteral);
     setCurrentParsedDataTemplateLiteralArray(data.savedTemplateLiteralArray);
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
-    console.log('this works fine?')
   };
 
   const switchModals = () => {

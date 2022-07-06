@@ -54,8 +54,8 @@ const showItems = (content: any, props: any, hashedData: any) => {
   const totalQtyOfItemValue = (value: string, index: any) => {
     let totalQtyOfItem = 0;
 
-    for (let i = 0; i < hashedData[props.headers[index][0]].length; i++) {
-      if (hashedData[props.headers[index][0]][i] === value) {
+    for (let i = 0; i < hashedData[props.headers[index]].length; i++) {
+      if (hashedData[props.headers[index]][i] === value) {
         totalQtyOfItem++;
       }
     }
@@ -177,56 +177,57 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     (state: RootState) => state.returnedData.HASHED_DATA
   );
 
-  const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
-    console.log(props.headers, "state", [headerToReplace]);
-    let newArr: any = [];
-    nicknamedHeaders.map((header: any) => {
-      console.log('header', header[0], headerToReplace)
-      if (header[0] == headerToReplace) {
-        console.log('it does!')
-        return newArr.push([inputValue]);
-      }
-      return newArr.push(header);
-    });
+  // const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
+  //   console.log(props.headers, "state", [headerToReplace]);
+  //   let newArr: any = [];
+  //   nicknamedHeaders.map((header: any) => {
+  //     console.log('header', header, headerToReplace)
+  //     if (header == headerToReplace) {
+  //       console.log('it does!')
+  //       return newArr.push([inputValue]);
+  //     }
+  //     return newArr.push(header);
+  //   });
 
-    setNicknamedHeaders(newArr)
-  };
+  //   setNicknamedHeaders(newArr)
+  // };
 
-  useEffect(() => {
-    setNicknamedHeaders(props.headers); //this is a really cheap fix, best thing to do would be to fix up the headers in redux (right now its got an extra [0] on it) and add the replacement there
-  }, [props.headers]);
+
 
   const parsedDataIsLoading = useSelector(
     (state: RootState) => state.returnedData.parsedDataIsLoading
   );
 
   const handleEditSubmit = () => {
-    setEditInput([0, 0, 0]);
-    handleEditHeaders(inputValue, editInput[2]);
-    return props.postNewHeaderName(
-      inputValue,
-      editInput[2],
-      props.templateId,
-      props.templateVersion
-    );
+    // setEditInput([0, 0, 0]);
+    // handleEditHeaders(inputValue, editInput[2]);
+    // return props.postNewHeaderName(
+    //   inputValue,
+    //   editInput[2],
+    //   props.templateId,
+    //   props.templateVersion
+    // );
   };
 
   const loopThroughHeaders = (props: any) => {
     let arr = [];
-    for (let i = 0; i < nicknamedHeaders.length; i++) {
+    for (let i = 0; i < props.headers.length; i++) {
+      console.log(nicknamedHeaders[i], 'find undefined')
       arr.push(
         <>
-          <GridItem key={i}               onMouseEnter={()=>{props.setIsHeaderOnHover(props.headers[i][0])}}
+          <GridItem key={i}
+              onMouseEnter={()=>{props.setIsHeaderOnHover(props.headers[i])}}
               onMouseLeave={()=>{props.setIsHeaderOnHover('')}}>
             <span
     
-              className={props.headers[i][0]}
+              className={props.headers[i]}
             >
-              {nicknamedHeaders[i][0] ? nicknamedHeaders[i][0] : props.headers[i][0]}
+              {props.headers[i]}
+              {/* {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]} */}
               <StyledEditIcon
                 style={{ transform: "scale(0.6)" }}
                 onClick={(e) =>
-                  setEditInput([e.pageY, e.clientX, props.headers[i][0]])
+                  setEditInput([e.pageY, e.clientX, props.headers[i]])
                 }
               />
             </span>
@@ -238,11 +239,13 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     return arr;
   };
 
+
+
+  console.log('ets go', parsedDataIsLoading)
+if (parsedDataIsLoading) return <div>Loading...</div>
+
   return (
     <ParsedTableWrapper>
-      {props.parsedDataHeaders.length < 1 ? (
-        <p>Loading...</p>
-      ) : (
         <ParsedTableResultsWrapper>
           {editInput[0] !== 0 && editInput[1] !== 0 && (
             <Modal
@@ -265,7 +268,6 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
           <GridContainer>{loopThroughHeaders(props)}</GridContainer>
           {loopThroughRows(props, hashedData)}
         </ParsedTableResultsWrapper>
-      )}
     </ParsedTableWrapper>
   );
 }
@@ -287,6 +289,7 @@ interface IParsedDataComponentProps {
   templateId: string;
   templateVersion: string;
   setIsHeaderOnHover: any;
+  parsedDataIsLoading: boolean;
 }
 
 export default ParsedDataTable;
