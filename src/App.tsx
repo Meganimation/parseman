@@ -387,6 +387,10 @@ function App() {
          combinedString = `${wordValueFromWordCloud}${tailSearch}`
       }
 
+      if (checkToSeeIfTailSearchStartsWithAnd[0] === "AND") {
+        combinedString = `${wordValueFromWordCloud}${tailSearch} `
+     }
+
       if (checkToSeeIfTailSearchStartsWithAnd[0] !== "" ) {
         // checkToSeeIfTailSearchStartsWithAnd[0] = wordValueFromWordCloud
         // combinedString = checkToSeeIfTailSearchStartsWithAnd.join(" ")
