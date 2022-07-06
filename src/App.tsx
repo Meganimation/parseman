@@ -534,7 +534,6 @@ function App() {
   };
 
   const handleSavedParsedDataModal = () => {
-    {dispatch(setLoading(true))}
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: true });
   };
 

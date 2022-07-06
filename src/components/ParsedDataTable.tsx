@@ -177,20 +177,17 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     (state: RootState) => state.returnedData.HASHED_DATA
   );
 
-  // const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
-  //   console.log(props.headers, "state", [headerToReplace]);
-  //   let newArr: any = [];
-  //   nicknamedHeaders.map((header: any) => {
-  //     console.log('header', header, headerToReplace)
-  //     if (header == headerToReplace) {
-  //       console.log('it does!')
-  //       return newArr.push([inputValue]);
-  //     }
-  //     return newArr.push(header);
-  //   });
+  useEffect(() => {
+    setNicknamedHeaders(props.headers);
+  }, [props.headers]);
 
-  //   setNicknamedHeaders(newArr)
-  // };
+  const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
+    let newArr: any = [...nicknamedHeaders];
+    newArr[props.headers.indexOf(headerToReplace)] = inputValue;
+
+    setNicknamedHeaders(newArr)
+    console.log('hello', props.headers.indexOf(headerToReplace));
+  };
 
 
 
@@ -199,20 +196,19 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
   );
 
   const handleEditSubmit = () => {
-    // setEditInput([0, 0, 0]);
-    // handleEditHeaders(inputValue, editInput[2]);
-    // return props.postNewHeaderName(
-    //   inputValue,
-    //   editInput[2],
-    //   props.templateId,
-    //   props.templateVersion
-    // );
+    setEditInput([0, 0, 0]);
+    handleEditHeaders(inputValue, editInput[2]);
+    return props.postNewHeaderName(
+      inputValue,
+      editInput[2],
+      props.templateId,
+      props.templateVersion
+    );
   };
 
   const loopThroughHeaders = (props: any) => {
     let arr = [];
     for (let i = 0; i < props.headers.length; i++) {
-      console.log(nicknamedHeaders[i], 'find undefined')
       arr.push(
         <>
           <GridItem key={i}
@@ -222,8 +218,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     
               className={props.headers[i]}
             >
-              {props.headers[i]}
-              {/* {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]} */}
+              {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]}
               <StyledEditIcon
                 style={{ transform: "scale(0.6)" }}
                 onClick={(e) =>
@@ -239,9 +234,6 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     return arr;
   };
 
-
-
-  console.log('ets go', parsedDataIsLoading)
 if (parsedDataIsLoading) return <div>Loading...</div>
 
   return (
