@@ -6,6 +6,10 @@ import TimeSelectorPicker from "./TimeSelectorPicker";
 import { RadioButton } from "stories/RadioButton";
 import EyeClosedIcon from "@material-ui/icons/VisibilityOff";
 import {colors} from "utils/theme/colors"
+import {
+  clearData,
+} from "../slices/currentDataSlice";
+import { useDispatch } from "react-redux";
 
 const StyledNavWrapper = styled.nav`
   display: flex;
@@ -125,7 +129,7 @@ export default function NavBar(props: INavBarProps) {
   const [menu, setMenu] = React.useState(false);
   const [radioValue, setRadioValue] = React.useState("Templates");
   const [inputValue, setInputValue] = React.useState("");
-
+  const dispatch = useDispatch();
   const handleMenu = () => {
     setMenu(false);
   };
@@ -135,9 +139,9 @@ export default function NavBar(props: INavBarProps) {
   }, [props.tailSearch]);
 
   const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+      dispatch(clearData('clear')); 
       props.updateTailSearchResultsHandler(inputValue);
-    }
+      props.setVisibility({ type: "toggleParsedDataTableVisibility", visible: false });
   };
   return (
     <>
@@ -198,9 +202,7 @@ export default function NavBar(props: INavBarProps) {
               const val = event.target.value as string;
               setInputValue(val);
             }}
-            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              handleSubmit(e);
-            }}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" ? handleSubmit(e) : null}
           />
 
           <ShowingResultsWrapper>
@@ -302,4 +304,5 @@ interface INavBarProps {
   handleEndDateChange: any;
   handleStartDateChange: any;
   handleSavedParsedDataModal: any;
+  setVisibility: any;
 }

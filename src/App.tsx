@@ -31,6 +31,7 @@ import {
   convertToParsed,
   hashedData,
   saveToParsedData,
+  clearData,
 } from "./slices/currentDataSlice";
 import useTemplateFetch from "./hooks/useTemplateFetch";
 import useLogtailFetch from "./hooks/useLogtailFetch";
@@ -224,8 +225,20 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const handleUpdateLogtail = () => {
-    let filterAddOnValue = `${tailSearch} AND TemplateId=${checkedTemplateId}`;
+  const handleUpdateLogtail = (templateId:string, templateVersion:string, templateLiteral:string, totalTemplates:string) => {
+    handleCheckedRadio(
+      templateId,
+      templateVersion,
+      templateLiteral,
+      totalTemplates
+    );
+    let filterAddOnValue;
+    if (tailSearch.includes('AND TemplateId=')) filterAddOnValue = ` AND TemplateId=${templateId}`;
+    else {
+    filterAddOnValue = `${tailSearch} AND TemplateId=${templateId}`
+  }
+
+  console.log(filterAddOnValue, tailSearch);
     updateTailSearchResultsHandler(filterAddOnValue);
   };
 
@@ -402,6 +415,8 @@ function App() {
   };
 
   const goBackOnTailSearch = () => {
+    dispatch(clearData('clear'));
+    setVisibility({ type: "toggleParsedDataTableVisibility", visible: false });
     setNavbarValues({ type: "setTailSearch", value: previousTailSearch });
     if (previousTailSearch === tailSearch) {
       setNavbarValues({ type: "setTailSearch", value: "" });
@@ -526,6 +541,7 @@ function App() {
     setCurrentParsedDataTemplateLiteral(data.savedTemplateLiteral);
     setCurrentParsedDataTemplateLiteralArray(data.savedTemplateLiteralArray);
     setVisibility({ type: "toggleParsedDataModalVisbility", visible: false });
+    console.log('this works fine?')
   };
 
   const switchModals = () => {
@@ -551,6 +567,7 @@ function App() {
         handleStartDateChange={handleStartDateChange}
         handleEndDateChange={handleEndDateChange}
         handleSavedParsedDataModal={handleSavedParsedDataModal}
+        setVisibility={setVisibility}
       />
 
       {CURRENT_ENVIRONMENT_TYPE === "OFFLINE" && (

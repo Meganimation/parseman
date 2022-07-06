@@ -95,7 +95,7 @@ const PopoutLoader = styled.div`
   right: 20%;
   height: 100px;
   width: 300px;
-  background: ${colors.lightGrayBlue};
+  background: red;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -170,14 +170,15 @@ export default function TemplateTableComponent(
               <TableWrapper
                 ref={lastElementRef}
                 darkMode={darkMode}
-                onClick={() => {
-                  handleCheckedRadio(
-                    data.templateId,
-                    data.templateVersion,
-                    data.templateLiteral,
-                    data.totalTemplates
-                  );
-                }}
+                onMouseUp={() => {handleUpdateLogtail(data.templateId, data.templateVersion, data.templateLiteral, data.totalTemplates)}}
+                // onClick={() => {
+                //   handleCheckedRadio(
+                //     data.templateId,
+                //     data.templateVersion,
+                //     data.templateLiteral,
+                //     data.totalTemplates
+                //   );
+                // }}
               >
                 <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
                   <RadioButton
@@ -194,15 +195,15 @@ export default function TemplateTableComponent(
             return (
               <TableWrapper
                 darkMode={darkMode}
-                onMouseUp={() => {handleUpdateLogtail()}}
-                onMouseDown={() => {
-                  handleCheckedRadio(
-                    data.templateId,
-                    data.templateVersion,
-                    data.templateLiteral,
-                    data.totalTemplates
-                  );
-                }}
+                onMouseUp={() => {handleUpdateLogtail(data.templateId, data.templateVersion, data.templateLiteral, data.totalTemplates)}}
+                // onMouseDown={() => {
+                //   handleCheckedRadio(
+                //     data.templateId,
+                //     data.templateVersion,
+                //     data.templateLiteral,
+                //     data.totalTemplates
+                //   );
+                // }}
               >
                 <RadioButtonWrapper style={{ paddingLeft: "10px" }}>
                   <RadioButton

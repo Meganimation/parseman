@@ -41,7 +41,7 @@ const loopThroughRows = (props: any, hashedData: any) => {
 
   for (let i = 0; i < props.content.length; i++) {
     arr.push(
-      <GridContainer>
+      <GridContainer key={i}>
         {showItems(props.content[i], props, hashedData)}
       </GridContainer>
     );

@@ -21,7 +21,7 @@ const initialState: CurrentDataSliceState = {
   parsedDataIsLoading: false,
   HASHED_DATA: [],
   error: false,
-  savedParsedData: [],
+  savedParsedData: ['872429730_c13415', '879435597_89b479'],
 };
 
 export const CurrentDataSlice = createSlice({
@@ -104,14 +104,15 @@ export const CurrentDataSlice = createSlice({
       state.savedParsedData = [...state.savedParsedData, action.payload];
     },
     clearData: (state, action: PayloadAction<any>) => {
-      state.parsedDataSidebarInfo = [];
+      console.log('clearing data', action)
+        state.parsedDataSidebarInfo = [];
         state.parsedDataRows = [];
         state.parsedDataHeaders = [];
         state.parsedSortBool = [];
         state.hashedParsedData = {};
-        state.parsedDataIsLoading = true;
-        state.HASHED_DATA = [];
-        state.error = false
+        // state.parsedDataIsLoading = true;
+        // state.HASHED_DATA = [];
+        // state.error = false
     },
   },
 });
