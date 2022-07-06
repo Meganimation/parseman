@@ -18,7 +18,7 @@ const initialState: CurrentDataSliceState = {
   parsedDataHeaders: [],
   parsedSortBool: [],
   hashedParsedData: {},
-  parsedDataIsLoading: false, 
+  parsedDataIsLoading: false,
   HASHED_DATA: [],
   error: false,
   savedParsedData: [],
@@ -31,7 +31,7 @@ export const CurrentDataSlice = createSlice({
     convertToParsed: (state, action: PayloadAction<any>) => {
       let pageAmount = action.payload[1]
       action.payload = action.payload[0]
-      
+
       let { host, recordId, templateId, timestamp, version } = action.payload;
       state.parsedDataSidebarInfo = [
         host,
@@ -51,11 +51,12 @@ export const CurrentDataSlice = createSlice({
         const tempArr: any = [];
         const tempArrOfHeaders: any = [];
         const tempSortArr: any = [];
-  
+
         if (action.payload.lines[i].itemBody === undefined) {
           console.log('item body doesnt exist, somehow an error occurred')
           state.error = true;
-          break}
+          break
+        }
 
         const arrayOfLines = action.payload.lines[i].itemBody;
         for (let j = 0; j < arrayOfLines.length; j++) {
@@ -101,9 +102,20 @@ export const CurrentDataSlice = createSlice({
     },
     saveToParsedData: (state, action: PayloadAction<any>) => {
       state.savedParsedData = [...state.savedParsedData, action.payload];
-  }},
+    },
+    clearData: (state, action: PayloadAction<any>) => {
+      state.parsedDataSidebarInfo = [];
+        state.parsedDataRows = [];
+        state.parsedDataHeaders = [];
+        state.parsedSortBool = [];
+        state.hashedParsedData = {};
+        state.parsedDataIsLoading = true;
+        state.HASHED_DATA = [];
+        state.error = false
+    },
+  },
 });
 
-export const { convertToParsed, hashedData, saveToParsedData} = CurrentDataSlice.actions;
+export const { convertToParsed, hashedData, saveToParsedData, clearData } = CurrentDataSlice.actions;
 
 export default CurrentDataSlice.reducer;

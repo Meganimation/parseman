@@ -109,7 +109,7 @@ export default function ParsedDataComponent({
   const parsedSortBool: any = useSelector(
     (state: RootState) => state.returnedData.parsedSortBool
   );
-  const [isHeaderOnHover, setIsHeaderOnHover] = useState('test');
+  const [isHeaderOnHover, setIsHeaderOnHover] = useState('');
   const [modal, setModal] = useState(false);
   const [inputTemplateId, setInputTemplateId] = useState("");
   const [localTemplateId, setLocalTemplateId] = useState(
@@ -415,6 +415,8 @@ export default function ParsedDataComponent({
     }))
       
   }
+
+
   
   return (
     <ParsedDataComponentWrapper>
