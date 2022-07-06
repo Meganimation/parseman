@@ -68,11 +68,12 @@ export default function WordCloudComponent(props: IWordCloudComponentProps) {
     });
   };
 
+  if (loadingWordCloudData && !wordCloudError) return <div>Loading...</div>;
+  if (wordCloudError) return <div>Error</div>;
+
   return (
     <>
       <WordCloudComponentWrapper darkMode={darkMode}>
-      {loadingWordCloudData && !wordCloudError && <>Loading...</>}
-      {wordCloudError && <>Error!</>}
         <WordsContainer>{mapWords(wordCloudData)}</WordsContainer>
       </WordCloudComponentWrapper>
   
