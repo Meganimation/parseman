@@ -12,5 +12,4 @@ const Template: ComponentStory<typeof Table> = (args) => <Table {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-onClick: () => {alert('Hello World')},
 };

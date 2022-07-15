@@ -8,7 +8,12 @@ import './Table.css'
 // const parsedDataHeaders: any = useSelector(
 //     (state: RootState) => state.returnedData.parsedDataHeaders
 //   );
-
+const createHeaders = (headers: any) => {
+  return headers.map((item: any) => ({
+      text: item,
+      ref: useRef(),
+  }));
+}
 
 export const Table = ({
     headers = ['headerOne', 'h2', 'HeeeeaderThreeeeee', 'FOur', 'Five.'],
@@ -88,19 +93,75 @@ export const Table = ({
         </tbody>
     )
 
-    const createHeaders = (headers: any) => {
-        return headers.map((item: any) => ({
-            text: item,
-            ref: useRef(),
-        }));
-    }
-
     const columns = createHeaders(headers);
+
+    const mouseMove = useCallback(
+        (e) => {
+            console.log('mouse moving')
+          const gridColumns = columns.map((col: any, i: any) => {
+            if (i === activeIndex) {
+              const width = e.clientX - col.ref.current.offsetLeft;
+                console.log(tableElement.current)
+              if (width >= minCellWidth) {
+                return `${width}px`;
+              }
+            }
+            return `${col.ref.current.offsetWidth}px`;
+          });
+         {/* @ts-ignore */ }
+         tableElement.current.style.color = 'red'
+         {/* @ts-ignore */ }
+          tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+            " "
+          )}`;
+        },
+        [activeIndex, columns, minCellWidth]
+      );
+
+      const removeListeners = useCallback(() => {
+        window.removeEventListener("mousemove", mouseMove);
+        window.removeEventListener("mouseup", removeListeners);
+      }, [mouseMove]);
+    
+      const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+      }, [setActiveIndex, removeListeners]);
+    
+      useEffect(() => {
+        if (activeIndex !== null) {
+          window.addEventListener("mousemove", mouseMove);
+          window.addEventListener("mouseup", mouseUp);
+        }
+    
+        return () => {
+          removeListeners();
+        };
+      }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+    
+      // Demo only
+      const resetTableCells = () => {
+              {/* @ts-ignore */ }
+        tableElement.current.style.gridTemplateColumns = "";
+      };
+    
+    
 
     useEffect(() => {
         {/* @ts-ignore */ }
         setTableHeight(tableElement.current.offsetHeight);
     }, []);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+          window.addEventListener('mousemove', mouseMove);
+          window.addEventListener('mouseup', mouseUp);
+        }
+      
+        return () => {
+          removeListeners();
+        }
+      }, [activeIndex, mouseMove, mouseUp, removeListeners]);
 
     return (
         <div className="table-wrapper">
