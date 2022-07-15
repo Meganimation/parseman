@@ -7,7 +7,7 @@ import { Modal } from "stories/Modal";
 import { Button } from "stories/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import ParsedDataTable from "./ParsedDataTable";
-import {colors} from "utils/theme/colors"
+import { colors } from "utils/theme/colors"
 
 const ParsedDataComponentWrapper = styled.section`
   padding-top: 1rem;
@@ -16,31 +16,57 @@ const ParsedDataComponentWrapper = styled.section`
 `;
 
 const InfoBar = styled.aside<StyledParsedTableType>`
-  background-color: ${(props) => (props.darkMode ? colors.lightestBlue : colors.white )};
-  margin: 10px;
-  width: 25vw;
-  border-radius: 20px;
-  padding: 20px;
-  overflow-y: auto;
+  background-color: ${(props) => (props.darkMode ? colors.blue : colors.white)};
+  width: 20vw;
+  padding: 20px 50px;
+
+  margin-right: 20px;
+  position: relative;
+  top: -3.55rem;
+  left: -5px;
+  height: 103%;
+
+
+  h5 {
+    font-family: "Roboto", sans-serif;
+    padding: 0 0 10px 0; 
+    margin: 0;
+   }
 `;
 
 const InfoItem = styled.div`
   margin-top: 2px;
   font-size: 0.8rem;
-  width: 15vw;
+  padding-top: 0.5rem;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
 `;
+
+const ExitWrapper = styled.div` 
+position: relative;
+top: -1rem;
+left: 105%;
+&:hover {
+ 
+}
+`
 
 const StyledEditTemplateWrapper = styled.div`
 
   display: flex;
-  alignItems: center;
   flexWrap: wrap;
   cursor: pointer;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding-left: 10px;
   svg {
     opacity: 0.5;
+    padding-left: 10px;
   }
 
   &:hover {
+    transform: scale(1.1);
     svg {
       opacity: 1;
     }
@@ -64,17 +90,41 @@ const StyledModalInput = styled.input`
       }
   `;
 
-  const TemplateLiteralWrapper = styled.b<StyledParsedTableType>`
-  background: ${(props) => (props.background ? colors.darkBlue : colors.purple)};
+const TemplateLiteralWrapper = styled.span<StyledParsedTableType>`
   width: fit-content;
+  background: ${(props) => (props.isHeaderOnHover ? colors.lightGrayBlue : 'none')};  
+  border: ${(props) => (props.isHeaderOnHover ? `10px solid ${colors.lightGrayBlue}` : 'none')};
   `
 
-  const TemplateLiteralContent = styled.div<StyledParsedTableType>`
- padding: 10px;
- overflow-wrap: break-word;
-  word-break: break-all;
+const TemplateLiteralContent = styled.div<StyledParsedTableType>`
   overflow-y: auto;
+  height: 26.5rem;
+  text-align: center;
+
   
+  `
+
+  const SelectInputWrapper = styled.div`
+  position: absolute;
+  bottom: 15px;
+
+
+  font-family: "Roboto", sans-serif;
+  text-align-last: center;
+  font-size: 10px;
+
+  select{
+    height: 2rem;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    &:hover {
+    transform: scale(1.1);
+    }
+    padding-left: 0.1rem;
+
+  }
   `
 
 export interface ISubmitState {
@@ -88,10 +138,10 @@ export default function ParsedDataComponent({
   version = "1",
   templateLiteral = "None",
   darkMode = false,
-  handleExit = () => {},
+  handleExit = () => { },
   parsedSideInfoIsVisible = true,
-  postNewTemplateId = () => {},
-  postNewHeaderName = () => {},
+  postNewTemplateId = () => { },
+  postNewHeaderName = () => { },
   ...props
 }: IParsedDataComponentProps) {
   const returnedData: any = useSelector(
@@ -113,7 +163,7 @@ export default function ParsedDataComponent({
   const parsedSortBool: any = useSelector(
     (state: RootState) => state.returnedData.parsedSortBool
   );
-  const [isHeaderOnHover, setIsHeaderOnHover] = useState('');
+  const [isHeaderOnHover, setIsHeaderOnHover] = useState('none');
   const [modal, setModal] = useState(false);
   const [inputTemplateId, setInputTemplateId] = useState("");
   const [localTemplateId, setLocalTemplateId] = useState(
@@ -369,143 +419,97 @@ export default function ParsedDataComponent({
     }
   };
 
-  const replaceTemplateLiteral = (
-    headerIndex: number,
-    headerString: string
-  ) => {
-    const targetedHeaderString = state.headers[headerIndex][0];
-
-
-    let newString = props.checkedTemplateLiteral.replace(
-      `<<<${targetedHeaderString}>>>`,
-      headerString
-    );
-
-    props.updateTemplateLiteral(newString);
-  };
-
-  const highlightOnTemplateLiteral = (
-    headerIndex: number,
-    mouseOver: boolean
-  ) => {
-    if (mouseOver) {
-      const targetedHeaderString = state.headers[headerIndex][0];
-
-
-      //this is for when you hover on the header
-      let highlightValueInTemplateLiteral = props.checkedTemplateLiteral.replace(
-        `<<<${targetedHeaderString}>>>`,
-        `>>>${targetedHeaderString}<<<`
-      );
-
-      props.updateTemplateLiteral(highlightValueInTemplateLiteral);
-    }
-    if (!mouseOver) {
-      const targetedHeaderString = state.headers[headerIndex][0];
-      //this is for when you hover on the header
-      let highlightValueInTemplateLiteral = props.checkedTemplateLiteral.replace(
-        `>>>${targetedHeaderString}<<<`,
-        `<<<${targetedHeaderString}>>>`
-      );
-
-      props.updateTemplateLiteral(highlightValueInTemplateLiteral);
-    }
-  };
-
-  const showTemplateLiteral=(templateLiteralArray:string[])=>{
-    return(templateLiteralArray.map((templateLiteral: string,index: any)=>{
-      return(
-        <TemplateLiteralWrapper key={index} className={templateLiteral} style={{background: isHeaderOnHover === templateLiteral ?  colors.lightGrayBlue : 'none'}}>{templateLiteral}
+  const showTemplateLiteral = (templateLiteralArray: string[]) => {
+    return (templateLiteralArray.map((templateLiteral: string, index: any) => {
+      return (
+        <TemplateLiteralWrapper key={index} className={templateLiteral} isHeaderOnHover={isHeaderOnHover === templateLiteral}>{templateLiteral}
         </TemplateLiteralWrapper>
       )
     }))
-      
+
   }
 
 
-  
+
   return (
     <ParsedDataComponentWrapper>
       {parsedSideInfoIsVisible && (
         <>
-          <Exit onExit={handleExit} darkMode={darkMode} />
           <InfoBar darkMode={darkMode}>
-            <>
-              totalTemplates: (enter total templates here) showing
-              <select name="cars" id="cars" onChange={(e)=>{props.changeParsedDataPageAmount(e)}}>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="150">150</option>
-                <option value="200">200</option>
-              </select>out of top 500
-              results
-            </>
+          <ExitWrapper>
+            <Exit onExit={handleExit} darkMode={darkMode}  iconColor={colors.lightGray}/>
+            </ExitWrapper>
             <InfoItem>
-              <StyledEditTemplateWrapper
-                onClick={() => {
+          
+                <h5>Template Id:</h5> <StyledEditTemplateWrapper onClick={() => {
                   setModal(true);
+                }}>{localTemplateId} <EditIcon style={{ transform: "scale(0.6)" }} /></StyledEditTemplateWrapper>
+   
+          </InfoItem>
+          <InfoItem>
+
+              <h5>Version:</h5> <div> {returnedData.version} </div>
+  
+          </InfoItem>
+          <InfoItem>
+            <h5>Template Literal:</h5>
+            <TemplateLiteralContent >{showTemplateLiteral(props.currentParsedDataTemplateLiteralArray)}</TemplateLiteralContent>
+          </InfoItem>
+
+          <SelectInputWrapper>
+                Showing top
+            <select name="pageAmount" id="pageAmount" onChange={(e) => { props.changeParsedDataPageAmount(e) }}>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="150">150</option>
+              <option value="200">200</option>
+            </select> / 500
+          </SelectInputWrapper>
+        </InfoBar>
+        {modal && (
+              <Modal
+                onExit={() => {
+                  setModal(false);
                 }}
+                title="Enter Template Id Name"
+                darkMode={darkMode}
+                height="100px"
               >
-                <b>
-                  Template Id: {localTemplateId}
-                  <EditIcon style={{ transform: "scale(0.6)" }} />
-                </b>
-              </StyledEditTemplateWrapper>
-              {modal && (
-                <Modal
-                  onExit={() => {
-                    setModal(false);
+                <StyledModalInput
+                  type="text"
+                  value={inputTemplateId}
+                  onChange={(e) => setInputTemplateId(e.target.value)}
+                />
+                <Button
+                  onClick={() => {
+                    handleEditTemplateId();
                   }}
-                  title="Enter Template Id Name"
-                  darkMode={darkMode}
-                  height="100px"
-                >
-                  <StyledModalInput
-                    type="text"
-                    value={inputTemplateId}
-                    onChange={(e) => setInputTemplateId(e.target.value)}
-                  />
-                  <Button
-                    onClick={() => {
-                      handleEditTemplateId();
-                    }}
-                    label="Submit"
-                  />
-                </Modal>
-              )}
-            </InfoItem>
-            <InfoItem>
-              <p>
-                <b>Version:</b> {returnedData.version}
-              </p>
-            </InfoItem>
-            <InfoItem>
-              <b>Template Literal:</b>
-              <TemplateLiteralContent >{showTemplateLiteral(props.currentParsedDataTemplateLiteralArray)}</TemplateLiteralContent>
-            </InfoItem>
-          </InfoBar>
+                  label="Submit"
+                />
+              </Modal>
+            )}
+
         </>
-      )}
-      <ParsedDataTable
-        templateId={localTemplateId}
-        templateVersion={returnedData.version}
-        parsedDataHeaders={parsedDataHeaders}
-        parsedDataIsLoading={parsedDataIsLoading}
-        headers={state.headers}
-        content={state.content}
-        arrOfSortBools={state.arrOfSortBools}
-        handleNumberSort={handleNumberSort}
-        handleNumAndSymSort={handleNumAndSymSort}
-        handleAllSort={handleAllSort}
-        handleDateSort={handleDateSort}
-        postNewTemplateId={postNewTemplateId}
-        replaceTemplateLiteral={replaceTemplateLiteral}
-        highlightOnTemplateLiteral={highlightOnTemplateLiteral}
-        darkMode={darkMode}
-        postNewHeaderName={postNewHeaderName}
-        setIsHeaderOnHover={setIsHeaderOnHover}
-      />
-    </ParsedDataComponentWrapper>
+  )
+}
+<ParsedDataTable
+  templateId={localTemplateId}
+  templateVersion={returnedData.version}
+  parsedDataHeaders={parsedDataHeaders}
+  parsedDataIsLoading={parsedDataIsLoading}
+  headers={state.headers}
+  content={state.content}
+  arrOfSortBools={state.arrOfSortBools}
+  handleNumberSort={handleNumberSort}
+  handleNumAndSymSort={handleNumAndSymSort}
+  handleAllSort={handleAllSort}
+  handleDateSort={handleDateSort}
+  postNewTemplateId={postNewTemplateId}
+  darkMode={darkMode}
+  postNewHeaderName={postNewHeaderName}
+  setIsHeaderOnHover={setIsHeaderOnHover}
+/>
+    </ParsedDataComponentWrapper >
   );
 }
 
@@ -515,6 +519,7 @@ type StyledParsedTableType = {
   darkMode?: boolean;
   background?: any;
   parsedSideInfoIsVisible?: boolean;
+  isHeaderOnHover?: boolean;
 };
 
 interface IParsedDataComponentProps {

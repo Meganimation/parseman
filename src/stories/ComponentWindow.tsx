@@ -21,6 +21,7 @@ interface ComponentWindowProps {
   buttonTwoText?: any;
   onButtonTwoClick?: () => void;
   onButtonTwoMouseUp?: () => void;
+  noPadding?: boolean;
 }
 
 const ComponentWindowWrapper = styled.section`
@@ -35,7 +36,9 @@ const ComponentWindowWrapper = styled.section`
   border: ${(props: ComponentWindowProps) =>
     props.darkMode ? `5px ${colors.lighterBlue} solid` : "5px white solid"};
 
-  padding: 5px;
+  padding: ${(props: ComponentWindowProps) =>
+    props.noPadding ? `0` : "5px"};
+
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
 `;
 
@@ -90,12 +93,14 @@ export const ComponentWindow = ({
   onButtonTwoClick = () => {},
   onButtonTwoMouseUp = () => {},
   onExit = null,
+  noPadding = false,
   ...props
 }: ComponentWindowProps) => {
   return (
     <ComponentWindowWrapper
       darkMode={darkMode}
       headerHeight={headerHeight}
+      noPadding={noPadding}
       {...props}
     >
       <HeaderContent

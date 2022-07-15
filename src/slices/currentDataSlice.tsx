@@ -79,9 +79,6 @@ export const CurrentDataSlice = createSlice({
           newArr.push(x[0])
         }
         arrOfHeaders = newArr;
-
-        
-
         state.parsedDataRows = arrOfRows;
         state.parsedDataHeaders = Array.from(new Set(arrOfHeaders))
         state.hashedParsedData = tempHash;

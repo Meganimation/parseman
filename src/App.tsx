@@ -683,6 +683,7 @@ function App() {
           onButtonOneClick={() => {
             saveParsedInfo();
           }}
+          noPadding
         >
           <div ref={scrollToViewRef}>
             <ParsedDataComponent

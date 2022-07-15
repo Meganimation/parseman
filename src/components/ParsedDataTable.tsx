@@ -6,19 +6,24 @@ import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
 import { Modal } from "stories/Modal";
 
+import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+
 const ParsedTableWrapper = styled.div`
   height: 100%;
   width: 100%;
   overflow-y: auto;
 `;
+
 const ParsedTableResultsWrapper = styled.section``;
 
 const GridContainer = styled.div`
   display: grid;
   grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr;
 `;
 
-const GridItem = styled.div`
+const GridItem = styled.span`
   background: rgba(51, 170, 51, 0.01);
   border-radius: 3px;
   text-align: left;
@@ -35,6 +40,10 @@ const StyledEditIcon = styled(EditIcon)`
     opacity: 100%;
   }
 `;
+
+const SortButton = styled.span`
+  cursor: pointer;
+  `
 
 const loopThroughRows = (props: any, hashedData: any) => {
   let arr = [];
@@ -68,12 +77,7 @@ const showItems = (content: any, props: any, hashedData: any) => {
     let arr = [];
     for (let i = 0; i < content.length; i++) {
       arr.push(
-        <GridItem
-          onClick={() => {
-            props.replaceTemplateLiteral(i, content[i]);
-          }}
-          key={i}
-        >
+        <GridItem>
           <Tooltip
             tooltipComponent={
               <div>total qty: {totalQtyOfItemValue(content[i], i)}</div>
@@ -91,8 +95,8 @@ const showItems = (content: any, props: any, hashedData: any) => {
 
 
 const displayCorrectSortButton = (index: number, props: any) => {
- if (props.content[0][index] === undefined) return console.log('error!') //for now, maybe render a modal that say:
- //"there was an error trying to render the data, try again <button> or something like that" 
+  if (props.content[0][index] === undefined) return console.log('error!') //for now, maybe render a modal that say:
+  //"there was an error trying to render the data, try again <button> or something like that" 
   let areAllSameValues = props.content.every(
     (item: any) => item[index] === props.content[0][index]
   );
@@ -111,61 +115,56 @@ const displayCorrectSortButton = (index: number, props: any) => {
       .match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g)
   );
 
-  if (areAllSameValues) return <p> Duplicates Only</p>;
+  if (areAllSameValues) return <ArrowDropUp />;
   if (containsMonths)
     return (
-      <button
+      <SortButton
         onClick={(e) => {
           props.handleDateSort(e, index);
         }}
       >
-        Contains Date
-        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-      </button>
+        {props.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+      </SortButton>
     );
   if (onlyContainsLetters && containsLetters)
     return (
-      <button
+      <SortButton
         onClick={(e) => {
           props.handleAllSort(e, index);
         }}
       >
-        Contains Letters
-        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-      </button>
+        {props.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+      </SortButton>
     );
   if (!onlyContainsNumbers)
     return (
-      <button
+      <SortButton
         onClick={(e) => {
           props.handleNumberSort(e, index);
         }}
       >
-        Contains Numbers
-        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-      </button>
+        {props.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+      </SortButton>
     );
   if (containsLetters)
     return (
-      <button
+      <SortButton
         onClick={(e) => {
           props.handleAllSort(e, index);
         }}
       >
-        Other
-        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-      </button>
+        {props.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+      </SortButton>
     );
   else
     return (
-      <button
+      <SortButton
         onClick={(e) => {
           props.handleNumAndSymSort(e, index);
         }}
       >
-        Contains Numbers and Symbols
-        {props.arrOfSortBools[index] === "ascending" ? " ^ " : " v "}
-      </button>
+        {props.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+      </SortButton>
     );
 };
 
@@ -181,7 +180,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     setNicknamedHeaders(props.headers);
   }, [props.headers]);
 
-  const handleEditHeaders = (inputValue:any, headerToReplace: any) => {
+  const handleEditHeaders = (inputValue: any, headerToReplace: any) => {
     let newArr: any = [...nicknamedHeaders];
     newArr[props.headers.indexOf(headerToReplace)] = inputValue;
 
@@ -212,21 +211,21 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
       arr.push(
         <>
           <GridItem key={i}
-              onMouseEnter={()=>{props.setIsHeaderOnHover(props.headers[i])}}
-              onMouseLeave={()=>{props.setIsHeaderOnHover('')}}>
+            onMouseEnter={() => { props.setIsHeaderOnHover(props.headers[i]) }}
+            onMouseLeave={() => { props.setIsHeaderOnHover('none') }}
+          >
+
             <span
-    
+              onClick={(e) =>
+                setEditInput([e.pageY, e.clientX, props.headers[i]])
+              }
+
               className={props.headers[i]}
             >
               {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]}
-              <StyledEditIcon
-                style={{ transform: "scale(0.6)" }}
-                onClick={(e) =>
-                  setEditInput([e.pageY, e.clientX, props.headers[i]])
-                }
-              />
+              {displayCorrectSortButton(i, props)}
             </span>
-            {displayCorrectSortButton(i, props)}
+      
           </GridItem>
         </>
       );
@@ -234,32 +233,32 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     return arr;
   };
 
-if (parsedDataIsLoading) return <div>Loading...</div>
+  if (parsedDataIsLoading) return <div>Loading...</div>
 
   return (
     <ParsedTableWrapper>
-        <ParsedTableResultsWrapper>
-          {editInput[0] !== 0 && editInput[1] !== 0 && (
-            <Modal
-              top={editInput[0]}
-              left={editInput[1]}
-              onExit={() => {
-                setEditInput([0, 0]);
-              }}
-              editMode
-              darkMode={props.darkMode}
-              hasBackground={false}
-              placeholder={`${editInput[2]}`}
-              onEditSubmit={() => {
-                handleEditSubmit();
-              }}
-              inputValue={inputValue}
-              onInputChange={(e: any) => setInputValue(e.target.value)}
-            ></Modal>
-          )}
-          <GridContainer>{loopThroughHeaders(props)}</GridContainer>
-          {loopThroughRows(props, hashedData)}
-        </ParsedTableResultsWrapper>
+      <ParsedTableResultsWrapper>
+        {editInput[0] !== 0 && editInput[1] !== 0 && (
+          <Modal
+            top={editInput[0]}
+            left={editInput[1]}
+            onExit={() => {
+              setEditInput([0, 0]);
+            }}
+            editMode
+            darkMode={props.darkMode}
+            hasBackground={false}
+            placeholder={`${editInput[2]}`}
+            onEditSubmit={() => {
+              handleEditSubmit();
+            }}
+            inputValue={inputValue}
+            onInputChange={(e: any) => setInputValue(e.target.value)}
+          ></Modal>
+        )}
+        <GridContainer>{loopThroughHeaders(props)}</GridContainer>
+        {loopThroughRows(props, hashedData)}
+      </ParsedTableResultsWrapper>
     </ParsedTableWrapper>
   );
 }
@@ -275,8 +274,6 @@ interface IParsedDataComponentProps {
   arrOfSortBools: string[];
   postNewTemplateId: any;
   postNewHeaderName: any;
-  replaceTemplateLiteral: any;
-  highlightOnTemplateLiteral: any;
   darkMode: boolean;
   templateId: string;
   templateVersion: string;
