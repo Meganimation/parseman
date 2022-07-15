@@ -25,10 +25,11 @@ const GridContainer = styled.div`
 
 const GridItem = styled.span`
   background: rgba(51, 170, 51, 0.01);
-  border-radius: 3px;
   text-align: left;
-  min-width: 150px;
+  width: ${(props: { width: string }) => props.width+2}rem;
   word-break: break-word;
+ border: 0.5px solid rgba(51, 170, 51, 0.1);
+ padding: 0 0.5rem;
   }
 `;
 
@@ -77,7 +78,7 @@ const showItems = (content: any, props: any, hashedData: any) => {
     let arr = [];
     for (let i = 0; i < content.length; i++) {
       arr.push(
-        <GridItem>
+        <GridItem width={props.headers[i].length}>
           <Tooltip
             tooltipComponent={
               <div>total qty: {totalQtyOfItemValue(content[i], i)}</div>
@@ -213,6 +214,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
           <GridItem key={i}
             onMouseEnter={() => { props.setIsHeaderOnHover(props.headers[i]) }}
             onMouseLeave={() => { props.setIsHeaderOnHover('none') }}
+            width={props.headers[i].length}
           >
 
             <span
@@ -223,9 +225,9 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
               className={props.headers[i]}
             >
               {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]}
-              {displayCorrectSortButton(i, props)}
+           
             </span>
-      
+            {displayCorrectSortButton(i, props)}
           </GridItem>
         </>
       );

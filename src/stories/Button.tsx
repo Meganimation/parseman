@@ -19,7 +19,7 @@ const StyledButton = styled.button`
   height: ${(props: ButtonProps) => props.height ? props.height : '3em'};
   border-radius: 5px;
   font-size: ${(props: ButtonProps) => props.fontSize ? props.fontSize : '20px'};
-  font-family: "IBM Plex Mono", sans-serif;
+  font-family: "Roboto", sans-serif;
   border: 0px;
   color: ${colors.white};
   border-bottom: 2px solid ${colors.lighterPurple};
