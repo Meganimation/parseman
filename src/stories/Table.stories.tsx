@@ -11,9 +11,7 @@ export default {
 const tableContent = (
   <tbody>
       <tr>
-          <td>
-              <span>Large Detroit Style Pizza</span>
-          </td>
+
           <td>
               <span>3213456785</span>
           </td>
@@ -28,11 +26,7 @@ const tableContent = (
           </td>
       </tr>
       <tr>
-          <td>
-              <span>
-                  Double Decker Club With Fries. Pickles, extra side avacado
-              </span>
-          </td>
+
           <td>
               <span>9874563245</span>
           </td>
@@ -47,9 +41,7 @@ const tableContent = (
           </td>
       </tr>
       <tr>
-          <td>
-              <span>Family Sized Lobster Dinner</span>
-          </td>
+
           <td>
               <span>3456781234</span>
           </td>
@@ -66,7 +58,7 @@ const tableContent = (
   </tbody>
 )
 
-const Template: ComponentStory<typeof Table> = (args) => <Table tableContent={tableContent} headers={['a','b','c','d','e']} minCellWidth={120}/>;
+const Template: ComponentStory<typeof Table> = (args) => <Table tableContent={tableContent} headers={['b','c','d','e']} minCellWidth={120}/>;
 
 export const Primary = Template.bind({});
 Primary.args = {

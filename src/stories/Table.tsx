@@ -1,13 +1,14 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import './Table.css'
+import styled from 'styled-components';
 
-// import { useSelector } from "react-redux";
+const DyanmicTable = styled.table` {
+  width: 100%;
+  display: grid;
+  overflow: auto;
+  grid-template-columns: ${(props: { gridTemplateColumns: string }) => props.gridTemplateColumns};
+`
 
-// import { RootState } from "slices/store";
-
-// const parsedDataHeaders: any = useSelector(
-//     (state: RootState) => state.returnedData.parsedDataHeaders
-//   );
 const createHeaders = (headers: any) => {
   return headers.map((item: any) => ({
       text: item,
@@ -16,23 +17,31 @@ const createHeaders = (headers: any) => {
 }
 
 export const Table = ({
-    headers = ['headerOne', 'h2', 'HeeeeaderThreeeeee', 'FOur', 'Five.'],
+    headers,
     minCellWidth,
     tableContent,
     onClick = () => { },
 }: ITableProps) => {
 
+  const gridTemplateColumnsCSS = () =>{
+
+    let arr = [];
+    for (let i = 0; i < headers.length; i++) {
+        arr.push(`minmax(${minCellWidth}px, 1fr)`);
+    }
+    // setGridTemplateColumns(arr.join(' '))
+    return arr.join(' ');
+    
+}
+
+console.log('HEY', headers)
 
 
     const [tableHeight, setTableHeight] = useState('auto');
     const [activeIndex, setActiveIndex] = useState(null);
+    const [gridTemplateColumns, setGridTemplateColumns] = useState('minmax(100px, 1fr)');
     const tableElement = useRef(null);
     
-
-    const mouseDown = (index: any) => {
-        setActiveIndex(index);
-      }
-
 
 
 
@@ -44,25 +53,13 @@ export const Table = ({
           const gridColumns = columns.map((col: any, i: any) => {
             if (i === activeIndex) {
               const width = e.clientX - col.ref.current.offsetLeft;
-                console.log(tableElement.current)
               if (width >= minCellWidth) {
                 return `${width}px`;
               }
             }
             return `${col.ref.current.offsetWidth}px`;
           });
-
-          console.log(gridColumns.join(
-            " "
-          ))
-
-
-         {/* @ts-ignore */ }
-         tableElement.current.style.color = 'red'
-         {/* @ts-ignore */ }
-          tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
-            " "
-          )}`;
+         setGridTemplateColumns(gridColumns.join(' '))
         },
         [activeIndex, columns, minCellWidth]
       );
@@ -71,6 +68,11 @@ export const Table = ({
         window.removeEventListener("mousemove", mouseMove);
         window.removeEventListener("mouseup", removeListeners);
       }, [mouseMove]);
+
+      const mouseDown = (index: any) => {
+        setActiveIndex(index);
+      }
+
     
       const mouseUp = useCallback(() => {
         setActiveIndex(null);
@@ -87,13 +89,7 @@ export const Table = ({
           removeListeners();
         };
       }, [activeIndex, mouseMove, mouseUp, removeListeners]);
-    
-      // Demo only
-      const resetTableCells = () => {
-              {/* @ts-ignore */ }
-        tableElement.current.style.gridTemplateColumns = "";
-      };
-    
+  
     
 
     useEffect(() => {
@@ -114,7 +110,7 @@ export const Table = ({
 
     return (
         <div className="table-wrapper">
-            <table className="resizeable-table" ref={tableElement}>
+            <DyanmicTable className="resizeable-table" ref={tableElement} gridTemplateColumns={gridTemplateColumns}>
                 <thead>
                     <tr>
                         {/* @ts-ignore */}
@@ -131,7 +127,7 @@ export const Table = ({
                     </tr>
                 </thead>
                 {tableContent}
-            </table>
+            </DyanmicTable>
         </div>
     );
 };

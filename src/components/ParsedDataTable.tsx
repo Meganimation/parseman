@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
 import { Modal } from "stories/Modal";
+import { Table} from "stories/Table";
 
 import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
@@ -45,6 +46,65 @@ const StyledEditIcon = styled(EditIcon)`
 const SortButton = styled.span`
   cursor: pointer;
   `
+
+  const tableContent = (
+    <tbody>
+        <tr>
+            <td>
+                <span>Large Detroit Style Pizza</span>
+            </td>
+            <td>
+                <span>3213456785</span>
+            </td>
+            <td>
+                <span>$31.43</span>
+            </td>
+            <td>
+                <span>Pending</span>
+            </td>
+            <td>
+                <span>Dave</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>
+                    Double Decker Club With Fries. Pickles, extra side avacado
+                </span>
+            </td>
+            <td>
+                <span>9874563245</span>
+            </td>
+            <td>
+                <span>$12.99</span>
+            </td>
+            <td>
+                <span>Delivered</span>
+            </td>
+            <td>
+                <span>Cathy</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>Family Sized Lobster Dinner</span>
+            </td>
+            <td>
+                <span>3456781234</span>
+            </td>
+            <td>
+                <span>$320.00</span>
+            </td>
+            <td>
+                <span>In Progress</span>
+            </td>
+            <td>
+                <span>Alexander</span>
+            </td>
+        </tr>
+    </tbody>
+  )
+  
 
 const loopThroughRows = (props: any, hashedData: any) => {
   let arr = [];
@@ -92,6 +152,38 @@ const showItems = (content: any, props: any, hashedData: any) => {
     return arr;
   }
 };
+
+const showItemsTWO = (content: any) => {
+  // const totalQtyOfItemValue = (value: string, index: any) => {
+  //   let totalQtyOfItem = 0;
+
+  //   for (let i = 0; i < hashedData[props.headers[index]].length; i++) {
+  //     if (hashedData[props.headers[index]][i] === value) {
+  //       totalQtyOfItem++;
+  //     }
+  //   }
+
+  //   return totalQtyOfItem;
+  // };
+
+  if (content.length === 0) return <p>No data</p>;
+  else {
+    let arr = [];
+    for (let i = 0; i < content.length; i++) {
+      arr.push(
+        <td>
+        <span>
+          {content[i]}
+        </span>
+        </td>
+      );
+    }
+    return (
+      <tbody>{arr}</tbody>
+    );
+  }
+};
+
 
 
 
@@ -235,33 +327,43 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     return arr;
   };
 
+  const loopThroughHeadersARR = (props: any) => {
+    let arr = [];
+    for (let i = 0; i < props.headers.length; i++) {
+      arr.push(props.headers[i]);
+    }
+    return arr;
+  };
+
   if (parsedDataIsLoading) return <div>Loading...</div>
 
   return (
-    <ParsedTableWrapper>
-      <ParsedTableResultsWrapper>
-        {editInput[0] !== 0 && editInput[1] !== 0 && (
-          <Modal
-            top={editInput[0]}
-            left={editInput[1]}
-            onExit={() => {
-              setEditInput([0, 0]);
-            }}
-            editMode
-            darkMode={props.darkMode}
-            hasBackground={false}
-            placeholder={`${editInput[2]}`}
-            onEditSubmit={() => {
-              handleEditSubmit();
-            }}
-            inputValue={inputValue}
-            onInputChange={(e: any) => setInputValue(e.target.value)}
-          ></Modal>
-        )}
-        <GridContainer>{loopThroughHeaders(props)}</GridContainer>
-        {loopThroughRows(props, hashedData)}
-      </ParsedTableResultsWrapper>
-    </ParsedTableWrapper>
+    // <ParsedTableWrapper>
+    //   <ParsedTableResultsWrapper>
+    //     {editInput[0] !== 0 && editInput[1] !== 0 && (
+    //       <Modal
+    //         top={editInput[0]}
+    //         left={editInput[1]}
+    //         onExit={() => {
+    //           setEditInput([0, 0]);
+    //         }}
+    //         editMode
+    //         darkMode={props.darkMode}
+    //         hasBackground={false}
+    //         placeholder={`${editInput[2]}`}
+    //         onEditSubmit={() => {
+    //           handleEditSubmit();
+    //         }}
+    //         inputValue={inputValue}
+    //         onInputChange={(e: any) => setInputValue(e.target.value)}
+    //       ></Modal>
+    //     )}
+    //     <GridContainer>{loopThroughHeaders(props)}</GridContainer>
+    //     {loopThroughRows(props, hashedData)}
+    //   </ParsedTableResultsWrapper>
+    // </ParsedTableWrapper>
+    <Table tableContent={tableContent} headers={loopThroughHeadersARR(props)} minCellWidth={120}/>
+    
   );
 }
 
