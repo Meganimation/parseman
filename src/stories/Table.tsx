@@ -11,130 +11,144 @@ const DyanmicTable = styled.table` {
 
 const createHeaders = (headers: any) => {
   return headers.map((item: any) => ({
-      text: item,
-      ref: useRef(),
+    text: item,
+    ref: useRef(),
   }));
 }
 
 export const Table = ({
-    headers,
-    minCellWidth,
-    tableContent,
-    onClick = () => { },
+  headers,
+  minCellWidth,
+  tableContent,
+  onClick = () => { },
 }: ITableProps) => {
 
-  const gridTemplateColumnsCSS = () =>{
+  const gridTemplateColumnsCSS = () => {
 
     let arr = [];
     for (let i = 0; i < headers.length; i++) {
-        arr.push(`minmax(${minCellWidth}px, 1fr)`);
+      arr.push(`minmax(${minCellWidth}px, 1fr)`);
     }
     // setGridTemplateColumns(arr.join(' '))
     return arr.join(' ');
-    
-}
 
-console.log('HEY', headers)
-
-
-    const [tableHeight, setTableHeight] = useState('auto');
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [gridTemplateColumns, setGridTemplateColumns] = useState('minmax(100px, 1fr)');
-    const tableElement = useRef(null);
-    
+  }
 
 
 
-    const columns = createHeaders(headers);
+  const [tableHeight, setTableHeight] = useState('auto');
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [gridTemplateColumns, setGridTemplateColumns] = useState(gridTemplateColumnsCSS());
+  const [arrOfWidths, setArrOfWidths] = useState([]);
+  const tableElement = useRef(null);
 
-    const mouseMove = useCallback(
-        (e) => {
+  const columns = createHeaders(headers);
 
-          const gridColumns = columns.map((col: any, i: any) => {
-            if (i === activeIndex) {
-              const width = e.clientX - col.ref.current.offsetLeft;
-              if (width >= minCellWidth) {
-                return `${width}px`;
-              }
-            }
-            return `${col.ref.current.offsetWidth}px`;
-          });
-         setGridTemplateColumns(gridColumns.join(' '))
-        },
-        [activeIndex, columns, minCellWidth]
-      );
+  const mouseDoubleClick = useCallback(
+    (e) => {
 
-      const removeListeners = useCallback(() => {
-        window.removeEventListener("mousemove", mouseMove);
-        window.removeEventListener("mouseup", removeListeners);
-      }, [mouseMove]);
+      //do the same thing as mouseMove but use the length of the longest item in the row to decipher the width of the cell
 
-      const mouseDown = (index: any) => {
-        setActiveIndex(index);
-      }
+    },
+    [activeIndex, columns, minCellWidth]
+  );
 
-    
-      const mouseUp = useCallback(() => {
-        setActiveIndex(null);
-        removeListeners();
-      }, [setActiveIndex, removeListeners]);
-    
-      useEffect(() => {
-        if (activeIndex !== null) {
-          window.addEventListener("mousemove", mouseMove);
-          window.addEventListener("mouseup", mouseUp);
+  const mouseMove = useCallback(
+    (e) => {
+
+      const gridColumns = columns.map((col: any, i: any) => {
+
+        if (i === activeIndex) {
+
+          const width = (e.screenX / 3) //janky but works for now
+          console.log('e.screenX', e.screenX)
+
+          if (width >= minCellWidth) {
+
+            return `${width}px`;
+          }
         }
-    
-        return () => {
-          removeListeners();
-        };
-      }, [activeIndex, mouseMove, mouseUp, removeListeners]);
-  
-    
 
-    useEffect(() => {
-        {/* @ts-ignore */ }
-        setTableHeight(tableElement.current.offsetHeight);
-    }, []);
+        return `${col.ref.current.offsetWidth}px`;
+      });
 
-    useEffect(() => {
-        if (activeIndex !== null) {
-          window.addEventListener('mousemove', mouseMove);
-          window.addEventListener('mouseup', mouseUp);
-        }
-      
-        return () => {
-          removeListeners();
-        }
-      }, [activeIndex, mouseMove, mouseUp, removeListeners]);
 
-    return (
-        <div className="table-wrapper">
-            <DyanmicTable className="resizeable-table" ref={tableElement} gridTemplateColumns={gridTemplateColumns}>
-                <thead>
-                    <tr>
-                        {/* @ts-ignore */}
-                        {columns.map(({ ref, text }, i) => (
-                            <th ref={ref} key={text}>
-                                <span>{text}</span>
-                                <div
-                                    style={{ height: tableHeight }}
-                                    onMouseDown={() => mouseDown(i)}
-                                    className={`resize-handle ${activeIndex === i ? 'active' : 'idle'}`}
-                                />
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                {tableContent}
-            </DyanmicTable>
-        </div>
-    );
+      setGridTemplateColumns(gridColumns.join(' '))
+    },
+    [activeIndex, columns, minCellWidth]
+  );
+
+  const removeListeners = useCallback(() => {
+    window.removeEventListener("mousemove", mouseMove);
+    window.removeEventListener("mouseup", removeListeners);
+  }, [mouseMove]);
+
+  const mouseDown = (index: any) => {
+    setActiveIndex(index);
+  }
+
+
+  const mouseUp = useCallback(() => {
+    setActiveIndex(null);
+    removeListeners();
+  }, [setActiveIndex, removeListeners]);
+
+  useEffect(() => {
+    if (activeIndex !== null) {
+      window.addEventListener("mousemove", mouseMove);
+      window.addEventListener("mouseup", mouseUp);
+    }
+
+    return () => {
+      removeListeners();
+    };
+  }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+
+
+  useEffect(() => {
+    {/* @ts-ignore */ }
+    setTableHeight(tableElement.current.offsetHeight);
+  }, []);
+
+  useEffect(() => {
+    if (activeIndex !== null) {
+      window.addEventListener('mousemove', mouseMove);
+      window.addEventListener('mouseup', mouseUp);
+    }
+
+    return () => {
+      removeListeners();
+    }
+  }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+  return (
+    <div className="table-wrapper">
+      <DyanmicTable className="resizeable-table" ref={tableElement} gridTemplateColumns={gridTemplateColumns}>
+        <thead>
+          <tr>
+            {/* @ts-ignore */}
+            {columns.map(({ ref, text }, i) => (
+              <th ref={ref} key={text}>
+                <span>{text}</span>
+                <div
+                  style={{ height: tableHeight }}
+                  onMouseDown={() => mouseDown(i)}
+                  className={`resize-handle ${activeIndex === i ? 'active' : 'idle'}`}
+                />
+              </th>
+            ))}
+          </tr>
+        </thead>
+        {tableContent}
+      </DyanmicTable>
+    </div>
+  );
 };
 
 interface ITableProps {
-    onClick?: any;
-    headers: string[];
-    minCellWidth: any;
-    tableContent: any;
+  onClick?: any;
+  headers: string[];
+  minCellWidth: any;
+  tableContent: any;
 }

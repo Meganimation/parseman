@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import EditIcon from "@material-ui/icons/Edit";
 import { RootState } from "slices/store";
 import { Modal } from "stories/Modal";
-import { Table} from "stories/Table";
+import { Table } from "stories/Table";
 
 import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
@@ -15,6 +15,7 @@ const ParsedTableWrapper = styled.div`
   width: 100%;
   overflow-y: auto;
 `;
+
 
 const ParsedTableResultsWrapper = styled.section``;
 
@@ -27,7 +28,7 @@ const GridContainer = styled.div`
 const GridItem = styled.span`
   background: rgba(51, 170, 51, 0.01);
   text-align: left;
-  width: ${(props: { width: string }) => props.width+2}rem;
+  width: ${(props: { width: string }) => props.width + 2}rem;
   word-break: break-word;
  border: 0.5px solid rgba(51, 170, 51, 0.1);
  padding: 0 0.5rem;
@@ -47,64 +48,64 @@ const SortButton = styled.span`
   cursor: pointer;
   `
 
-  const tableContent = (
-    <tbody>
-        <tr>
-            <td>
-                <span>Large Detroit Style Pizza</span>
-            </td>
-            <td>
-                <span>3213456785</span>
-            </td>
-            <td>
-                <span>$31.43</span>
-            </td>
-            <td>
-                <span>Pending</span>
-            </td>
-            <td>
-                <span>Dave</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span>
-                    Double Decker Club With Fries. Pickles, extra side avacado
-                </span>
-            </td>
-            <td>
-                <span>9874563245</span>
-            </td>
-            <td>
-                <span>$12.99</span>
-            </td>
-            <td>
-                <span>Delivered</span>
-            </td>
-            <td>
-                <span>Cathy</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span>Family Sized Lobster Dinner</span>
-            </td>
-            <td>
-                <span>3456781234</span>
-            </td>
-            <td>
-                <span>$320.00</span>
-            </td>
-            <td>
-                <span>In Progress</span>
-            </td>
-            <td>
-                <span>Alexander</span>
-            </td>
-        </tr>
-    </tbody>
-  )
-  
+const tableContent = (
+  <tbody>
+    <tr>
+      <td>
+        <span>Large Detroit Style Pizza</span>
+      </td>
+      <td>
+        <span>3213456785</span>
+      </td>
+      <td>
+        <span>$31.43</span>
+      </td>
+      <td>
+        <span>Pending</span>
+      </td>
+      <td>
+        <span>Dave</span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span>
+          Double Decker Club With Fries. Pickles, extra side avacado
+        </span>
+      </td>
+      <td>
+        <span>9874563245</span>
+      </td>
+      <td>
+        <span>$12.99</span>
+      </td>
+      <td>
+        <span>Delivered</span>
+      </td>
+      <td>
+        <span>Cathy</span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span>Family Sized Lobster Dinner</span>
+      </td>
+      <td>
+        <span>3456781234</span>
+      </td>
+      <td>
+        <span>$320.00</span>
+      </td>
+      <td>
+        <span>In Progress</span>
+      </td>
+      <td>
+        <span>Alexander</span>
+      </td>
+    </tr>
+  </tbody>
+)
+
 
 const loopThroughRows = (props: any, hashedData: any) => {
   let arr = [];
@@ -168,22 +169,19 @@ const showItemsTWO = (content: any) => {
 
   if (content.length === 0) return <p>No data</p>;
   else {
-    let arr = [];
-    for (let i = 0; i < content.length; i++) {
-      arr.push(
-        <td>
-        <span>
-          {content[i]}
-        </span>
-        </td>
-      );
-    }
     return (
-      <tbody>{arr}</tbody>
-    );
-  }
+      content.map((column: any, index: any) => {
+        return (
+          <tr key={index}>
+           {column.map((item: any, index: any) => {
+              return <td key={index}><span>{item}</span></td>
+           })}
+          </tr>
+        );
+      }
+    ))
 };
-
+}
 
 
 
@@ -317,7 +315,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
               className={props.headers[i]}
             >
               {nicknamedHeaders[i] ? nicknamedHeaders[i] : props.headers[i]}
-           
+
             </span>
             {displayCorrectSortButton(i, props)}
           </GridItem>
@@ -335,7 +333,9 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     return arr;
   };
 
-  if (parsedDataIsLoading) return <div>Loading...</div>
+  if (props.headers.length < 1) return <div>Loading...</div>
+  const test = props.headers
+
 
   return (
     // <ParsedTableWrapper>
@@ -361,9 +361,11 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
     //     <GridContainer>{loopThroughHeaders(props)}</GridContainer>
     //     {loopThroughRows(props, hashedData)}
     //   </ParsedTableResultsWrapper>
-    // </ParsedTableWrapper>
-    <Table tableContent={tableContent} headers={loopThroughHeadersARR(props)} minCellWidth={120}/>
-    
+    //</ParsedTableWrapper>
+    <ParsedTableWrapper >
+      <Table tableContent={showItemsTWO(props.content)} headers={props.headers} minCellWidth={150} />
+    </ParsedTableWrapper>
+
   );
 }
 

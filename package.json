@@ -74,6 +74,7 @@
     "@storybook/node-logger": "^6.4.9",
     "@storybook/preset-create-react-app": "^4.0.0",
     "@storybook/react": "^6.4.9",
+    "@types/jquery": "^3.5.14",
     "@types/styled-components": "^5.1.18",
     "webpack": "^5.65.0"
   }
