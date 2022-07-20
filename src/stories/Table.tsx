@@ -9,12 +9,13 @@ const DyanmicTable = styled.table` {
   grid-template-columns: ${(props: { gridTemplateColumns: string }) => props.gridTemplateColumns};
 `
 
-const createHeaders = (headers: any) => {
-  return headers.map((item: any) => ({
-    text: item,
-    // ref: useRef(),
-  }));
-}
+// const createHeaders = (headers: any) => {
+//   return headers.map((item: any) => ({
+//     text: item,
+//     ref: useRef(),
+//   }));
+  
+// }
 
 export const Table = ({
   headers,
@@ -27,11 +28,13 @@ export const Table = ({
   onClick = () => { },
 }: ITableProps) => {
 
+
+
   const gridTemplateColumnsCSS = () => {
 
     let arr = [];
     for (let i = 0; i < headers.length; i++) {
-      arr.push(`minmax(${minCellWidth}px, 1fr)`);
+      arr.push(`150px`);
     }
     // setGridTemplateColumns(arr.join(' '))
     return arr.join(' ');
@@ -46,7 +49,7 @@ export const Table = ({
   const [arrOfWidths, setArrOfWidths] = useState([]);
   const tableElement = useRef(null);
 
-  const columns = createHeaders(headers);
+  // const columns = createHeaders(headers);
 
   const mouseDoubleClick = useCallback(
     (e) => {
@@ -54,13 +57,13 @@ export const Table = ({
       //do the same thing as mouseMove but use the length of the longest item in the row to decipher the width of the cell
 
     },
-    [activeIndex, columns, minCellWidth]
+    [activeIndex, headers, minCellWidth]
   );
 
   const mouseMove = useCallback(
     (e) => {
 
-      const gridColumns = columns.map((col: any, i: any) => {
+      const gridColumns = headers.map((col: any, i: any) => {
 
         if (i === activeIndex) {
 
@@ -73,13 +76,14 @@ export const Table = ({
           }
         }
 
-        return `${col.ref.current.offsetWidth}px`;
+return gridTemplateColumns.split(" ")[i]
+        // return `${col.ref.current.offsetWidth}px`;
       });
 
-
+      console.log(gridColumns.join(' '))
       setGridTemplateColumns(gridColumns.join(' '))
     },
-    [activeIndex, columns, minCellWidth]
+    [activeIndex, headers, minCellWidth]
   );
 
   const removeListeners = useCallback(() => {
@@ -132,8 +136,8 @@ export const Table = ({
         <thead>
           <tr>
             {/* @ts-ignore */}
-            {columns.map(({ ref, text }, i) => (
-              <th ref={ref} key={text}
+            {headers.map((text, i) => (
+              <th key={text}
                 onMouseEnter={() => { setIsHeaderOnHover(text) }}
                 onMouseLeave={() => { setIsHeaderOnHover('none') }}
                 onClick={(e) =>

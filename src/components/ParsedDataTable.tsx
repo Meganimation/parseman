@@ -359,10 +359,7 @@ function ParsedDataTable(props: IParsedDataComponentProps) {
   };
 
   if (props.headers.length < 1) return <div>Loading...</div>
-  console.log('headers', props.headers, 'nicknamedheaders', nicknamedHeaders)
-
-
-  return (
+  else return (
     // <ParsedTableWrapper>
     //   <ParsedTableResultsWrapper>
     //     {editInput[0] !== 0 && editInput[1] !== 0 && (
