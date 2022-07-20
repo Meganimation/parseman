@@ -12,7 +12,7 @@ const DyanmicTable = styled.table` {
 const createHeaders = (headers: any) => {
   return headers.map((item: any) => ({
     text: item,
-    ref: useRef(),
+    // ref: useRef(),
   }));
 }
 
@@ -20,6 +20,10 @@ export const Table = ({
   headers,
   minCellWidth,
   tableContent,
+  setEditInput,
+  displayCorrectSortButton,
+  stuff,
+  setIsHeaderOnHover,
   onClick = () => { },
 }: ITableProps) => {
 
@@ -129,8 +133,16 @@ export const Table = ({
           <tr>
             {/* @ts-ignore */}
             {columns.map(({ ref, text }, i) => (
-              <th ref={ref} key={text}>
-                <span>{text}</span>
+              <th ref={ref} key={text}
+                onMouseEnter={() => { setIsHeaderOnHover(text) }}
+                onMouseLeave={() => { setIsHeaderOnHover('none') }}
+                onClick={(e) =>
+                  setEditInput([e.pageY, e.clientX, text])
+                }
+
+                className={text}
+              >
+                <span>{text}</span> <div>{displayCorrectSortButton(i, stuff)}</div>
                 <div
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(i)}
@@ -151,4 +163,10 @@ interface ITableProps {
   headers: string[];
   minCellWidth: any;
   tableContent: any;
+  setEditInput?: any;
+  displayCorrectSortButton?: any;
+  content?: any;
+  arrOfSortBools?: any;
+  stuff?: any;
+  setIsHeaderOnHover?: any;
 }
