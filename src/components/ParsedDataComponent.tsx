@@ -9,6 +9,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import ParsedDataTable from "./ParsedDataTable";
 import { colors } from "utils/theme/colors"
 
+import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+
 const ParsedDataComponentWrapper = styled.section`
   padding-top: 1rem;
   height: 75vh;
@@ -50,6 +53,11 @@ left: 105%;
  
 }
 `
+
+const SortButton = styled.span`
+  cursor: pointer;
+  `
+
 
 const StyledEditTemplateWrapper = styled.div`
 
@@ -93,7 +101,8 @@ const StyledModalInput = styled.input`
 const TemplateLiteralWrapper = styled.span<StyledParsedTableType>`
   width: fit-content;
   background: ${(props) => (props.isHeaderOnHover ? colors.lightGrayBlue : 'none')};  
-  border: ${(props) => (props.isHeaderOnHover ? `10px solid ${colors.lightGrayBlue}` : 'none')};
+  border-top: ${(props) => (props.isHeaderOnHover ? `10px solid ${colors.lightGrayBlue}` : 'none')};
+  border-bottom: ${(props) => (props.isHeaderOnHover ? `10px solid ${colors.lightGrayBlue}` : 'none')};
   `
 
 const TemplateLiteralContent = styled.div<StyledParsedTableType>`
@@ -429,6 +438,75 @@ export default function ParsedDataComponent({
 
   }
 
+  const displayCorrectSortButton = (index: number) => {
+
+    if (state.content[0][index] === undefined) return console.log('error!') //for now, maybe render a modal that say:
+    //"there was an error trying to render the data, try again <button> or something like that" 
+    let areAllSameValues = state.content.every(
+      (item: any) => item[index] === state.content[0][index]
+    );
+    let onlyContainsNumbers = state.content[0][index].match(/[^0-9]/g);
+    let containsLetters = state.content[0][index].match(/[a-zA-Z]/g);
+    let onlyContainsLetters = state.content[0][index].match(/[^a-zA-Z]/g);
+    let containsMonths = state.content.every((item: any) =>
+      item[index]
+        .toLowerCase()
+        .match(/jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/g)
+    );
+  
+    if (areAllSameValues) return null;
+    if (containsMonths)
+      return (
+        <SortButton
+          onClick={(e) => {
+            handleDateSort(e, index);
+          }}
+        >
+          {state.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+        </SortButton>
+      );
+    if (onlyContainsLetters && containsLetters)
+      return (
+        <SortButton
+          onClick={(e) => {
+            handleAllSort(e, index);
+          }}
+        >
+          {state.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+        </SortButton>
+      );
+    if (!onlyContainsNumbers)
+      return (
+        <SortButton
+          onClick={(e) => {
+            handleNumberSort(e, index);
+          }}
+        >
+          {state.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+        </SortButton>
+      );
+    if (containsLetters)
+      return (
+        <SortButton
+          onClick={(e) => {
+            handleAllSort(e, index);
+          }}
+        >
+          {state.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+        </SortButton>
+      );
+    else
+      return (
+        <SortButton
+          onClick={(e) => {
+            handleNumAndSymSort(e, index);
+          }}
+        >
+          {state.arrOfSortBools[index] === "ascending" ? <ArrowDropUp /> : <ArrowDropDown />}
+        </SortButton>
+      );
+  };
+
 
 
   return (
@@ -508,6 +586,7 @@ export default function ParsedDataComponent({
   darkMode={darkMode}
   postNewHeaderName={postNewHeaderName}
   setIsHeaderOnHover={setIsHeaderOnHover}
+  displayCorrectSortButton={displayCorrectSortButton}
 />
     </ParsedDataComponentWrapper >
   );

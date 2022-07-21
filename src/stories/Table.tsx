@@ -2,11 +2,15 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import './Table.css'
 import styled from 'styled-components';
 
-const DyanmicTable = styled.table` {
+const DyanmicTable = styled.table` 
   width: 100%;
   display: grid;
   overflow: auto;
   grid-template-columns: ${(props: { gridTemplateColumns: string }) => props.gridTemplateColumns};
+`
+
+const StyledTh = styled.th`
+  display:flex;
 `
 
 // const createHeaders = (headers: any) => {
@@ -14,7 +18,7 @@ const DyanmicTable = styled.table` {
 //     text: item,
 //     ref: useRef(),
 //   }));
-  
+
 // }
 
 export const Table = ({
@@ -25,6 +29,7 @@ export const Table = ({
   displayCorrectSortButton,
   stuff,
   setIsHeaderOnHover,
+  templateId,
   onClick = () => { },
 }: ITableProps) => {
 
@@ -51,6 +56,10 @@ export const Table = ({
 
   // const columns = createHeaders(headers);
 
+  useEffect(() => {
+    setGridTemplateColumns(gridTemplateColumnsCSS())
+  }, [templateId])
+
   const mouseDoubleClick = useCallback(
     (e) => {
 
@@ -76,7 +85,7 @@ export const Table = ({
           }
         }
 
-return gridTemplateColumns.split(" ")[i]
+        return gridTemplateColumns.split(" ")[i]
         // return `${col.ref.current.offsetWidth}px`;
       });
 
@@ -137,22 +146,21 @@ return gridTemplateColumns.split(" ")[i]
           <tr>
             {/* @ts-ignore */}
             {headers.map((text, i) => (
-              <th key={text}
+              <StyledTh key={text}
                 onMouseEnter={() => { setIsHeaderOnHover(text) }}
                 onMouseLeave={() => { setIsHeaderOnHover('none') }}
-                onClick={(e) =>
-                  setEditInput([e.pageY, e.clientX, text])
-                }
 
                 className={text}
               >
-                <span>{text}</span> <div>{displayCorrectSortButton(i, stuff)}</div>
+                <span onClick={(e) =>
+                  setEditInput([e.pageY, e.clientX, text])
+                }>{text}</span> <div>{displayCorrectSortButton(i)}</div>
                 <div
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(i)}
                   className={`resize-handle ${activeIndex === i ? 'active' : 'idle'}`}
                 />
-              </th>
+              </StyledTh>
             ))}
           </tr>
         </thead>
@@ -173,4 +181,5 @@ interface ITableProps {
   arrOfSortBools?: any;
   stuff?: any;
   setIsHeaderOnHover?: any;
+  templateId?: string;
 }
